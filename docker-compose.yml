@@ -3,13 +3,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfiles/Dockerfile.frontend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: development
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
 
@@ -17,27 +17,37 @@ services:
     build:
       context: .
       dockerfile: Dockerfiles/Dockerfile.backend
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     ports:
       - "5000:5000"
     environment:
-      NODE_ENV: development
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/app_db
+      #- FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      #- KEEP_THE_SCORE_API_KEY=${KEEP_THE_SCORE_API_KEY}
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     depends_on:
       - db
+      - elasticsearch
 
   db:
     image: postgres:15-alpine
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: my_database
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
 
 volumes:
-  db_data:
-
+  pgdata:

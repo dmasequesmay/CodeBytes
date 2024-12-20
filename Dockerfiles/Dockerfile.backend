@@ -1,6 +1,9 @@
 # Dockerfiles/Dockerfile.backend
 FROM node:18-alpine
 
+# Install Git
+RUN apk add --no-cache git
+
 WORKDIR /app
 
 COPY backend/package*.json ./
