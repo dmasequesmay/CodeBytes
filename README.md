@@ -20,10 +20,15 @@ If you'd like to know more about Docker, please view the following links:
 
 ## How to use it: 
 
-To create the container, run the following command in the terminal:
+To create the container for the first time, run the following command in the terminal:
 ```
 docker-compose up --build
 ```
+
+Once you've ran this command, the container should be available for you. Going forward, unless you want to do a fresh reinstall of the container, you won't need to run this command again.
+
+
+
 
 
 # Breakdown of the Stack
