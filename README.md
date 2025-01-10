@@ -20,7 +20,11 @@ If you'd like to know more about Docker, please view the following links:
 
 ## How to use it: 
 
-TBD
+To create the container, run the following command in the terminal:
+```
+docker-compose up --build
+```
+
 
 # Breakdown of the Stack
 
