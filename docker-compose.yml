@@ -1,32 +1,22 @@
 services:
-  frontend:
+  app:
     build:
       context: .
-      dockerfile: Dockerfiles/Dockerfile.frontend
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:3000" # Frontend
+      - "5000:5000" # Backend
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:5000
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfiles/Dockerfile.backend
-    ports:
-      - "5000:5000"
-    environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/app_db
-      #- FIREBASE_API_KEY=${FIREBASE_API_KEY}
-      #- KEEP_THE_SCORE_API_KEY=${KEEP_THE_SCORE_API_KEY}
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+      # - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      # - KEEP_THE_SCORE_API_KEY=${KEEP_THE_SCORE_API_KEY}
     volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - ./frontend:/app/frontend
+      - ./backend:/app/backend
+      - /app/frontend/node_modules
+      - /app/backend/node_modules
     depends_on:
       - db
       - elasticsearch
