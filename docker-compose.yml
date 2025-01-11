@@ -13,13 +13,11 @@ services:
       # - FIREBASE_API_KEY=${FIREBASE_API_KEY}
       # - KEEP_THE_SCORE_API_KEY=${KEEP_THE_SCORE_API_KEY}
     volumes:
-      - ./frontend:/app/frontend
-      - ./backend:/app/backend
-      - /app/frontend/node_modules
-      - /app/backend/node_modules
+      - .:/root/codebytes
     depends_on:
       - db
       - elasticsearch
+    working_dir: /root
 
   db:
     image: postgres:15-alpine

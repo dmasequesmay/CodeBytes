@@ -7,7 +7,7 @@
 README.md
 CHANGELOG.md
 docker-compose.yml
-Dockerfiles
+Dockerfile
 
 # Node
 ## Logs
