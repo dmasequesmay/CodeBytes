@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node app/index.js"
   },
+  "type":"module",
   "dependencies": {
     "@elastic/elasticsearch" : "latest",
     "express": "^4.18.2",

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from "express";
 // const firebase = require('./firebaseConfig');
-const elasticSearch = require('./elasticSearchConfig');
+import * as elastic from "./elasticSearchConfig.js";
 // const { createLeaderboard } = require('./keepTheScoreConfig');
 
 const app = express();
