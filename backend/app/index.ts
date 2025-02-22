@@ -1,6 +1,7 @@
 import express from "express";
 // const firebase = require('./firebaseConfig');
 import * as elastic from "./elasticSearchConfig.js";
+import {classRole, lessonDifficulty, userInfo} from "../types/enums";
 // const { createLeaderboard } = require('./keepTheScoreConfig');
 
 const app = express();
