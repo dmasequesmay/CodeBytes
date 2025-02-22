@@ -23,10 +23,10 @@ If you'd like to know more about Docker, please view the following links:
 
 To create the container for the first time, run the following command in the terminal:
 ```
-docker-compose up
+docker-compose up --build
 ```
 
-Once you've ran this command, the container should be available for you. Going forward, unless you want to do a fresh reinstall of the container, you won't need to run this command again.
+Once you've ran this command, the container should be available for you. Going forward, unless you want to do a fresh reinstall of the container (or a rebuild with new code), you won't need to run this command again.
 
 ## How to start working in the container
 
