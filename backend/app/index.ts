@@ -6,7 +6,7 @@ import * as elastic from "./elasticSearchConfig.js";
 const app = express();
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/', (req:any, res) => {
   res.send('Backend is running');
 });
 

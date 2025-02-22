@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "scripts": {
-    "start": "node app/index.js"
+    "start": "npx tsc"
   },
   "type":"module",
   "dependencies": {
@@ -11,7 +11,9 @@
     "pg": "^8.11.0",
     "firebase": "latest",
     "axios" : "latest",
-    "typescript": "^4"
+    "typescript": "^4",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.4"
   }
 }
 
