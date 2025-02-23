@@ -6,15 +6,8 @@
 --     fk_baz VARCHAR(10) REFERENCES other_table(baz)
 -- );
 
--- Unfortunately, since postgresql doesn't do "IF NOT EXISTS" for types,
--- you have to do this instead.
+-- CREATE TYPE your_enum_type AS ENUM ('value1', 'value2', 'value3');
 
--- DO $$ 
--- BEGIN
---     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'your_enum_type') THEN
---         CREATE TYPE your_enum_type AS ENUM ('value1', 'value2', 'value3');
---     END IF;
--- END $$;
 
 -- TODO: create ENUM for lesson_diff
 
