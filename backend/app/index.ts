@@ -43,19 +43,65 @@ app.post("/add-user ", (req, res) => {
 
 /*TODO: write the backend endpoint for adding to the class table */
 app.post("/add-class ", (req, res) => {
-  
+  const { className } : {
+    className:string
+  } = req.body;
+
+  dpool.query(
+    'INSERT INTO classes (className)',
+    [className]
+  )
+  .then(() => {
+    res.status(200).send("success!");
+  })
+  .catch((error) => {
+    console.error('Error inserting data:', error);
+    res.status(500).send('Internal Server Error');
+  });
 });
 
 
 /*TODO: write the backend endpoint for adding to the lessons table */
 app.post("/add-lesson ", (req, res) => {
-  
+  const { lessonName, difficulty } : {
+    lessonName:string,
+    difficulty:string
+  } = req.body;
+
+  dpool.query(
+    'INSERT INTO lessons (lessonName, difficulty)',
+    [lessonName, difficulty]
+  )
+  .then(() => {
+    res.status(200).send("success!");
+  })
+  .catch((error) => {
+    console.error('Error inserting data:', error);
+    res.status(500).send('Internal Server Error');
+  });
 });
 
 
 /*TODO: write the backend endpoint for adding to the badges table */
 app.post("/add-badge ", (req, res) => {
-  
+  const { badgeName, badgeDesc, requirement, badgeImageSrc } : {
+    badgeName:string,
+    badgeDesc:string,
+    requirement:string,
+    badgeImageSrc:string
+  } = req.body;
+
+  dpool.query(
+    'INSERT INTO badges(badgeName, badgeDesc, requirement, badgeImageSrc)',
+    [badgeName, badgeDesc, requirement, badgeImageSrc]
+  )
+  .then(() => {
+    res.status(200).send("success!");
+  })
+  .catch((error) => {
+    console.error('Error inserting data', error);
+    res.status(500).send('Internal Server Error');
+  });
 });
 
 
