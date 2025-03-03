@@ -21,12 +21,12 @@ CREATE TYPE user_info AS ENUM ('student', 'mentor', 'admin');
 CREATE TABLE IF NOT EXISTS badges(
     id SERIAL PRIMARY KEY,
     badgeName VARCHAR(200) NOT NULL,
-    badeDesc TEXT,
+    badgeDesc TEXT,
     requirement TEXT NOT NULL,
-    badeImageSrc TEXT NOT NULL
+    badgeImageSrc TEXT NOT NULL
 );
 
--- TODO: write CREATE TABLE statement for users | Quick Question : enum_type_name? What's that and how am I suppose to create one above?
+-- TODO: write CREATE TABLE statement for users
 CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY,
     userName VARCHAR(20) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS user_owned_badges(
     dateEarned DATE NOT NULL
 );
 
--- TODO: write CREATE TABLE statement for user_progress | Double check on this one: userId defined correctly?
+-- TODO: write CREATE TABLE statement for user_progress
 CREATE TABLE IF NOT EXISTS user_progress(
     id SERIAL PRIMARY KEY,
     FOREIGN KEY (id) REFERENCES users(id),
