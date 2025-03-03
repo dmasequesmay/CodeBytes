@@ -29,6 +29,15 @@ CREATE TABLE IF NOT EXISTS Badges (
 
 -- TODO: write CREATE TABLE statement for user_owned_badges
 
+CREATE TABLE IF NOT EXISTS UserOwnedBadges (
+    userId INT NOT NULL,
+    badgeId INT NOT NULL,
+    dateEarned DATE NOT NULL,
+    PRIMARY KEY (userId, badgeId),
+    FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (badgeId) REFERENCES Badges(id) ON DELETE CASCADE
+);
+
 -- TODO: write CREATE TABLE statement for user_progress
 
 -- TODO: write CREATE TABLE statement for lessons
