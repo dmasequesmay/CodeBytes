@@ -17,6 +17,14 @@
 
 -- TODO: write CREATE TABLE statement for badges
 
+CREATE TABLE IF NOT EXISTS Badges (
+    id SERIAL PRIMARY KEY,
+    badgeName VARCHAR(200) NOT NULL,
+    badgeDesc TEXT,
+    requirement TEXT NOT NULL,
+    badgeImageSrc TEXT NOT NULL
+);
+
 -- TODO: write CREATE TABLE statement for users
 
 -- TODO: write CREATE TABLE statement for user_owned_badges
