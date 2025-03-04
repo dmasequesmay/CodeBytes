@@ -34,6 +34,11 @@ CREATE TABLE IF NOT EXISTS Badges (
 -- TODO: write CREATE TABLE statement for lessons
 
 -- TODO: write CREATE TABLE statement for classes
+CREATE TABLE IF NOT EXISTS Classes (
+    id SERIAL PRIMARY KEY,
+    className VARCHAR(50) NOT NULL,
+    teacherId SERIAL NOT NULL
+);
 
 -- TODO: write CREATE TABLE statment for class_membership
 
