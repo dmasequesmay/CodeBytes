@@ -19,7 +19,17 @@ CREATE TYPE class_role AS ENUM ('student', 'assistant', 'teacher');
 
 -- TODO: write CREATE TABLE statement for users
 
--- TODO: write CREATE TABLE statement for user_owned_badges | Double Check on this one: ids defined correctly?
+-- TODO: write CREATE TABLE statement for user_owned_badges
+CREATE TABLE IF NOT EXISTS Users (
+    id SERIAL PRIMARY KEY,
+    userName VARCHAR(20) NOT NULL,
+    firstName TEXT NOT NULL,
+    lastName TEXT NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    role user_role DEFAULT 'student',
+    dateJoined DATE
+);
 
 -- TODO: write CREATE TABLE statement for user_progress
 
@@ -27,7 +37,7 @@ CREATE TYPE class_role AS ENUM ('student', 'assistant', 'teacher');
 
 -- TODO: write CREATE TABLE statement for classes
 
--- TODO: write CREATE TABLE statment for class_membership | Double Check : user and class id both primary?
+-- TODO: write CREATE TABLE statment for class_membership
 CREATE TABLE IF NOT EXISTS class_membership(
     userId SERIAL,
     classId SERIAL,
@@ -37,6 +47,6 @@ CREATE TABLE IF NOT EXISTS class_membership(
     role class_role NOT NULL DEFAULT 'student'
 );
 
--- TODO: write CREATE TABLE statement for user_lesson_progress | Double Check : user and lesson id both primary?
+-- TODO: write CREATE TABLE statement for user_lesson_progress
 
 
