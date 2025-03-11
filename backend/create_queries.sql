@@ -8,10 +8,10 @@
 
 -- CREATE TYPE your_enum_type AS ENUM ('value1', 'value2', 'value3');
 
+
 -- TODO: create ENUM for lesson_diff
 
 -- TODO: create ENUM for class_role
-CREATE TYPE class_role AS ENUM ('student', 'assistant', 'teacher');
 
 -- TODO: create ENUM for user_info
 
@@ -39,16 +39,6 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 
 -- TODO: write CREATE TABLE statement for user_owned_badges
-CREATE TABLE IF NOT EXISTS Users (
-    id SERIAL PRIMARY KEY,
-    userName VARCHAR(20) NOT NULL,
-    firstName TEXT NOT NULL,
-    lastName TEXT NOT NULL,
-    password TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    role user_role DEFAULT 'student',
-    dateJoined DATE
-);
 
 CREATE TABLE IF NOT EXISTS UserOwnedBadges (
     userId INT NOT NULL,
@@ -66,14 +56,6 @@ CREATE TABLE IF NOT EXISTS UserOwnedBadges (
 -- TODO: write CREATE TABLE statement for classes
 
 -- TODO: write CREATE TABLE statment for class_membership
-CREATE TABLE IF NOT EXISTS class_membership(
-    userId SERIAL,
-    classId SERIAL,
-    (userId, classId) PRIMARY KEY,
-    FOREIGN KEY (userId) REFERENCES users(id),
-    FOREIGN KEY (classId) REFERENCES classes(id),
-    role class_role NOT NULL DEFAULT 'student'
-);
 
 -- TODO: write CREATE TABLE statement for user_lesson_progress
 
