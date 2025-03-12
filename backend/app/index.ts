@@ -42,6 +42,25 @@ app.post("/add-user ", (req, res) => {
 });
 
 /*TODO: write the backend endpoint for adding to the class table */
+app.post("/add-class ", (req, res) => {
+  const { className, teacherId }:{
+    className:string,
+    teacherId:int
+  } = req.body;
+
+  dpool.query(
+    'INSERT INTO Classes (class_name, teacher_id) VALUES ($1, $2)',
+    [className, teacherId]
+  )
+  .then(() => {
+    res.status(200).send("success!");
+  })
+  .catch((error) => {
+    console.error('Error inserting data:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
+
 
 /*TODO: write the backend endpoint for adding to the lessons table */
 app.post("/add-lesson ", (req, res) => {
