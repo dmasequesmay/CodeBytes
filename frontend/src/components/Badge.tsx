@@ -9,7 +9,7 @@ export default function Badge({image, name, desc}:{
                 src={image}
                 alt={name}
                 className="h-[150px] w-[150px] rounded-full border-4 border-gray-300"
-                >
+                ></img>
         </div>
         <div className="mt-4 text-xl font-bold text-gray-800">
             {name}
