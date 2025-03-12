@@ -62,7 +62,11 @@ CREATE TABLE IF NOT EXISTS UserOwnedBadges (
 -- TODO: write CREATE TABLE statement for user_progress
 
 -- TODO: write CREATE TABLE statement for lessons
-
+CREATE TABLE IF NOT EXISTS Lessons(
+    id SERIAL PRIMARY KEY,
+    lessonName VARCHAR(200) NOT NULL,
+    difficulty lesson_diff NOT NULL DEFAULT 'medium'
+)
 -- TODO: write CREATE TABLE statement for classes
 
 -- TODO: write CREATE TABLE statment for class_membership

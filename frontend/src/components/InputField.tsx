@@ -5,14 +5,14 @@ export default function InputField({fieldName, iconSrc,idName}:{
 }){
     return <div className="flex flex-col">
         <div>
-            <p>{/* FieldName Goes here */}</p>
+            <p>{fieldName}</p>
         </div>
         <div className="grid grid-cols-8 gap-2">
-            <div>
-                {/* Icon img tag goes here */}
+            <div className="col-span-1">
+                <img src={iconSrc} alt={`${fieldName} icon`} />
             </div>
-            <div>
-                <input type="text" id=""></input>
+            <div className="col-span-7">
+                <input type="text" id={idName}></input>
             </div>
         </div>
     </div>;
