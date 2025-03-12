@@ -76,5 +76,13 @@ CREATE TABLE IF NOT EXISTS class_membership(
 );
 
 -- TODO: write CREATE TABLE statement for user_lesson_progress
-
+CREATE TABLE IF NOT EXISTS user_lesson_progress(
+    userId INT NOT NULL,
+    lessonId INT NOT NULL,
+    dateStart DATE NOT NULL,
+    dateFinished DATE,
+    PRIMARY KEY (userId, lessonId),
+    FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (lessonId) REFERENCES Lessons(id) ON DELETE CASCADE
+)
 
