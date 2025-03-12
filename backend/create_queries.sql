@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS Lessons(
     id SERIAL PRIMARY KEY,
     lessonName VARCHAR(200) NOT NULL,
     difficulty lesson_diff NOT NULL DEFAULT 'medium'
-)
+);
 -- TODO: write CREATE TABLE statement for classes
 
 -- TODO: write CREATE TABLE statment for class_membership
@@ -88,5 +88,5 @@ CREATE TABLE IF NOT EXISTS user_lesson_progress(
     PRIMARY KEY (userId, lessonId),
     FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
     FOREIGN KEY (lessonId) REFERENCES Lessons(id) ON DELETE CASCADE
-)
+);
 
