@@ -64,16 +64,23 @@ app.post("/add-class ", (req, res) => {
 
 /*TODO: write the backend endpoint for adding to the lessons table */
 app.post("/add-lesson ", (req, res) => {
-  
+  const { lessonName, difficulty } : {
+    lessonName:string,
+    difficulty:lessonDifficulty,
+  } = req.body;
+
+  dpool.query(
+    'INSERT INTO lessons (lessonName, difficulty) VALUES ($1, $2)',
+    [lessonName, difficulty]
+  )
+  .then(() => {
+    res.status(200).send("success!");
+  })
+  .catch((error) => {
+    console.error('Error inserting data:', error);
+    res.status(500).send('Internal Server Error');
+  });
 });
 
 
 /*TODO: write the backend endpoint for adding to the badges table */
-app.post("/add-badge ", (req, res) => {
-  
-});
-
-
-app.listen(5000, () => {
-  console.log('Server is running on http://localhost:5000');
-});
