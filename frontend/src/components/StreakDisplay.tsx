@@ -1,11 +1,12 @@
 export default function StreakDisplayer({numDays}:{
     numDays:number
 }){
-    return <div className="grid grid-cols-3">
-        <div className="">
-            <img src=""></img>
+    return <div className="grid grid-cols-2 items-center border-4 border-white">
+        <img src=""></img>
+        <div className = "border-l-4 border-white">
+            <p>{numDays}</p>
+            <p>Day Streak!</p>
         </div>
-        <div></div>
     </div>;
 }
 
