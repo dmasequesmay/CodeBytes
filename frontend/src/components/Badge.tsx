@@ -3,15 +3,19 @@ export default function Badge({image, name, desc}:{
     name: string,
     desc: string
 }){
-    return <div className="flex flex-col">
+    return <div className="flex flex-col items-center p-4 bg-white shadow-lg rounded-2xl">
         <div>
-            <img src=""></img>
+            <img 
+                src={image}
+                alt={name}
+                className="h-[150px] w-[150px] rounded-full border-4 border-gray-300"
+                ></img>
         </div>
-        <div>
-            {/* Name Here */}
+        <div className="mt-4 text-xl font-bold text-gray-800">
+            {name}
         </div>
-        <div>
-            {/* Description Here */}
+        <div className="mt-2 text-sm text-gray-600 text-center">
+            {desc}
         </div>
     </div>;
 }
