@@ -3,7 +3,8 @@ export default function BigTextDisplay({text}:{
 }){
     return <div>
         <h1>
-            
+            {/* grabs the text and puts it in the header */}
+            {text}
         </h1>
     </div>;
 }
