@@ -2,7 +2,9 @@ export default function DailyStreak({streak}:{
     streak:number
 }){
     return <p>
-
+        <span className="text-4xl font-bold">{streak}-day streak,</span>{" "}
+        {/* uses the streak num, then displays the text option based on the streak */}
+        {streak < 5 ? "you're getting there!" : "keep it up!"}
     </p>;
 }
 
