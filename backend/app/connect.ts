@@ -21,7 +21,8 @@ import pg from "pg";
 const pool = new pg.Pool({
     user: 'postgres',
     host: 'localhost',
-    password: '1234'
+    password: 'postgres',
+    database: 'app_db'
 });
 
 export default pool;
