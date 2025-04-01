@@ -45,7 +45,7 @@ app.post("/add-user ", (req, res) => {
 app.post("/add-class ", (req, res) => {
   const { className, teacherId }:{
     className:string,
-    teacherId:int
+    teacherId:number
   } = req.body;
 
   dpool.query(
