@@ -1,11 +1,9 @@
 export default function ContinueButton({imgSrc}:{
     imgSrc?:string
 }){
-    return <button className="">
+    return <button className="rounded-lg bg-white font-bold flex items-center px-4 py-2">
         <span>CONTINUE</span>
-        <img src="">
-        {/* Make sure to include imgSrc within this element! */}
-        </img>
+        {imgSrc && <img src={imgSrc} />}
     </button>;
 }
 
