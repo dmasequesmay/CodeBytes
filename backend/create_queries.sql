@@ -68,6 +68,11 @@ CREATE TABLE IF NOT EXISTS Lessons(
     difficulty lesson_diff NOT NULL DEFAULT 'medium'
 );
 -- TODO: write CREATE TABLE statement for classes
+CREATE TABLE IF NOT EXISTS Classes (
+    id SERIAL PRIMARY KEY,
+    className VARCHAR(50) NOT NULL,
+    teacherId SERIAL NOT NULL REFERENCES Users(userId)
+);
 
 -- TODO: write CREATE TABLE statment for class_membership
 CREATE TABLE IF NOT EXISTS class_membership(
