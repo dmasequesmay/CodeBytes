@@ -39,16 +39,6 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 
 -- TODO: write CREATE TABLE statement for user_owned_badges
-CREATE TABLE IF NOT EXISTS Users (
-    id SERIAL PRIMARY KEY,
-    userName VARCHAR(20) NOT NULL,
-    firstName TEXT NOT NULL,
-    lastName TEXT NOT NULL,
-    password TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    role user_role DEFAULT 'student',
-    dateJoined DATE
-);
 
 CREATE TABLE IF NOT EXISTS UserOwnedBadges (
     userId INT NOT NULL,
