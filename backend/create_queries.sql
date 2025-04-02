@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Badges (
 CREATE TABLE IF NOT EXISTS Classes (
     id SERIAL PRIMARY KEY,
     className VARCHAR(50) NOT NULL,
-    teacherId SERIAL NOT NULL
+    teacherId SERIAL NOT NULL REFERENCES Users(userId)
 );
 
 -- TODO: write CREATE TABLE statment for class_membership
