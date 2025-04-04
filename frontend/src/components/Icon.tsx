@@ -1,7 +1,13 @@
 export default function Icon({image}:{
     image:string;
-}){
-    return <img className="" src=""></img>;
+}){ 
+    return 
+        <img
+            className="h-[200px] w-[200px] rounded-full border-4 border-gray-300"
+            src={image}
+            alt="User Profile"
+        ></img>
+    // return <img className="" src=""></img>;
 }
 
 /*
