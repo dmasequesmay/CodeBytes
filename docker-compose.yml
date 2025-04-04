@@ -13,12 +13,14 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       # - FIREBASE_API_KEY=${FIREBASE_API_KEY}
       # - KEEP_THE_SCORE_API_KEY=${KEEP_THE_SCORE_API_KEY}
+      - JUDGE0_API_URL=http://judge0-api:9000 # Add this for Judge0
     volumes:
       - .:/root/codebytes
     depends_on:
       - db
       - elasticsearch
       - pgadmin
+      - judge0-api
     working_dir: /root
 
   db:
@@ -50,6 +52,23 @@ services:
       - discovery.type=single-node
     ports:
       - "9200:9200"
+
+  judge0-api:
+    image: judge0/api:latest
+    ports:
+      - "9000:9000"
+    environment:
+      - JUDGE0_API_JUDGE0_RUNTIME_URL=http://judge0-runtime:8080
+      - JUDGE0_API_JUDGE0_RUNTIME_TOKEN=your-secret-token
+    depends_on:
+      - judge0-runtime
+
+  judge0-runtime:
+    image: judge0/runtime:latest
+    environment:
+      - JUDGE0_RUNTIME_TOKEN=your-secret-token
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   pgdata:
