@@ -7,21 +7,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "latest",
+    "@monaco-editor/react": "latest",
+    "lucide-react": "^0.487.0",
+    "next": "^13.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "next": "^13.0.0",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^4",
-    "@monaco-editor/react": "latest",
-    "@headlessui/react": "latest",
     "react-hook-form": "latest",
-    "react-scripts": "latest"
+    "react-scripts": "latest",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^4"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0",
     "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.7"
+    "@types/react-dom": "^18.2.7",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
   }
 }
-
