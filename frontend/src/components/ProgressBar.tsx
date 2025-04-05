@@ -5,17 +5,14 @@ export default function ProgressBar({moduleName, subsectionsFinished, total}:{
 }){
     return <div className="flex flex-col">
         <div>
-            <p>{/* moduleName Goes here */}</p>
+            <p>{moduleName}</p>
         </div>
         <div className="grid grid-cols-8 gap-2">
             <div>
-                {/* Progress Bar goes here */}
+                {<progress value={subsectionsFinished} max={total} />}
             </div>
             <div>
-                {/* Percentage goes here
-                    to compute:
-                        (subsectionsFinished/Total)*100 
-                */}
+                {Math.round((subsectionsFinished/total)*100)}%
             </div>
         </div>
     </div>;
