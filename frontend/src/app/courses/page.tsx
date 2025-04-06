@@ -105,7 +105,7 @@ export default function CourseLanding() {
     { name: "C++", progress: 100 },
     { name: "Python", progress: 55 },
     { name: "React", progress: 20 },
-    // static for now; will be getting thsi info dynamically later
+    // static for now; will be getting this info dynamically later
   ]
 
   return (

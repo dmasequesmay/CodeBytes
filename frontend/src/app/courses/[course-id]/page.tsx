@@ -1,8 +1,10 @@
 "use client"
+import { useParams } from "next/navigation"
 
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
 
-export default function Course({ params }: { params: { courseId: string } }) {
+export default function Course() {
+  // TODO: access the courseId attribute from params (hint: look at the top import)
   const courseId = null; // TODO: access the courseId attribute from params
 
   // placeholder (for now)
@@ -25,9 +27,6 @@ export default function Course({ params }: { params: { courseId: string } }) {
                 <IconName className="..." />
             </div>
             
-            Each icon should have:
-            - 2 units of padding on all sides
-            - Width and height of 6 units
             
             Refer to Tailwind CSS documentation for more details:
             https://tailwindcss.com/docs/padding
@@ -49,15 +48,7 @@ export default function Course({ params }: { params: { courseId: string } }) {
               <h2 className="...">{title}</h2>
               <p className="...">{content}</p>
             </div>
-          
-          Each section should have:
-          - Light gray background
-          - 4 units of padding
-          - Rounded corners
-          - Title with semibold font weight
-          - 2 units of bottom margin on title
-          - Content text in dark gray
-          
+
           Refer to Tailwind CSS documentation for more details:
           https://tailwindcss.com/docs/background-color
           https://tailwindcss.com/docs/padding
