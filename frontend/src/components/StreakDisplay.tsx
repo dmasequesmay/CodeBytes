@@ -1,13 +1,15 @@
 export default function StreakDisplayer({numDays}:{
     numDays:number
 }){
-    return <div className="grid grid-cols-2 items-center border-4 border-white">
-        <img src=""></img>
-        <div className = "border-l-4 border-white">
-            <p>{numDays}</p>
-            <p>Day Streak!</p>
+    return(
+        <div className='flex justify-center w-200 mx-auto space-x-50 p-4 border border-white'>
+          <div className='w-100 h-120 flex border-r-2 m-0'><img src='' alt='flame' width={320} height={320} /></div>
+          <div className='pl-4 m-16 text-white flex flex-col justify-center'>
+            <p className='flex justify-center text-4xl'>{numDays}</p>
+            <p className='flex justify-center text-4xl'>Day Streak!</p>
+          </div>
         </div>
-    </div>;
+    );
 }
 
 /*
