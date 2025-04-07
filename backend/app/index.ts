@@ -84,3 +84,23 @@ app.post("/add-lesson ", (req, res) => {
 
 
 /*TODO: write the backend endpoint for adding to the badges table */
+app.post("/add-badge ", (req, res) => {
+  const { badgeName, badgeDesc, requirement, badgeImageSrc } : {
+    badgeName: string,
+    badgeDesc: string,
+    requirement: string,
+    badgeImageSrc: string
+  } = req.body;
+
+  dpool.query(
+    'INSERT INTO Badges (badgeName, badgeDesc, requirement, badgeImageSrc) VALUES ($1, $2, $3, $4)',
+    [badgeName, badgeDesc, requirement, badgeImageSrc]
+  )
+  .then(() => {
+    res.status(200).send("success!");
+  })
+  .catch((error) => {
+    console.error('Error inserting data:', error);
+    res.status(500).send('Internal Server Error');
+  });
+});
