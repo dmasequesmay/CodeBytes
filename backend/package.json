@@ -4,17 +4,16 @@
   "scripts": {
     "start": "npx tsc"
   },
-  "type":"module",
+  "type": "module",
   "dependencies": {
-    "@elastic/elasticsearch" : "latest",
-    "express": "^4.18.2",
-    "pg": "^8.11.0",
-    "firebase": "latest",
-    "axios" : "latest",
-    "typescript": "^4",
+    "@elastic/elasticsearch": "^8.17.1",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.7.4"
+    "@types/firebase": "^2.4.32",
+    "@types/node": "^22.7.4",
+    "axios": "latest",
+    "express": "^4.18.2",
+    "firebase": "^11.6.0",
+    "pg": "^8.11.0",
+    "typescript": "^4"
   }
 }
-
-

@@ -11,8 +11,12 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:5000
       - DATABASE_URL=postgres://postgres:postgres@db:5432/app_db
       - ELASTICSEARCH_URL=http://elasticsearch:9200
-      # - FIREBASE_API_KEY=${FIREBASE_API_KEY}
-      # - KEEP_THE_SCORE_API_KEY=${KEEP_THE_SCORE_API_KEY}
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=changeme
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
       - JUDGE0_API_URL=http://judge0-api:9000 # Add this for Judge0
     volumes:
       - .:/root/codebytes
@@ -20,6 +24,7 @@ services:
       - db
       - elasticsearch
       - pgadmin
+      # - firebase
       - judge0-api
     working_dir: /root
 
@@ -47,14 +52,27 @@ services:
       - db
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.3
     environment:
       - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     ports:
       - "9200:9200"
+      - "9300:9300"
+
+  # firebase:
+  #   image: firebase/firebase-tools:latest
+  #   ports:
+  #     - "5001:5000"
+  #     - "9199:9199"
 
   judge0-api:
-    image: judge0/api:latest
+    image: judge0/judge0:latest
     ports:
       - "9000:9000"
     environment:
@@ -64,7 +82,7 @@ services:
       - judge0-runtime
 
   judge0-runtime:
-    image: judge0/runtime:latest
+    image: judge0/judge0:latest
     environment:
       - JUDGE0_RUNTIME_TOKEN=your-secret-token
     volumes:
