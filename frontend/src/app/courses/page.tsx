@@ -244,7 +244,6 @@ export default function CourseLanding() {
               {/* TODO: Map through courses and render CourseCard component */}
               {courses.map((course) => (
                 <CourseCard
-                  key={course.name}
                   name={course.name}
                   progress={course.progress}
                   onClick={() => setCurrentCourse(course.name)}

@@ -5,16 +5,29 @@ import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
 
 export default function Course() {
   // TODO: access the courseId attribute from params (hint: look at the top import)
-  const courseId = null; // TODO: access the courseId attribute from params
+  const { courseId } = useParams(); // TODO: access the courseId attribute from params
 
   // placeholder (for now)
   const courseTitle = "[Course Title]";
   
   // for now, use placeholder text for goals. refer to Mid-Fi for details.
   const courseSections = [
-    // TODO: add 4 js objects. each should have a "title" and "goals" attribute
-    // make 1 for each possible difficulty as defined in the DB Model
-    // title: difficulty, goals: learning path + goals (refer to Mid-Fi)
+    {
+      title: "Beginner",
+      goals: "Learn the basics and understand the foundations of the subject.",
+    },
+    {
+      title: "Intermediate",
+      goals: "Build upon core concepts with practical examples and challenges.",
+    },
+    {
+      title: "Advanced",
+      goals: "Master advanced topics and explore real-world applications.",
+    },
+    {
+      title: "Expert",
+      goals: "Demonstrate deep expertise through complex, project-based learning.",
+    },
   ];
 
   return (
@@ -33,7 +46,15 @@ export default function Course() {
             https://tailwindcss.com/docs/width
             https://tailwindcss.com/docs/height
         */}
-        
+        <div className="p-2 hover:bg-gray-300 rounded-full cursor-pointer">
+          <LightbulbIcon className="h-6 w-6 text-gray-700" />
+        </div>
+        <div className="p-2 hover:bg-gray-300 rounded-full cursor-pointer">
+          <HomeIcon className="h-6 w-6 text-gray-700" />
+        </div>
+        <div className="p-2 hover:bg-gray-300 rounded-full cursor-pointer">
+          <UserIcon className="h-6 w-6 text-gray-700" />
+        </div>
       </div>
 
       {/* Main Content */}
@@ -57,6 +78,17 @@ export default function Course() {
           https://tailwindcss.com/docs/margin
           https://tailwindcss.com/docs/text-color
           */}
+          {courseSections.map((section, index) => (
+            <div
+              key={index}
+              className="bg-gray-100 p-6 rounded-lg shadow-sm"
+            >
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                {section.title}
+              </h2>
+              <p className="text-gray-600">{section.goals}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
