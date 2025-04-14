@@ -5,19 +5,19 @@ import { Search, Home, User, Lightbulb } from "lucide-react"
 
 // TODO: Add interface for CourseProps with required properties
 interface CourseProps {
-  // TODO: Add name property for course title
-  // TODO: Add progress property for course completion percentage
+  name: string;
+  progress: number;
 }
 
 // TODO: Create CourseCard component that displays course progress
 const CourseCard = ({ name, progress }: CourseProps) => {
   // TODO: Calculate circle circumference based on radius
   // Radius should be 45 units
-  const circumference = ;
+  const circumference = 2 * Math.PI * 45;
   
   // TODO: Calculate strokeDashoffset based on progress
   // Formula: circumference - (progress / 100) * circumference
-  const strokeDashoffset = ;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     // TODO: Create outer container with these properties:
@@ -25,25 +25,25 @@ const CourseCard = ({ name, progress }: CourseProps) => {
     // - 6 units of padding
     // - Rounded corners
     // - Flex layout with column direction and centered items
-    <div className="">
+    <div className="bg-gray-100 p-6 rounded-lg flex flex-col items-center">
       {/* TODO: Add course name heading with these properties:
           - Medium font weight
           - Large text size
           - 4 units of bottom margin
           - use name parameter here
       */}
-      <h3 className=""></h3>
+      <h3 className="font-medium text-lg mb-4">{name}</h3>
       
       {/* TODO: Create container for circular progress indicator with:
           - 24 units width and height
           - Relative positioning
       */}
-      <div className="">
+      <div className="w-24 h-24 relative">
         {/* TODO: Add SVG container with:
             - Full width and height
             - Viewbox of 0 0 100 100
         */}
-        <svg className="">
+        <svg className="w-full h-full" Viewbox="0 0 100 100">
           {/* TODO: Add background circle with:
               - Gray color (Font size 300)
               - 10 units stroke width
@@ -54,7 +54,12 @@ const CourseCard = ({ name, progress }: CourseProps) => {
               https://tailwindcss.com/docs/stroke
           */}
           <circle 
-            className=" stroke-current" 
+            className="text-gray-300 stroke-current"
+            cx="50"
+            cy="50"
+            r="45"
+            strokeWidth="10"
+            fill="transparent" 
           />
           {/* TODO: Add progress circle with:
               - Green color (Font size 300)
@@ -69,7 +74,16 @@ const CourseCard = ({ name, progress }: CourseProps) => {
               https://tailwindcss.com/docs/stroke
           */}
           <circle
-            className=" stroke-current"
+            className="text-green-600 stroke-current"
+            cx="50"
+            cy="50"
+            r="45"
+            strokeWidth="10"
+            strokeLinecap="round"
+            fill="transparent"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            transform="rotate(-90 50 50)"
           />
         </svg>
         
@@ -77,12 +91,12 @@ const CourseCard = ({ name, progress }: CourseProps) => {
             - Full width and height
             - Flex layout with centered items
         */}
-        <div className="">
+        <div className="absolute inset-0 flex items-center justify-center w-full h-full">
           {/* TODO: Add percentage text with:
               - Extra large font size
               - Bold font weight
           */}
-          <span className="">%</span>
+          <span className="text-xl font-bold">{progress}%</span>
         </div>
       </div>
     </div>
