@@ -53,7 +53,7 @@ export default function ProblemDisplay({
   }
 
   // TODO: Calculate progress percentage
-  const progressPercentage = null;
+  const progressPercentage = totalProblems > 0 ? (currentProgress / totalProblems) * 100 : 0;
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -62,17 +62,17 @@ export default function ProblemDisplay({
       <div className="flex-1 p-8 flex flex-col items-center">
         {/* TOOD: Dynamically display the current problem number (Problem N)
         adjust styling to reflect the Midfis */}
-        <h1 className=""></h1>
+        <h1 className="text-2xl font-semibold mb-4">Problem {problemNumber}</h1>
 
         {/* TODO: Dynamically display the progress bar (width = progressPercentage)
         adjust styling to reflect the Midfis */}
         <div className="w-full max-w-2xl h-6 bg-gray-300 rounded-full mb-8">
-          <div className="" style={{}} />
+          <div className="h-full bg-green-500 rounded-full mb-8" style={{ width: `${progressPercentage}`}} />
         </div>
 
         {/* TODO: display the prompt within the <p> tag. text should be of size large (lg) */}
         <div className="w-full max-w-2xl mb-6 text-center">
-          <p className=""></p>
+          <p className="text-lg">{prompt}</p>
         </div>
 
         {/* TODO: display the question area */}
@@ -85,13 +85,13 @@ export default function ProblemDisplay({
           should use the language parameter,
           use a medium font size (12-16)*/}
           <Editor
-            height=""
-            language={}
+            height="100%"
+            language={language}
             defaultValue="// Start coding here"
             theme="vs-dark"
             options={{
               minimap: { enabled: false },
-              fontSize: ,
+              fontSize: 14,
             }}
           />
         </div>
@@ -119,13 +119,13 @@ export default function ProblemDisplay({
         <div className="flex space-x-4">
           <button
             className="px-8 py-3 bg-gray-400 hover:bg-gray-500 text-black font-medium rounded-md"
-            onClick={}
+            onClick={handleTryNow}
           >
             Try Now
           </button>
           <button
             className="px-8 py-3 bg-gray-400 hover:bg-gray-500 text-black font-medium rounded-md"
-            onClick={}
+            onClick={handleContinue}
           >
             Continue
           </button>
