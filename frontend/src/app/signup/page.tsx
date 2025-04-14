@@ -6,7 +6,8 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-
+import { GoogleLogin } from '@react-oauth/google';
+import { signInWithGoogle } from '../../services/auth';
 export default function Signup() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -72,6 +73,10 @@ export default function Signup() {
             <p className="">Enter your personal data to create your account</p>
           </div>
         {/* WARNING: Do NOT modify the css here; these control the Google/Github login options! */}
+        {/* TODO: Wrap the existing google login button within the GoogleLogin component.
+        ensure that it is hooked into the signInWithGoogle function (i.e. on success, communicate the login to the firebase auth)
+        hint: look into the render attribute of GoogleLogin!
+         */}
           <div className="flex gap-4">
             <Button variant="outline" className="w-full flex items-center justify-center gap-2" type="button">
               <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
