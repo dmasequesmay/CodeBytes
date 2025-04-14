@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Search, Home, User, Lightbulb } from "lucide-react"
 
 // TODO: Add interface for CourseProps with required properties
@@ -110,6 +110,19 @@ export default function CourseLanding() {
   // TODO: Add state management for current course
   const [currentCourse, setCurrentCourse] = useState("");
   // note: this should be the last course the user interacted with; where to update?
+  useEffect(() => {
+    const savedName = localStorage.getItem("userName");
+    const savedCourse = localStorage.getItem("lastCourse");
+    if (savedName) setUserName(savedName);
+    if (savedCourse) setCurrentCourse(savedCourse);
+  }, []);
+
+  // ✅ Save last interacted course to localStorage when it changes
+  useEffect(() => {
+    if (currentCourse) {
+      localStorage.setItem("lastCourse", currentCourse);
+    }
+  }, [currentCourse]);
 
   // TODO: Add course data structure with these properties:
   // - name: string (course name)
@@ -127,7 +140,7 @@ export default function CourseLanding() {
     // - Maximum width of 4xl
     // - Center horizontally
     // - 4 units of padding
-    <div className="">
+    <div className="max-w-4xl mx-auto p-4">
       {/* Search Bar */}
       <div className="flex items-center mb-6">
         <div className="relative flex-1">
@@ -138,11 +151,10 @@ export default function CourseLanding() {
               - Border
               - Overflow hidden
           */}
-          <div className="">
+          <div className="flex items-center bg-white rounded-lg border overflow-hidden">
             {/* TODO: Add search text and initials avatar */}
             <div className="pl-4 pr-2 flex items-center">
               <span className="text-gray-700">Find Course</span>
-
             </div>
             {/* TODO: Add search input field with:
                 - Flex layout with 1 unit
@@ -150,14 +162,14 @@ export default function CourseLanding() {
                 - 4 units left/right padding
                 - No outline
             */}
-            <input type="text" className="" placeholder="" />
+            <input type="text" className="flex-1 py-2 px-4 outline-none" placeholder="Search courses..." />
             {/* TODO: Add search button with:
                 - Gray background (200)
                 - 3 units padding
                 - Rounded corners on right side
                 - Search icon
             */}
-            <button className="">
+            <button className="bg-gray-200 p-3 rounded-r-lg">
               <Search className="h-5 w-5 text-gray-700" />
             </button>
           </div>
