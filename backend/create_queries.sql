@@ -9,12 +9,13 @@
 -- CREATE TYPE your_enum_type AS ENUM ('value1', 'value2', 'value3');
 
 -- TODO: create ENUM for lesson_diff
+CREATE TYPE lesson_diff AS ENUM ('easy', 'medium', 'hard', 'extreme');
 
 -- TODO: create ENUM for class_role
 CREATE TYPE class_role AS ENUM ('student', 'assistant', 'teacher');
 
 -- TODO: create ENUM for user_info
-
+CREATE TYPE user_info AS ENUM ('student', 'mentor', 'admin');
 -- TODO: write CREATE TABLE statement for badges
 
 CREATE TABLE IF NOT EXISTS Badges (
