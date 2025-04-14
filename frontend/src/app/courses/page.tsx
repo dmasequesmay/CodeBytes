@@ -183,14 +183,14 @@ export default function CourseLanding() {
           - Rounded corners
           - 6 units bottom margin
       */}
-      <div className="">
+      <div className="bg-gray-200 p-4 rounded-lg mb-6">
         {/* TODO: Add dynamic user greeting text with:
             - Centered text (use in outer <p> tag below)
             - Semi-Bold font weight for user name and course name (use within inner <span>)
         */}
-        <p className="">
-          Hello <span className=""></span>! You are currently taking{" "}
-          <span className=""></span>
+        <p className="text-center">
+          Hello <span className="font-semibold">{userName || "Guest"}</span>! You are currently taking{" "}
+          <span className="font-semibold">{currentCourse || "no course yet"}</span>
         </p>
       </div>
 
@@ -207,7 +207,7 @@ export default function CourseLanding() {
             - Centered items
             - 8 units spacing between items
         */}
-        <div className="">
+        <div className="w-20 bg-gray-200 rounded-lg mr-4 p-4 flex flex-col items-center space-y-8">
           <button className="p-2 hover:bg-gray-300 rounded-full">
             <Lightbulb className="h-6 w-6" />
           </button>
@@ -227,7 +227,7 @@ export default function CourseLanding() {
         */}
         <div className="flex-1">
           {/* TODO: Add heading<h2> Below: use text "Choose a Course"*/}
-          
+          <h2 className="text-2xl font-bold mb-4">Choose a Course</h2>
 
           {/* Scrollable Course Grid */}
           {/* TODO: Create scrollable container with:
@@ -235,14 +235,21 @@ export default function CourseLanding() {
               - Maximum height of 400 units
               - 2 units right padding
           */}
-          <div className="">
+          <div className="overflow-y-auto max-h-[400px] pr-2">
             {/* TODO: Create grid layout with:
                 - 2 columns
                 - 4 units gap between items
             */}
-            <div className="">
+            <div className="grid grid-cols-2 gap-4">
               {/* TODO: Map through courses and render CourseCard component */}
-              
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.name}
+                  name={course.name}
+                  progress={course.progress}
+                  onClick={() => setCurrentCourse(course.name)}
+                />
+              ))}
             </div>
           </div>
         </div>
