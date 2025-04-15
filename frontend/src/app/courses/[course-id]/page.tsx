@@ -60,7 +60,7 @@ export default function Course() {
       {/* Main Content */}
       <div className="flex-1 p-6">
         {/* TODO: Dynamically add courseTitle here */}
-        <h1 className="text-3xl font-bold text-center mb-8">...</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">{courseTitle}</h1>
 
         <div className="space-y-4 max-w-3xl mx-auto">
           {/* TODO: Dynamically loop through courseSections, generating a <div> for each one 
