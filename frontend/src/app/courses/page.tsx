@@ -1,23 +1,23 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Search, Home, User, Lightbulb } from "lucide-react"
 
 // TODO: Add interface for CourseProps with required properties
 interface CourseProps {
-  // TODO: Add name property for course title
-  // TODO: Add progress property for course completion percentage
+  name: string;
+  progress: number;
 }
 
 // TODO: Create CourseCard component that displays course progress
 const CourseCard = ({ name, progress }: CourseProps) => {
   // TODO: Calculate circle circumference based on radius
   // Radius should be 45 units
-  const circumference = ;
+  const circumference = 2 * Math.PI * 45;
   
   // TODO: Calculate strokeDashoffset based on progress
   // Formula: circumference - (progress / 100) * circumference
-  const strokeDashoffset = ;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     // TODO: Create outer container with these properties:
@@ -25,25 +25,25 @@ const CourseCard = ({ name, progress }: CourseProps) => {
     // - 6 units of padding
     // - Rounded corners
     // - Flex layout with column direction and centered items
-    <div className="">
+    <div className="bg-gray-100 p-6 rounded-lg flex flex-col items-center">
       {/* TODO: Add course name heading with these properties:
           - Medium font weight
           - Large text size
           - 4 units of bottom margin
           - use name parameter here
       */}
-      <h3 className=""></h3>
+      <h3 className="font-medium text-lg mb-4">{name}</h3>
       
       {/* TODO: Create container for circular progress indicator with:
           - 24 units width and height
           - Relative positioning
       */}
-      <div className="">
+      <div className="w-24 h-24 relative">
         {/* TODO: Add SVG container with:
             - Full width and height
             - Viewbox of 0 0 100 100
         */}
-        <svg className="">
+        <svg className="w-full h-full" Viewbox="0 0 100 100">
           {/* TODO: Add background circle with:
               - Gray color (Font size 300)
               - 10 units stroke width
@@ -54,7 +54,12 @@ const CourseCard = ({ name, progress }: CourseProps) => {
               https://tailwindcss.com/docs/stroke
           */}
           <circle 
-            className=" stroke-current" 
+            className="text-gray-300 stroke-current"
+            cx="50"
+            cy="50"
+            r="45"
+            strokeWidth="10"
+            fill="transparent" 
           />
           {/* TODO: Add progress circle with:
               - Green color (Font size 300)
@@ -69,7 +74,16 @@ const CourseCard = ({ name, progress }: CourseProps) => {
               https://tailwindcss.com/docs/stroke
           */}
           <circle
-            className=" stroke-current"
+            className="text-green-600 stroke-current"
+            cx="50"
+            cy="50"
+            r="45"
+            strokeWidth="10"
+            strokeLinecap="round"
+            fill="transparent"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            transform="rotate(-90 50 50)"
           />
         </svg>
         
@@ -77,12 +91,12 @@ const CourseCard = ({ name, progress }: CourseProps) => {
             - Full width and height
             - Flex layout with centered items
         */}
-        <div className="">
+        <div className="absolute inset-0 flex items-center justify-center w-full h-full">
           {/* TODO: Add percentage text with:
               - Extra large font size
               - Bold font weight
           */}
-          <span className="">%</span>
+          <span className="text-xl font-bold">{progress}%</span>
         </div>
       </div>
     </div>
@@ -96,6 +110,19 @@ export default function CourseLanding() {
   // TODO: Add state management for current course
   const [currentCourse, setCurrentCourse] = useState("");
   // note: this should be the last course the user interacted with; where to update?
+  useEffect(() => {
+    const savedName = localStorage.getItem("userName");
+    const savedCourse = localStorage.getItem("lastCourse");
+    if (savedName) setUserName(savedName);
+    if (savedCourse) setCurrentCourse(savedCourse);
+  }, []);
+
+  // ✅ Save last interacted course to localStorage when it changes
+  useEffect(() => {
+    if (currentCourse) {
+      localStorage.setItem("lastCourse", currentCourse);
+    }
+  }, [currentCourse]);
 
   // TODO: Add course data structure with these properties:
   // - name: string (course name)
@@ -113,7 +140,7 @@ export default function CourseLanding() {
     // - Maximum width of 4xl
     // - Center horizontally
     // - 4 units of padding
-    <div className="">
+    <div className="max-w-4xl mx-auto p-4">
       {/* Search Bar */}
       <div className="flex items-center mb-6">
         <div className="relative flex-1">
@@ -124,11 +151,10 @@ export default function CourseLanding() {
               - Border
               - Overflow hidden
           */}
-          <div className="">
+          <div className="flex items-center bg-white rounded-lg border overflow-hidden">
             {/* TODO: Add search text and initials avatar */}
             <div className="pl-4 pr-2 flex items-center">
               <span className="text-gray-700">Find Course</span>
-
             </div>
             {/* TODO: Add search input field with:
                 - Flex layout with 1 unit
@@ -136,14 +162,14 @@ export default function CourseLanding() {
                 - 4 units left/right padding
                 - No outline
             */}
-            <input type="text" className="" placeholder="" />
+            <input type="text" className="flex-1 py-2 px-4 outline-none" placeholder="Search courses..." />
             {/* TODO: Add search button with:
                 - Gray background (200)
                 - 3 units padding
                 - Rounded corners on right side
                 - Search icon
             */}
-            <button className="">
+            <button className="bg-gray-200 p-3 rounded-r-lg">
               <Search className="h-5 w-5 text-gray-700" />
             </button>
           </div>
@@ -157,14 +183,14 @@ export default function CourseLanding() {
           - Rounded corners
           - 6 units bottom margin
       */}
-      <div className="">
+      <div className="bg-gray-200 p-4 rounded-lg mb-6">
         {/* TODO: Add dynamic user greeting text with:
             - Centered text (use in outer <p> tag below)
             - Semi-Bold font weight for user name and course name (use within inner <span>)
         */}
-        <p className="">
-          Hello <span className=""></span>! You are currently taking{" "}
-          <span className=""></span>
+        <p className="text-center">
+          Hello <span className="font-semibold">{userName || "Guest"}</span>! You are currently taking{" "}
+          <span className="font-semibold">{currentCourse || "no course yet"}</span>
         </p>
       </div>
 
@@ -181,7 +207,7 @@ export default function CourseLanding() {
             - Centered items
             - 8 units spacing between items
         */}
-        <div className="">
+        <div className="w-20 bg-gray-200 rounded-lg mr-4 p-4 flex flex-col items-center space-y-8">
           <button className="p-2 hover:bg-gray-300 rounded-full">
             <Lightbulb className="h-6 w-6" />
           </button>
@@ -201,7 +227,7 @@ export default function CourseLanding() {
         */}
         <div className="flex-1">
           {/* TODO: Add heading<h2> Below: use text "Choose a Course"*/}
-          
+          <h2 className="text-2xl font-bold mb-4">Choose a Course</h2>
 
           {/* Scrollable Course Grid */}
           {/* TODO: Create scrollable container with:
@@ -209,14 +235,20 @@ export default function CourseLanding() {
               - Maximum height of 400 units
               - 2 units right padding
           */}
-          <div className="">
+          <div className="overflow-y-auto max-h-[400px] pr-2">
             {/* TODO: Create grid layout with:
                 - 2 columns
                 - 4 units gap between items
             */}
-            <div className="">
+            <div className="grid grid-cols-2 gap-4">
               {/* TODO: Map through courses and render CourseCard component */}
-              
+              {courses.map((course) => (
+                <CourseCard
+                  name={course.name}
+                  progress={course.progress}
+                  onClick={() => setCurrentCourse(course.name)}
+                />
+              ))}
             </div>
           </div>
         </div>
