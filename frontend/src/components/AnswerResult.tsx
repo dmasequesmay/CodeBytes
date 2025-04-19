@@ -7,40 +7,20 @@ export default function AnswerResult({
   errorColor = "#de1a24", 
   className = "",
 }) {
+  const color = isSuccess ? successColor : errorColor
+  const imgSrc_string = isSuccess ? "checkmark" : "x"
   return (
     <div
       className={`
-        /* TODO: Add these classes:
-          - Large rounded corners
-          - 6 units padding
-          - Flex layout with column direction
-          - Centered items
-          - Centered text
-          - Include any additional classes passed through className prop
-        */
+        rounded-xl p-6 flex flex-col items-center text-center
         ${className}
       `}
     >
-      {/* TODO: Add heading with these properties:
-          - Extra large text size
-          - Bold font weight
-          - 4 units bottom margin
-      */}
-      <h2 className=""></h2>
-      
-      {/* TODO: Add icon container with these properties:
-          - 16 units width and height
-          - Rounded corners
-          - 2 units border
-          - Black border color
-          - Flex layout with centered items
-      */}
-      <div className="">
-        {/* TODO: Add success or error icon
-            - Use the Icon.tsx component
-            - For success: checkmark imgSrc
-            - For error: X imgSrc
-        */}
+      <h2 className="text-2xl font-bold mb-4">
+        {message}
+      </h2>
+      <div className="w-16 h-16 rounded-xl border-2 border-black flex items-center justify-center">
+        <Icon imgSrc={imgSrc_string} color={color} />
       </div>
     </div>
   )
