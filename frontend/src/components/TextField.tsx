@@ -3,7 +3,7 @@ export default function TextField({text}:{
 }){
     return <div>
         <p>
-
+            {text}
         </p>
     </div>;
 }
