@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, Trophy, BookOpen, UserPlus, Monitor } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -28,7 +29,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Link>
           {/* TODO: When clicked, this button will either open/close the sidebar (i.e. reverse its current state).
           Implement the onClick listener below */}
-          <button className="rounded-full p-2 bg-black text-white" onClick={() => null}>
+          <button className="rounded-full p-2 bg-black text-white" 
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          >
             <Menu className="h-6 w-6" />
           </button>
         </div>
@@ -39,11 +42,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* TODO: If this sidebar is open, it should be 16 units wide. If it is closed, it should be 0 units wide and be hidden 16 units to the left (hint: -ml-xx). */}
         {/* Add to the stylings so that it reflects the Midfi (current implementation is only partially correct*/}
         <div
-          className={`transition-all duration-300 bg-[#a5a6f6] flex`}
+          className={`transition-all duration-300 bg-[#a5a6f6] flex flex-col items-center py-6 ${
+            isSidebarOpen ? "w-16" : "w-0 -ml-16"
+          }`}
         >
-          {sidebarIcons.map((item, index) => (
+          {isSidebarOpen && sidebarIcons.map((item, index) => (
             // TODO: For each item in sidebarIcons, add a button element (height and with of 6 units, add some padding as well)
-            null
+            <button
+              key={index}
+              className="h-12 w-12 mb-4 p-2 bg-white rounded-full flex items-center justify-center hover:bg-gray-100"
+              title={item.tooltip}
+            >
+              <item.icon className="h-6 w-6 text-black" />
+            </button>
           ))}
         </div>
 
