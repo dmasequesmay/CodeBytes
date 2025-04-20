@@ -1,7 +1,10 @@
-export default function ContinueButton({imgSrc}:{
-    imgSrc?:string
+import { MouseEventHandler } from "react";
+
+export default function ContinueButton({imgSrc, onClickEvent=()=>{}}:{
+    imgSrc?:string,
+    onClickEvent:MouseEventHandler<HTMLButtonElement>
 }){
-    return <button className="rounded-lg bg-white font-bold flex items-center px-4 py-2">
+    return <button className="rounded-lg bg-white font-bold flex items-center px-4 py-2" onClick={onClickEvent}>
         <span>CONTINUE</span>
         {imgSrc && <img src={imgSrc} />}
     </button>;
