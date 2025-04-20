@@ -19,11 +19,11 @@ export default function Signup() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // TODO: extract variables name and value from e.target
     // Hint: look into destructuring
-    const { name, value } = null;
+    const { name, value } = e.target;
     // TODO: implement a function to update the targeted form data
     // with the extracted name and value
     // HINT: Look into the spread operator 
-    setFormData()
+    setFormData(prevFormData => ({...prevFormData, [name]: value, }));
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -31,35 +31,25 @@ export default function Signup() {
     console.log("Form submitted:", formData)
     // Handle form submission logic here
   }
-
   return (
     <div className="flex min-h-screen w-full">
       <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-white p-8">
         <div className="max-w-md text-center">
             {/* TODO: Implement Styling for "Get Started" */}
-          <h1 className="">Get Started with Us</h1>
-          <p className="">Complete these steps to register your account</p>
+          <h1 className="text-black">Get Started with Us</h1>
+          <p className="text-black">Complete these steps to register your account!</p>
             {/* TODO: Implement Styling for the three steps (refer to Midfis) */}
           <div className="space-y-4 text-left">
-            <div className="">
-              <div className="">
-                1
-              </div>
-              <span>Sign up your account</span>
+            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm text-black">
+              <span>1. Sign up</span>
             </div>
 
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm">
-              <div className="">
-                2
-              </div>
-              <span>Set up your workspace</span>
+            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm text-black">
+              <span>2. Set up your workspace</span>
             </div>
 
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm">
-              <div className="">
-                3
-              </div>
-              <span>Create your profile</span>
+            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm text-black">
+              <span>3. Create your profile</span>
             </div>
           </div>
         </div>
@@ -68,10 +58,81 @@ export default function Signup() {
       <div className="w-full md:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h2 className="">Sign up Account</h2>
+            <h2 className="text-[50px]">Sign Up</h2>
             {/* TODO: Implement Styling here to reflect midfis */}
-            <p className="">Enter your personal data to create your account</p>
           </div>
+          {/* TODO: 
+            Add functionality + styling to the below form
+            The form should have 4 fields:
+            - First Name
+            - Last Name
+            - Email
+            - Password
+            each field's value should be linked to formData
+            ensure that the correct event handler will handle storage of field data 
+          */}
+          <form onSubmit={handleSubmit} className="space-y-6 m-3">
+            <div className="m-3">
+              <div className="grid m-2 gap-4 space-y-2 md:grid-cols-2">
+                <div>
+                  <label htmlFor="firstName" className="">
+                    First Name
+                  </label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="">
+                    Last Name
+                  </label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="m-2 space-y-2">
+              <label htmlFor="email" className="">
+                Email
+              </label>
+              <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+            </div>
+
+            <div className="m-2 space-y-2">
+              <label htmlFor="password" className="">
+                Password
+              </label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="m-5 text-center">
+              <Button variant="outline" type="submit" className="w-full flex items-center justify-center gap-2 text-violet-600 hover:text-violet-500">
+                Create Account
+              </Button>
+            </div>
+            </div>
+          </form>
+        <div className='flex items-center m-2'>
+          <div className='border-t border-white flex-grow'></div>
+          <div className='flex justify-center w-auto mx-auto'>or Sign Up with</div>
+          <div className='border-t border-white flex-grow'></div>
+        </div>
         {/* WARNING: Do NOT modify the css here; these control the Google/Github login options! */}
         {/* TODO: Wrap the existing google login button within the GoogleLogin component.
         ensure that it is hooked into the signInWithGoogle function (i.e. on success, communicate the login to the firebase auth)
@@ -109,81 +170,6 @@ export default function Signup() {
             </Button>
           </div>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">or</span>
-            </div>
-          </div>
-
-          {/* TODO: 
-            Add functionality + styling to the below form
-            The form should have 4 fields:
-            - First Name
-            - Last Name
-            - Email
-            - Password
-            each field's value should be linked to formData
-            ensure that the correct event handler will handle storage of field data 
-          */}  
-          <form onSubmit={} className="space-y-6">
-            <div className="">
-              <div className="space-y-2">
-                <label htmlFor="firstName" className="">
-                  First Name
-                </label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  value={}
-                  onChange={}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="lastName" className="">
-                  Last Name
-                </label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  value={}
-                  onChange={}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="email" className="">
-                Email
-              </label>
-              <Input id="email" name="email" type="email" value={} onChange={} required />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="password" className="">
-                Password
-              </label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={}
-                onChange={}
-                required
-              />
-            </div>
-
-            <Button type="submit" className="">
-              Sign Up
-            </Button>
-          </form>
-
           <p className="text-center text-sm text-gray-600">
             Already have an account?{" "}
             <Link href="/login" className="font-medium text-violet-600 hover:text-violet-500">
@@ -193,5 +179,5 @@ export default function Signup() {
         </div>
       </div>
     </div>
-  )
+  );
 }
