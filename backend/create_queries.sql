@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS Users (
     userName VARCHAR(20) NOT NULL,
     firstName TEXT NOT NULL,
     lastName TEXT NOT NULL,
-    password TEXT NOT NULL,
+    bio TEXT,
     email TEXT UNIQUE NOT NULL,
-    role user_role DEFAULT 'student',
+    role user_info DEFAULT 'student',
     dateJoined DATE
 );
 

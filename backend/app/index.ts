@@ -18,19 +18,19 @@ app.get('/', (req:any, res) => {
 });
 
 app.post("/add-user ", (req, res) => {
-  const { userName, firstName, lastName, password, email, role, dateJoined }:{
+  const { userName, firstName, lastName, bio, email, role, dateJoined }:{
     userName:string,
     firstName:string,
     lastName:string,
-    password:string,
+    bio:string,
     email:string,
     role: userInfo,
     dateJoined: Date
   } = req.body;
   
   dpool.query(
-    'INSERT INTO users (user_name, first_name, last_name, password, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-    [userName, firstName, lastName, password, email, role, dateJoined]
+    'INSERT INTO users (user_name, first_name, last_name, bio, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [userName, firstName, lastName, bio, email, role, dateJoined]
   )
   .then(() => {
     res.status(200).send("success!");
