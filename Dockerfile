@@ -4,8 +4,15 @@ FROM node:18-alpine
 # Backend setup
 WORKDIR /app/backend
 COPY backend/package*.json ./ 
+COPY backend/tsconfig.json ./
 RUN npm install
-COPY backend ./ 
+COPY backend/app ./app
+RUN npm run build
+
+# Copy SQL file to both source and dist directories
+COPY backend/app/create_queries.sql ./app/
+COPY backend/app/create_queries.sql ./dist/app/
+
 # Frontend setup
 WORKDIR /app/frontend
 COPY frontend/package*.json ./ 

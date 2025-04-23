@@ -246,3 +246,8 @@ lerna-debug.log
 # System Files
 .DS_Store
 Thumbs.db
+
+!backend/problem/preprocessing.ipynb
+backend/problem/archive*/
+backend/problem/pb_out/
+.venv/
