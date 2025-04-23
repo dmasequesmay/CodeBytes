@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useParams } from "next/navigation"
-import { lessonDifficulty } from "../../../backend/types/enums"
+import { lessonDifficulty } from "../../../backend/app/types/enums"
 import ContinueButton from "./ContinueButton"
 
 // Define difficulty settings

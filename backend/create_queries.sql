@@ -86,3 +86,14 @@ CREATE TABLE IF NOT EXISTS user_lesson_progress(
     FOREIGN KEY (lessonId) REFERENCES Lessons(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS problems(
+    id SERIAL PRIMARY KEY,
+    question VARCHAR(200) NOT NULL,
+    difficulty lesson_diff NOT NULL DEFAULT 'medium',
+    problem_io TEXT,
+    source VARCHAR(200),
+    is_coding BOOLEAN NOT NULL DEFAULT false,
+    language VARCHAR(200)
+);
+
+COPY problems(question, difficulty, problem_io, source, is_coding, language) FROM '/problem/pb_out/problemset.csv' WITH (FORMAT csv, HEADER true);

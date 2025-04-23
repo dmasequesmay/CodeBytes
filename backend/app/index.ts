@@ -1,17 +1,40 @@
 import express from "express";
 // const firebase = require('./firebaseConfig');
 import * as elastic from "./elasticSearchConfig.js";
-import {classRole, lessonDifficulty, userInfo} from "../types/enums";
+import {classRole, lessonDifficulty, userInfo} from "./types/enums";
 import pool from "./connect";
 import path from "path";
 import * as fs from "fs";
 import bodyParser from 'body-parser';
 // const { createLeaderboard } = require('./keepTheScoreConfig');
 
+async function executeSQLFile(filePath: string, pool: any) {
+    try {
+        const sql = fs.readFileSync(filePath, 'utf-8');
+        await pool.query(sql);
+        console.log(`Successfully executed SQL file: ${path.basename(filePath)}`);
+    } catch (error) {
+        console.error(`Error executing SQL file: ${path.basename(filePath)}`, error);
+    }
+}
+
 const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 let dpool = pool;
+
+// Execute SQL files when app starts
+const sqlFiles = [
+    path.join(__dirname, '..', 'create_queries.sql')
+];
+
+Promise.all(sqlFiles.map(file => executeSQLFile(file, dpool)))
+    .then(() => {
+        console.log('All SQL files executed successfully');
+    })
+    .catch(error => {
+        console.error('Error executing SQL files:', error);
+    });
 
 app.get('/', (req:any, res) => {
   res.send('Backend is running');
@@ -103,4 +126,9 @@ app.post("/add-badge ", (req, res) => {
     console.error('Error inserting data:', error);
     res.status(500).send('Internal Server Error');
   });
+});
+
+
+app.listen(5000, () => {
+  console.log('Server is running on port 5000');
 });
