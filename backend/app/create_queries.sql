@@ -62,16 +62,16 @@ CREATE TABLE IF NOT EXISTS Lessons(
 CREATE TABLE IF NOT EXISTS Classes (
     id SERIAL PRIMARY KEY,
     className VARCHAR(50) NOT NULL,
-    teacherId SERIAL NOT NULL REFERENCES Users(userId)
+    teacherId INT NOT NULL REFERENCES Users(id)
 );
 
 -- TODO: write CREATE TABLE statment for class_membership
 CREATE TABLE IF NOT EXISTS class_membership(
-    userId SERIAL,
-    classId SERIAL,
-    (userId, classId) PRIMARY KEY,
-    FOREIGN KEY (userId) REFERENCES users(id),
-    FOREIGN KEY (classId) REFERENCES classes(id),
+    userId INT,
+    classId INT,
+    PRIMARY KEY (userId, classId),
+    FOREIGN KEY (userId) REFERENCES Users(id),
+    FOREIGN KEY (classId) REFERENCES Classes(id),
     role class_role NOT NULL DEFAULT 'student'
 );
 
@@ -95,5 +95,3 @@ CREATE TABLE IF NOT EXISTS problems(
     is_coding BOOLEAN NOT NULL DEFAULT false,
     language VARCHAR(200)
 );
-
-COPY problems(question, difficulty, problem_io, source, is_coding, language) FROM '/problem/pb_out/problemset.csv' WITH (FORMAT csv, HEADER true);
