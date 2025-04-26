@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Flame, MoreHorizontal } from "lucide-react"
-import StreakDisplay from "@components/StreakDisplay"
+import StreakDisplayer from "@/components/StreakDisplay";
 
 export default function Profile({userId: number}) {
   // NOTE: we'll be using the userId to make a call to the DB to get info; will be implemented later
@@ -78,7 +78,7 @@ export default function Profile({userId: number}) {
             <div className="w-64 h-52 bg-slate-500 rounded-lg flex flex-col items-center justify-center relative">
               {/* TODO: Dynamically display the current user's day streak
               using the StreakDisplay component */}
-              <StreakDisplay streak={user.streak} />
+              <StreakDisplayer numDays={user.streak} />
             </div>
 
             {/* Bio section */}
