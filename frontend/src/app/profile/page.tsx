@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Flame, MoreHorizontal } from "lucide-react"
 import StreakDisplayer from "@/components/StreakDisplay";
+import Icon from "@/components/Icon";
+import Badge from "@/components/Badge";
 
 export default function Profile({userId: number}) {
   // NOTE: we'll be using the userId to make a call to the DB to get info; will be implemented later
@@ -51,7 +53,9 @@ export default function Profile({userId: number}) {
         <div className="relative pt-20 pb-4 border-b border-sky-300">
           {/* Profile picture placeholder */}
           {/* TODO: Implement an Icon component within the below div */}
-          <div className="w-40 h-40 bg-slate-500 rounded-full mx-auto"></div>
+          <div className="w-40 h-40 bg-slate-500 rounded-full mx-auto">
+            <Icon image="" />
+          </div>
 
           {/* Edit button */}
           <div className="absolute bottom-4 right-8">
@@ -110,7 +114,7 @@ export default function Profile({userId: number}) {
             {/* TODO: Dynamically map all items in the badges array to a Badge Component, and show the results below */}
             {visibleBadges.map((badge) =>(
               <div key={badge.id} className="w-24 h-24 bg-slate-400 rounded-lg flex items-center justify-center">
-                {badge.name}
+                <Badge image="" name={badge.name} desc="placeholder" />
               </div>
             ))}
             {null}
