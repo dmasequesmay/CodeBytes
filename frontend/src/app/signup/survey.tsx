@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+import ContinueButton from "@/components/ContinueButton"
 import { Button } from "@/components/ui/button";
 // For the survey items, use the button.tsx component found in the ui/ directory of components
 // Use the various TextField components as needed.
@@ -76,15 +77,19 @@ export default function Survey() {
         <div className="flex h-screen flex-col container">
             {/* TODO: Position this div to take up the entire height and about 60% width of the screen
             (use tailwind stylings) */}
-            <div className="flex-1">
+            <div className="flex-1 w-3/5 flex items-center justify-center">
                 {/* TODO: Dynamically display the ith item of the displays array (i.e. current val of DisplayIndex) */}
-                
+                {displays[displayIndex]}
             </div>
             {/* TODO: This is where the <Continue /> component will go.
              Use tailwind classes to position this at the bottom right of the screen 
              Also pass in a function to update the displayIndex using the updateDisplay hook*/}
-            <div className=" p-4 bg-gray-100">
-                {/* Add your content here */}
+            <div className=" p-4 bg-gray-100 flex justify-end">
+                <ContinueButton 
+                    onClickEvent={() => 
+                        updateDisplay(i => Math.min(i + 1, displays.length - 1))
+                    }
+                />
             </div>
         </div>
     );
