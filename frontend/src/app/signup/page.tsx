@@ -6,7 +6,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from '@react-oauth/google';
 import { signInWithGoogle } from '../../services/auth';
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -75,7 +75,7 @@ export default function Signup() {
             <div className="m-3">
               <div className="grid m-2 gap-4 space-y-2 md:grid-cols-2">
                 <div>
-                  <label htmlFor="firstName" className="">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-300">
                     First Name
                   </label>
                   <Input
@@ -88,7 +88,7 @@ export default function Signup() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="lastName" className="">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-300">
                     Last Name
                   </label>
                   <Input
@@ -102,14 +102,14 @@ export default function Signup() {
                 </div>
               </div>
               <div className="m-2 space-y-2">
-              <label htmlFor="email" className="">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
                 Email
               </label>
               <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
             </div>
 
             <div className="m-2 space-y-2">
-              <label htmlFor="password" className="">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
                 Password
               </label>
               <Input
