@@ -16,21 +16,21 @@ const difficultySettings = {
   // TODO: Implement the objects for medium, hard, and extreme.
   // Use orange for medium, red for hard, and purple for extreme
   [lessonDifficulty.medium]: {
-    label: "",
-    level: "",
-    color: "",
+    label: "NOVICE",
+    level: "Novice",
+    color: "#FFA500",
     image: "/placeholder.svg?height=80&width=80"
   },
   [lessonDifficulty.hard]: {
-    label: "",
-    level: "",
-    color: "",
+    label: "ADVANCED",
+    level: "Advanced",
+    color: "#FF0000",
     image: "/placeholder.svg?height=80&width=80"
   },
   [lessonDifficulty.extreme]: {
-    label: "",
-    level: "",
-    color: "",
+    label: "EXPERT",
+    level: "Expert",
+    color: "#9D00FF",
     image: "/placeholder.svg?height=80&width=80"
   }
 };
@@ -51,10 +51,10 @@ export default function Results({
   message
 }: ResultWindowProps) {
   // TODO: Use the difficulty params to get the settings for the window's color and label(s)
-  const settings = null;
+  const settings = difficultySettings[difficulty];
   
   // TODO: Calculate percentage of the number of problems correct
-  const percentage = null;
+  const percentage = total > 0 ? Math.round((current / total) * 100) : 0;
 
   // SVG parameters
   const size = 200
@@ -62,7 +62,7 @@ export default function Results({
   const radius = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
   // TODO: the below const controls how much of the progress bar will be filled. Implement strokeDashoffset such that the percentage of the progress bar filled is equal to the percentage of problems correct.
-  const strokeDashoffset = null;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-200 rounded-xl max-w-md mx-auto relative">
@@ -70,11 +70,13 @@ export default function Results({
       {/* Progress circle */}
       <div className="relative">
         {/* TODO: the svg tag below should use size for dimensions width & height */}
-        <svg  className="transform -rotate-90">
+        <svg  width = {size} height = {size} className="transform -rotate-90">
           {/* TODO: The two circle elements below should have a center at (size/2, size/2). also use the radius attribute */}
           {/* Background circle */}
           <circle
-            
+            circle_x = {size/2}
+            circle_y = {size/2}
+            radius = {radius}
             fill="transparent"
             stroke="#e0e0e0"
             strokeWidth={strokeWidth}
@@ -85,10 +87,14 @@ export default function Results({
           - for stroke, use the color within the settings object
           */}
           <circle
-            
+            circle_x = {size/2}
+            circle_y = {size/2}
+            radius = {radius}
             fill="transparent"
-            strokeWidth={strokeWidth}
-            strokeDasharray={circumference}
+            stroke = {settings.color}
+            strokeWidth = {strokeWidth}
+            strokeDasharray = {circumference}
+            strokeDashoffset = {strokeDashoffset}
             strokeLinecap="round"
           />
         </svg>
@@ -97,12 +103,12 @@ export default function Results({
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="relative w-20 h-20 mb-1">
             {/* TODO: use the image found in settings for the belwo <img> */}
-            <img src={} alt="Badge" className="object-contain w-full h-full" />
+            <img src={"/placeholder.svg?height=80&width=80"} alt="Badge" className="object-contain w-full h-full" />
             {/* Ribbon with label */}
             {/* TODO: use the color found in settings for the below <div>'s style attribute */}
             <div
               className="absolute bottom-0 left-1/2 transform -translate-x-1/2 px-3 py-0.5 text-xs font-bold text-white rounded-sm"
-              style={}
+              style={ {backgroundColor: settings.color}}
             >
               <div className="relative">
                 <div
@@ -120,7 +126,7 @@ export default function Results({
                   }}
                 ></div>
                 {/* TODO: Display the label found in settings here */}
-                
+                  {settings.label}
               </div>
             </div>
           </div>
@@ -128,15 +134,15 @@ export default function Results({
       </div>
 
       {/* TODO: Display the percentage */}
-      <div className="mt-4 text-4xl font-bold">%</div>
-
+      <div className="mt-4 text-4xl font-bold">{percentage}%</div>
       {/* TODO: Display the message */}
       <div className="mt-1 text-xl font-semibold text-center">
-        
+          {message}
       </div>
 
       {/* TODO: Implement Continue Button. use the image found in settings as well */}
-      
+      <ContinueButton imgSrc={settings.image} onClickEvent={}/>
+
     </div>
   )
 }
