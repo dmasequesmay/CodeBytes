@@ -156,10 +156,10 @@ export default function Signup() {
               }}
               useOneTap={true}
               theme="outline"
-              size="large"
+              size="medium"
               shape="rectangular"
-              logo_alignment="center"
-              width="100%"
+              logo_alignment="left"
+              width="300"
               text="signin_with"
               containerProps={{ className: 'w-full flex items-center justify-center gap-2' }}
             />
