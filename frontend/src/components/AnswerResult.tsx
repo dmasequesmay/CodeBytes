@@ -1,4 +1,6 @@
 "use client"
+import Icon from "./Icon"
+
 
 export default function AnswerResult({
   message,
@@ -9,6 +11,7 @@ export default function AnswerResult({
 }) {
   const color = isSuccess ? successColor : errorColor
   const imgSrc_string = isSuccess ? "checkmark" : "x"
+  // ^ imgSrc wil be replaced with actual assets later
   return (
     <div
       className={`
@@ -19,8 +22,9 @@ export default function AnswerResult({
       <h2 className="text-2xl font-bold mb-4">
         {message}
       </h2>
-      <div className="w-16 h-16 rounded-xl border-2 border-black flex items-center justify-center">
-        <Icon imgSrc={imgSrc_string} color={color} />
+      <div className="w-16 h-16 rounded-xl border-2 border-black flex items-center justify-center "
+      style={{ backgroundColor: color }}>
+        <Icon image={imgSrc_string} />
       </div>
     </div>
   )

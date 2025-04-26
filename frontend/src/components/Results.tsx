@@ -74,9 +74,9 @@ export default function Results({
           {/* TODO: The two circle elements below should have a center at (size/2, size/2). also use the radius attribute */}
           {/* Background circle */}
           <circle
-            circle_x = {size/2}
-            circle_y = {size/2}
-            radius = {radius}
+            cx={size/2}
+            cy={size/2}
+            r={radius}
             fill="transparent"
             stroke="#e0e0e0"
             strokeWidth={strokeWidth}
@@ -87,9 +87,9 @@ export default function Results({
           - for stroke, use the color within the settings object
           */}
           <circle
-            circle_x = {size/2}
-            circle_y = {size/2}
-            radius = {radius}
+            cx={size/2}
+            cy={size/2}
+            r={radius}
             fill="transparent"
             stroke = {settings.color}
             strokeWidth = {strokeWidth}
@@ -141,7 +141,7 @@ export default function Results({
       </div>
 
       {/* TODO: Implement Continue Button. use the image found in settings as well */}
-      <ContinueButton imgSrc={settings.image} onClickEvent={}/>
+      <ContinueButton imgSrc={settings.image} onClickEvent={() => {}}/>
 
     </div>
   )
