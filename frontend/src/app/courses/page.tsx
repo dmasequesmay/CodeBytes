@@ -43,7 +43,7 @@ const CourseCard = ({ name, progress }: CourseProps) => {
             - Full width and height
             - Viewbox of 0 0 100 100
         */}
-        <svg className="w-full h-full" Viewbox="0 0 100 100">
+        <svg className="w-full h-full" viewBox="0 0 100 100">
           {/* TODO: Add background circle with:
               - Gray color (Font size 300)
               - 10 units stroke width
@@ -108,7 +108,7 @@ export default function CourseLanding() {
   const [userName, setUserName] = useState("");
   
   // TODO: Add state management for current course
-  const [currentCourse, setCurrentCourse] = useState("");
+  const [currentCourse, setCurrentCourse] = useState("Java");
   // note: this should be the last course the user interacted with; where to update?
   useEffect(() => {
     const savedName = localStorage.getItem("userName");
@@ -246,7 +246,6 @@ export default function CourseLanding() {
                 <CourseCard
                   name={course.name}
                   progress={course.progress}
-                  onClick={() => setCurrentCourse(course.name)}
                 />
               ))}
             </div>
