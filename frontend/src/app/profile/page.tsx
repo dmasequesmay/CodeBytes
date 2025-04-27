@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Flame, MoreHorizontal } from "lucide-react"
 import StreakDisplayer from "@/components/StreakDisplay";
 import Icon from "@/components/Icon";
 import Badge from "@/components/Badge";
+import { mockUsers } from "../../mockData";
 
 export default function Profile({userId: number}) {
   // NOTE: we'll be using the userId to make a call to the DB to get info; will be implemented later

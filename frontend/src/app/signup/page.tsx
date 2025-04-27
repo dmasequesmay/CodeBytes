@@ -2,12 +2,14 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { signInWithGoogle } from '../../services/auth';
+import { mockUsers } from '../../mockData';
+import { useRouter } from "next/navigation"
 export default function Signup() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -15,6 +17,7 @@ export default function Signup() {
     email: "",
     password: "",
   })
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // TODO: extract variables name and value from e.target
@@ -29,9 +32,10 @@ export default function Signup() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log("Form submitted:", formData)
-    // Handle form submission logic here
+    // We'll be integrating firebase here later, but for now, go straight to the survey
+    router.push('./survey');
   }
-
+  
   const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {
     try {
       await signInWithGoogle();
