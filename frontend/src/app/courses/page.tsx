@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Search, Home, User, Lightbulb } from "lucide-react"
-import { mockCourses } from "../../mockData";
-
+import { getCourses } from '../../services/mockDataService';
 // TODO: Add interface for CourseProps with required properties
 interface CourseProps {
   name: string;

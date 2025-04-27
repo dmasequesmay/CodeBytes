@@ -34,7 +34,7 @@ export default function Signup() {
     e.preventDefault()
     console.log("Form submitted:", formData)
     // We'll be integrating firebase here later, but for now, go straight to the survey
-    router.push('./survey');
+    router.push('/signup/survey');
   }
   
   const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {

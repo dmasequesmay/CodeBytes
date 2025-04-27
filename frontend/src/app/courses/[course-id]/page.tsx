@@ -1,6 +1,6 @@
 "use client"
 import { useParams } from "next/navigation"
-
+import { getCourseById } from '../../../services/mockDataService';
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
 
 export default function Course() {
