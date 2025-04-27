@@ -15,6 +15,7 @@ export default function Profile({userId: number}) {
     userName: "Username123",
     firstName: "John",
     lastName: "Doe",
+    bio: "Learning to code one lesson at a time",
     email: "johndoe@email.com",
     dateJoined: new Date("2024-01-01"),
     streak: 0
@@ -88,7 +89,7 @@ export default function Profile({userId: number}) {
             {/* Bio section */}
             <div className="flex-1 flex flex-col justify-center items-center">
               <p className="text-lg max-w-md">
-                bio
+                {user.bio}
               </p>
             </div>
           </div>
