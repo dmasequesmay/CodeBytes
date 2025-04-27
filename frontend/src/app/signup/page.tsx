@@ -7,8 +7,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { signInWithGoogle } from '../../services/auth';
-import { mockUsers } from '../../mockData';
+// import { signInWithGoogle } from '../../services/auth';
+import { signInWithGoogle, signIn, signUp } from '../../mockAuth';
 import { useRouter } from "next/navigation"
 export default function Signup() {
   const [formData, setFormData] = useState({
