@@ -1,14 +1,14 @@
-enum lessonDifficulty {
-    easy=1,
-    medium,
-    hard,
-    extreme
-}
-
 /* TODO: write an enum type for classRole */
-enum classRole{}
+export const classRole = {} as const;
 
 /* TODO: write an enum type for user_info */
-enum userInfo{}
+export const userInfo = {} as const;
 
-export {lessonDifficulty, classRole, userInfo};
+export const lessonDifficulty = {
+    easy: 1,
+    medium: 2,
+    hard: 3,
+    extreme: 4
+} as const;
+
+export type LessonDifficulty = typeof lessonDifficulty[keyof typeof lessonDifficulty];

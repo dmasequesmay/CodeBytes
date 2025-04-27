@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { GoogleLogin } from '@react-oauth/google';
@@ -17,6 +18,8 @@ export default function Login() {
     password: "",
   })
 
+  const router = useRouter();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
@@ -28,6 +31,8 @@ export default function Login() {
       .then(() => {
         // Handle successful login
         console.log("Login successful");
+        // navigate to dashboard
+        router.push("/dashboard");
       })
       .catch((error) => {
         console.error("Login error:", error);

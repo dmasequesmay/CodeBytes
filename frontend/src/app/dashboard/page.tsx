@@ -4,14 +4,17 @@ import { useState } from "react"
 import Link from "next/link"
 import { Menu, Trophy, BookOpen, UserPlus, Monitor } from "lucide-react"
 import ContinueButton from "../../components/ContinueButton";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLanding() {
+  const router = useRouter();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const courses = [
-    { name: "Java", progress: 70 },
-    { name: "C++", progress: 100 },
-    { name: "Python", progress: 55 },
-    { name: "React", progress: 20 },
+    { name: "Java", progress: 70, id: 1 },
+    { name: "C++", progress: 100, id: 2 },
+    { name: "Python", progress: 55, id: 3 },
+    { name: "React", progress: 20, id: 4 },
     // Static for now; will be getting this info dynamically later
   ];
 
@@ -44,7 +47,7 @@ export default function DashboardLanding() {
             <h2 className="text-3xl font-bold mb-2">{language.name}</h2>
             {/* TODO: Implement a ContinueButton with imgSrc pointing to an image of a monitor
             (can be a placeholder for now) */}
-            <ContinueButton imgSrc="" onClickEvent={() => {}} />
+            <ContinueButton imgSrc="" onClickEvent={() => {router.push(`/courses/${language.id}?`)}} />
             <div className="mt-4 relative">
               <div className="h-2 bg-gray-300 rounded-full overflow-hidden">
                 {/* The width of the progress bar should be the progress percentage from language */}
@@ -68,16 +71,12 @@ export default function DashboardLanding() {
             <Monitor className="w-5 h-5" />
           </div>
           {/* TODO: add make the border of this gray with a width of 400*/}
-          <div className="h-64 flex items-end justify-between gap-4 pt-4 border-t border-l border-gray-400">
+          <div className="h-64 flex items-center justify-between gap-4 pt-4 border-t border-l border-gray-400">
             {/* Chart bars */}
             {chartData.map((item, index) => (
-                // TODO: have each outer div use flex and items-center. the height of the inner div should be dynamic based on item.progress
-                // Inner div should use #1a1a5c and a width of 16
-                // Outer div should have a width of 1/3
-                // Refer to Tailwind Docs for the specific classNames
-              <div key={index} className="flex items-center w-1/3">
+              <div key={index} className="flex flex-col items-center w-1/3 h-full">
                 <div 
-                  className="bg-[#1a1a5c] w-4 h-full rounded-full"
+                  className="w-4 h-0 mt-auto rounded-full bg-purple-700"
                   style={{ height: `${item.progress}%` }}
                 ></div>
                 <span className="text-black mt-2">{item.name}</span>

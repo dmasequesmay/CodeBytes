@@ -2,11 +2,19 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useParams } from "next/navigation"
-import { lessonDifficulty } from "../../../backend/app/types/enums"
 import ContinueButton from "./ContinueButton"
 
 // Define difficulty settings
-const difficultySettings = {
+const lessonDifficulty = {
+  easy: 1,
+  medium: 2,
+  hard: 3,
+  extreme: 4
+} as const;
+
+export type LessonDifficulty = typeof lessonDifficulty[keyof typeof lessonDifficulty];
+
+const difficultySettings: { [key in LessonDifficulty]: { label: string, level: string, color: string, image: string } } = {
   [lessonDifficulty.easy]: {
     label: "BEGINNER",
     level: "Beginner",
@@ -38,7 +46,7 @@ const difficultySettings = {
 interface ResultWindowProps {
   current: number
   total: number
-  difficulty: lessonDifficulty
+  difficulty: LessonDifficulty
   subject: string
   message:string
 }
@@ -103,7 +111,7 @@ export default function Results({
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="relative w-20 h-20 mb-1">
             {/* TODO: use the image found in settings for the belwo <img> */}
-            <img src={"/placeholder.svg?height=80&width=80"} alt="Badge" className="object-contain w-full h-full" />
+            <img src={settings.image} alt="Badge" className="object-contain w-full h-full" />
             {/* Ribbon with label */}
             {/* TODO: use the color found in settings for the below <div>'s style attribute */}
             <div

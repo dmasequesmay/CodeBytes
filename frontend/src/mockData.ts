@@ -134,10 +134,19 @@ export const mockUsers = [
   };
   
   // Results data structure
+  const lessonDifficulty = {
+    easy: 1,
+    medium: 2,
+    hard: 3,
+    extreme: 4
+  } as const;
+
+  export type LessonDifficulty = typeof lessonDifficulty[keyof typeof lessonDifficulty];
+
   export interface ResultData {
     current: number;
     total: number;
-    difficulty: string;
+    difficulty: LessonDifficulty;
     subject: string;
     message: string;
     score: number;
@@ -149,10 +158,48 @@ export const mockUsers = [
   export const mockResults: ResultData = {
     current: 2,
     total: 3,
-    difficulty: "easy",
+    difficulty: lessonDifficulty.easy,
     subject: "Python Fundamentals",
     message: "Great job! You've completed this lesson successfully.",
     score: 85,
     correctAnswers: 4,
     totalQuestions: 5
   };
+
+export interface Question {
+  id: number;
+  prompt: string;
+  questionType: "code" | "multiple-choice";
+  codeTemplate?: string;
+  choices?: string[];
+  correctAnswer: string | string[];
+  difficulty: string;
+  language?: string;
+}
+
+export const mockQuestions: Question[] = [
+  {
+    id: 1,
+    prompt: "Write a function that takes two numbers and returns their sum",
+    questionType: "code",
+    codeTemplate: "function sum(a, b) {\n  // TODO: Implement\n}",
+    correctAnswer: "return a + b;",
+    difficulty: "easy",
+    language: "javascript"
+  },
+  {
+    id: 2,
+    prompt: "Which of these is a valid JavaScript variable declaration?",
+    questionType: "multiple-choice",
+    choices: [
+      "var x = 5;",
+      "let x = 5;",
+      "const x = 5;",
+      "all of the above"
+    ],
+    correctAnswer: "all of the above",
+    difficulty: "easy",
+    language: "javascript"
+  },
+  // Add more questions as needed
+];

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Search, Home, User, Lightbulb } from "lucide-react"
 import { getCourses } from '../../services/mockDataService';
+import Link from "next/link";
 // TODO: Add interface for CourseProps with required properties
 interface CourseProps {
   name: string;
@@ -108,7 +109,7 @@ export default function CourseLanding() {
   const [userName, setUserName] = useState("");
   
   // TODO: Add state management for current course
-  const [currentCourse, setCurrentCourse] = useState("Java");
+  const [currentCourse, setCurrentCourse] = useState("Python");
   // note: this should be the last course the user interacted with; where to update?
   useEffect(() => {
     const savedName = localStorage.getItem("userName");
@@ -117,7 +118,6 @@ export default function CourseLanding() {
     if (savedCourse) setCurrentCourse(savedCourse);
   }, []);
 
-  // ✅ Save last interacted course to localStorage when it changes
   useEffect(() => {
     if (currentCourse) {
       localStorage.setItem("lastCourse", currentCourse);
@@ -212,10 +212,14 @@ export default function CourseLanding() {
             <Lightbulb className="h-6 w-6" />
           </button>
           <button className="p-2 hover:bg-gray-300 rounded-full">
-            <Home className="h-6 w-6" />
+            <Link href="/dashboard">
+              <Home className="h-6 w-6" />
+            </Link>
           </button>
           <button className="p-2 hover:bg-gray-300 rounded-full">
-            <User className="h-6 w-6" />
+            <Link href="/profile">
+              <User className="h-6 w-6" />
+            </Link>
           </button>
         </div>
 
@@ -242,11 +246,14 @@ export default function CourseLanding() {
             */}
             <div className="grid grid-cols-2 gap-4">
               {/* TODO: Map through courses and render CourseCard component */}
-              {courses.map((course) => (
-                <CourseCard
-                  name={course.name}
-                  progress={course.progress}
-                />
+              {courses.map((course, index) => (
+                <Link href={`/courses/${course.name}`}>
+                  <CourseCard
+                    key={index}
+                    name={course.name}
+                    progress={course.progress}
+                  />
+                </Link>
               ))}
             </div>
           </div>
