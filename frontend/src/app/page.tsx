@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-export default function Hpme() {
+export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <header className="container mx-auto py-4 px-6 flex items-center justify-between">
