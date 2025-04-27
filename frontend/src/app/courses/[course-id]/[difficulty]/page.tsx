@@ -8,7 +8,7 @@ import { Editor } from "@monaco-editor/react"
 import  AnswerResult  from "../../../../components/AnswerResult"
 import  Results  from "../../../../components/Results"
 import { mockQuestions, mockResults } from "../../../../mockData"
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 type QuestionType = "code" | "multiple-choice"
 
@@ -32,6 +32,8 @@ export default function ProblemDisplay({
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showAnswerResult, setShowAnswerResult] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const params = useParams();
+  const difficulty = params.difficulty;
 
   const handleContinue = () => {
     if (currentQuestion === mockQuestions.length - 1) {

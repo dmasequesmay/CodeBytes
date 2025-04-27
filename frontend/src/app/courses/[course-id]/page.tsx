@@ -6,8 +6,9 @@ import Link from 'next/link';
 
 export default function Course() {
   // TODO: access the courseId attribute from params (hint: look at the top import)
-  const { courseId } = useParams(); // TODO: access the courseId attribute from params
-  const course = getCourseById(courseId as string);
+  const params = useParams(); // TODO: access the courseId attribute from params
+  const courseId:string = params['course-id'].toString();
+  const course = getCourseById(courseId);
   // placeholder (for now)
   const courseTitle = course.title;
   

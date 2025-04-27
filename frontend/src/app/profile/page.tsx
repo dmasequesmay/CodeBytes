@@ -29,13 +29,13 @@ export default function Profile({userId: number}) {
     // more fields added later
   }))
 
-  const visibleBadges = badges.slice(badgeOffset, badgeOffset + 5)
+  const visibleBadges = badges.slice(badgeOffset, badgeOffset + 4)
 
   const handleNextBadges = () => {
     // TODO: implement pagination for badges (forward)
     // use the above hooks and change the badgeOffset
-    if (badgeOffset + 5 < badges.length) {
-      setBadgeOffset(badgeOffset + 5);
+    if (badgeOffset + 4 < badges.length) {
+      setBadgeOffset(badgeOffset + 4);
     } else {
       setBadgeOffset(0); 
     }
@@ -54,8 +54,7 @@ export default function Profile({userId: number}) {
       <div className="flex-1 bg-sky-100">
         <div className="relative pt-20 pb-4 border-b border-sky-300">
           {/* Profile picture placeholder */}
-          {/* TODO: Implement an Icon component within the below div */}
-          <div className="w-40 h-40 bg-slate-500 rounded-full mx-auto">
+          <div className="w-[200px] h-[200px] bg-slate-500 rounded-full mx-auto">
             <Icon image="" />
           </div>
 
@@ -68,61 +67,54 @@ export default function Profile({userId: number}) {
 
         {/* User info section */}
         <div className="py-4 text-center">
-          {/* TODO: Dynamically display the current user info
-          username
-          firstname lastname
-          email
-          date joined */}
           <h1 className="text-2xl font-bold mb-4">{user.userName}</h1>
           <p className="text-lg">{user.firstName} {user.lastName}</p>
           <p className="text-gray-500">{user.email}</p>
           <p className="text-gray-500">Joined: {user.dateJoined.toDateString()}</p>
 
-          
-          <div className="flex justify-center gap-8 px-8">
-            {/* Streak display */}
-            <div className="w-64 h-52 bg-slate-500 rounded-lg flex flex-col items-center justify-center relative">
-              {/* TODO: Dynamically display the current user's day streak
-              using the StreakDisplay component */}
-              <StreakDisplayer numDays={user.streak} />
-            </div>
-
-            {/* Bio section */}
-            <div className="flex-1 flex flex-col justify-center items-center">
-              <p className="text-lg max-w-md">
-                {user.bio}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Badges section */}       
-        <div className="mt-8 relative">
-          <div className="absolute top-1/2 -translate-y-1/2 right-4">
-            {/* hook this button into the handleNextBadges function
-            so that each click will display the next 5 badges */}
-            <button onClick={handleNextBadges} >
-              <ChevronRight className="w-8 h-8 text-black" />
-            </button>
+        
+        <div className="flex justify-center gap-8 px-8">
+          {/* Streak display */}
+          <div className="w-64 h-52 bg-slate-500 rounded-lg flex flex-col items-center justify-center relative">
+            {/* TODO: Dynamically display the current user's day streak
+            using the StreakDisplay component */}
+            <StreakDisplayer numDays={user.streak} />
           </div>
 
-          {/* More options button */}
-          <div className="absolute top-2 right-2">
-            <MoreHorizontal className="w-5 h-5 text-gray-500" />
-          </div>
-
-          {/* Display badges */}
-          <div className="flex justify-center gap-4 px-16">
-            {/* TODO: Dynamically map all items in the badges array to a Badge Component, and show the results below */}
-            {visibleBadges.map((badge) =>(
-              <div key={badge.id} className="w-24 h-24 bg-slate-400 rounded-lg flex items-center justify-center">
-                <Badge image="" name={badge.name} desc="placeholder" />
-              </div>
-            ))}
-            {null}
+          {/* Bio section */}
+          <div className="flex-1 flex flex-col justify-center items-center bg-purple-500">
+            <p className="text-lg max-w-md">
+              {user.bio}
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Badges section */}       
+      <div className="mt-8 relative">
+        <div className="absolute top-1/2 -translate-y-1/2 right-4">
+          {/* hook this button into the handleNextBadges function
+          so that each click will display the next 5 badges */}
+          <button onClick={handleNextBadges} >
+            <ChevronRight className="w-8 h-8 text-black" />
+          </button>
+        </div>
+
+        {/* More options button */}
+        <div className="absolute top-2 right-2">
+          <MoreHorizontal className="w-5 h-5 text-gray-500" />
+        </div>
+
+        {/* Display badges */}
+        <div className="grid grid-cols-4 gap-4 p-4 max-w-4xl mx-auto">
+          {/* TODO: Dynamically map all items in the badges array to a Badge Component, and show the results below */}
+          {visibleBadges.map((badge) => (
+            <div key={badge.id} className="w-40 h-40 bg-slate-400 rounded-lg flex items-center justify-center">
+              <Badge image="" name={badge.name} desc="placeholder" />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-  )
+    </div>  )
 }

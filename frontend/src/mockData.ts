@@ -22,9 +22,70 @@ export const mockUsers = [
   export const mockCourses = [
     {
       id: 1,
+      title: "Java",
+      description: "Master the fundamentals of Java programming",
+      difficulty: "medium",
+      progress: 70,
+      lessons: [
+        { 
+          id: 1, 
+          title: "Introduction to Java", 
+          description: "Getting started with Java basics",
+          completed: true,
+          difficulty: "medium"
+        },
+        { 
+          id: 2, 
+          title: "Object-Oriented Programming", 
+          description: "Understanding OOP concepts",
+          completed: true,
+          difficulty: "medium"
+        },
+        { 
+          id: 3, 
+          title: "Collections Framework",
+          description: "Working with Java collections",
+          completed: false,
+          difficulty: "medium"
+        }
+      ]
+    },
+    {
+      id: 2,
+      title: "C++",
+      description: "Master the fundamentals of C++ programming",
+      difficulty: "hard",
+      progress: 100,
+      lessons: [
+        { 
+          id: 1, 
+          title: "Introduction to C++", 
+          description: "Getting started with C++ basics",
+          completed: true,
+          difficulty: "hard"
+        },
+        { 
+          id: 2, 
+          title: "Pointers and Memory Management", 
+          description: "Understanding pointers and memory",
+          completed: true,
+          difficulty: "hard"
+        },
+        { 
+          id: 3, 
+          title: "Templates and Generic Programming",
+          description: "Working with templates",
+          completed: true,
+          difficulty: "hard"
+        }
+      ]
+    },
+    {
+      id: 3,
       title: "Python Fundamentals",
       description: "Learn the basics of Python programming",
       difficulty: "easy",
+      progress: 55,
       lessons: [
         { 
           id: 1, 
@@ -50,23 +111,31 @@ export const mockUsers = [
       ]
     },
     {
-      id: 2,
-      title: "JavaScript Basics",
-      description: "Master the fundamentals of JavaScript",
+      id: 4,
+      title: "React",
+      description: "Master React.js for building modern web applications",
       difficulty: "medium",
+      progress: 20,
       lessons: [
         { 
           id: 1, 
-          title: "Introduction to JavaScript", 
-          description: "Getting started with JavaScript",
+          title: "Introduction to React", 
+          description: "Getting started with React basics",
           completed: true,
           difficulty: "medium"
         },
         { 
           id: 2, 
-          title: "DOM Manipulation", 
-          description: "Working with the Document Object Model",
-          completed: true,
+          title: "Components and Props", 
+          description: "Building reusable components",
+          completed: false,
+          difficulty: "medium"
+        },
+        { 
+          id: 3, 
+          title: "State Management",
+          description: "Managing component state",
+          completed: false,
           difficulty: "medium"
         }
       ]

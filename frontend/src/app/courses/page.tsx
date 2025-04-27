@@ -128,10 +128,10 @@ export default function CourseLanding() {
   // - name: string (course name)
   // - progress: number (0-100)
   const courses = [
-    { name: "Java", progress: 70 },
-    { name: "C++", progress: 100 },
-    { name: "Python", progress: 55 },
-    { name: "React", progress: 20 },
+    { id: 1, name: "Java", progress: 70 },
+    { id: 2, name: "C++", progress: 100 },
+    { id: 3, name: "Python", progress: 55 },
+    { id: 4, name: "React", progress: 20 },
     // static for now; will be getting this info dynamically later
   ]
 
@@ -246,10 +246,10 @@ export default function CourseLanding() {
             */}
             <div className="grid grid-cols-2 gap-4">
               {/* TODO: Map through courses and render CourseCard component */}
-              {courses.map((course, index) => (
-                <Link href={`/courses/${course.name}`}>
+              {courses.map((course) => (
+                <Link href={`/courses/${course.id}`}>
                   <CourseCard
-                    key={index}
+                    key={course.id}
                     name={course.name}
                     progress={course.progress}
                   />
