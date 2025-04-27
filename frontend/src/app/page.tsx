@@ -41,7 +41,7 @@ export default function Home() {
               Something something something slogan.
             </p>
             <Link
-              href="/get-started"
+              href="/signup"
               className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-md text-lg font-medium inline-block transition-colors"
             >
               Get started today!
