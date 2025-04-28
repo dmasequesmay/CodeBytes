@@ -1,14 +1,16 @@
 "use client"
 import { useParams } from "next/navigation"
-
+import { getCourseById } from '../../../services/mockDataService';
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
+import Link from 'next/link';
 
 export default function Course() {
   // TODO: access the courseId attribute from params (hint: look at the top import)
-  const { courseId } = useParams(); // TODO: access the courseId attribute from params
-
+  const params = useParams(); // TODO: access the courseId attribute from params
+  const courseId:string = params['course-id'].toString();
+  const course = getCourseById(courseId);
   // placeholder (for now)
-  const courseTitle = "[Course Title]";
+  const courseTitle = course.title;
   
   // for now, use placeholder text for goals. refer to Mid-Fi for details.
   const courseSections = [
@@ -83,10 +85,12 @@ export default function Course() {
               key={index}
               className="bg-gray-100 p-6 rounded-lg shadow-sm"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                {section.title}
-              </h2>
-              <p className="text-gray-600">{section.goals}</p>
+              <Link href={`/courses/${courseId}/${index}`} className="block">
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  {section.title}
+                </h2>
+                <p className="text-gray-600">{section.goals}</p>
+              </Link>
             </div>
           ))}
         </div>

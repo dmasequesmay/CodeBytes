@@ -2,16 +2,16 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, Trophy, BookOpen, UserPlus, Monitor } from "lucide-react"
+import { Menu, Trophy, BookOpen, UserPlus, Monitor, User2Icon, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const sidebarIcons = [
-    { icon: Menu, tooltip: "Menu" },
-    { icon: Trophy, tooltip: "Trophies" },
-    { icon: BookOpen, tooltip: "Courses" },
-    { icon: UserPlus, tooltip: "Invite" }
+    { icon: Menu, tooltip: "Menu", href: "" },
+    { icon: Shield, tooltip: "Badges", href: "" },
+    { icon: BookOpen, tooltip: "Courses", href: "/courses" },
+    { icon: User2Icon, tooltip: "Profile", href: "/profile" }
   ];
 
   return (
@@ -48,13 +48,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         >
           {isSidebarOpen && sidebarIcons.map((item, index) => (
             // TODO: For each item in sidebarIcons, add a button element (height and with of 6 units, add some padding as well)
-            <button
-              key={index}
-              className="h-12 w-12 mb-4 p-2 bg-white rounded-full flex items-center justify-center hover:bg-gray-100"
-              title={item.tooltip}
-            >
-              <item.icon className="h-6 w-6 text-black" />
-            </button>
+            <Link key={index} href={item.href}>
+              <button
+                key={index}
+                className="h-12 w-12 mb-4 p-2 bg-white rounded-full flex items-center justify-center hover:bg-gray-100"
+                title={item.tooltip}
+              >
+                <item.icon className="h-6 w-6 text-black" />
+              </button>
+            </Link>
           ))}
         </div>
 

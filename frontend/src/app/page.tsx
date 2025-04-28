@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-export default function Hpme() {
+export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <header className="container mx-auto py-4 px-6 flex items-center justify-between">
@@ -41,7 +41,7 @@ export default function Hpme() {
               Something something something slogan.
             </p>
             <Link
-              href="/get-started"
+              href="/signup"
               className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-md text-lg font-medium inline-block transition-colors"
             >
               Get started today!

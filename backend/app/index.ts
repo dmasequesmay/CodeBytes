@@ -79,7 +79,7 @@ const startServer = async () => {
         lastName:string,
         bio:string,
         email:string,
-        role: userInfo,
+        role: typeof userInfo,
         dateJoined: Date
       } = req.body;
       
@@ -121,7 +121,7 @@ const startServer = async () => {
     app.post("/add-lesson ", (req, res) => {
       const { lessonName, difficulty } : {
         lessonName:string,
-        difficulty:lessonDifficulty,
+        difficulty:typeof lessonDifficulty,
       } = req.body;
 
       dpool.query(

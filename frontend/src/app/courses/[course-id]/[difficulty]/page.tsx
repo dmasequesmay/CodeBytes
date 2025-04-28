@@ -5,6 +5,10 @@ import type React from "react"
 import { useState } from "react"
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react"
 import { Editor } from "@monaco-editor/react"
+import  AnswerResult  from "../../../../components/AnswerResult"
+import  Results  from "../../../../components/Results"
+import { mockQuestions, mockResults } from "../../../../mockData"
+import { useParams, useRouter } from 'next/navigation';
 
 type QuestionType = "code" | "multiple-choice"
 
@@ -21,53 +25,68 @@ interface ProblemProps {
 
 export default function ProblemDisplay({
   problemNumber = 1,
-  prompt = "Write a function that returns the sum of two numbers",
-  questionType = "code",
-  codeTemplate = "function sum(a, b) {\n  // Your code here\n}",
-  choices = ["Option 1", "Option 2", "Option 3", "Option 4"],
-  totalProblems = 10,
-  currentProgress = 3,
-  language = "javascript",
+  totalProblems = 2,
+  currentProgress = 1,
 }: ProblemProps) {
-  const [code, setCode] = useState(codeTemplate)
-  const [selectedChoice, setSelectedChoice] = useState<number | null>(null)
-
-  const handleCodeChange = (value: string | undefined) => {
-    if (value !== undefined) {
-      setCode(value)
-    }
-  }
-
-  const handleChoiceSelect = (index: number) => {
-    setSelectedChoice(index)
-  }
-
-  const handleTryNow = () => {
-    console.log("Try Now clicked")
-    // Implement code execution or choice validation
-  }
+  const router = useRouter();
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showAnswerResult, setShowAnswerResult] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const params = useParams();
+  const difficulty = params.difficulty;
 
   const handleContinue = () => {
-    console.log("Continue clicked")
-    // Implement navigation to next problem
+    if (currentQuestion === mockQuestions.length - 1) {
+      setShowResults(true);
+    } else {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+  };
+
+  const handleTryNow = () => {
+    setShowAnswerResult(true);
+    setTimeout(() => {
+      setShowAnswerResult(false);
+      handleContinue();
+    }, 2000);
+  };
+
+  const handleChoiceSelect = (index: number) => {
+    // Mock selection for multiple choice
+    console.log('Selected choice:', index);
+  };
+
+  if (showResults) {
+    return (
+      <div className="flex min-h-screen bg-white">
+        <div className="flex-1 p-8">
+          <Results {...mockResults} />
+          <div className="mt-8">
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
+              Return to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  // TODO: Calculate progress percentage
-  const progressPercentage = totalProblems > 0 ? (currentProgress / totalProblems) * 100 : 0;
+  const currentQuestionData = mockQuestions[currentQuestion];
+  const { prompt, questionType, codeTemplate, choices } = currentQuestionData;
 
   return (
     <div className="flex min-h-screen bg-white">
-
-      {/* Main content */}
       <div className="flex-1 p-8 flex flex-col items-center">
-        {/* TOOD: Dynamically display the current problem number (Problem N)
-        adjust styling to reflect the Midfis */}
-        <h1 className="text-2xl font-semibold mb-4">Problem {problemNumber}</h1>
-
-        {/* TODO: Dynamically display the progress bar (width = progressPercentage)
-        adjust styling to reflect the Midfis */}
+        <h1 className="text-2xl font-semibold mb-4">Problem {currentQuestion + 1}</h1>
+        
         <div className="w-full max-w-2xl h-6 bg-gray-300 rounded-full mb-8">
-          <div className="h-full bg-green-500 rounded-full mb-8" style={{ width: `${progressPercentage}`}} />
+          <div 
+            className="h-full bg-green-500 rounded-full" 
+            style={{ width: `${(currentQuestion + 1) / totalProblems * 100}%`}}
+          />
         </div>
 
         {/* TODO: display the prompt within the <p> tag. text should be of size large (lg) */}
@@ -78,32 +97,30 @@ export default function ProblemDisplay({
         {/* TODO: display the question area */}
         <div className="w-full max-w-2xl bg-gray-200 rounded-lg p-6 mb-6 min-h-[300px] flex items-center justify-center">
           {questionType === "code" ? (
-        <div className="w-full h-[400px] border rounded-md overflow-hidden">
+            <div className="w-full h-[400px] border rounded-md overflow-hidden">
           {/* TODO: Implement the editor
           
           height should take up the remaining space,
           should use the language parameter,
           use a medium font size (12-16)*/}
-          <Editor
-            height="100%"
-            language={language}
-            defaultValue="// Start coding here"
-            theme="vs-dark"
-            options={{
-              minimap: { enabled: false },
-              fontSize: 14,
-            }}
-          />
-        </div>
+              <Editor
+                height="100%"
+                language={currentQuestionData.language || "javascript"}
+                defaultValue={codeTemplate || "// Start coding here"}
+                theme="vs-dark"
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                }}
+              />
+            </div>
           ) : (
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-              {choices.map((choice, index) => (
+              {choices?.map((choice, index) => (
                 <button
                   key={index}
-                  className={`p-4 rounded-md text-left ${
-                    selectedChoice === index ? "bg-green-500 text-white" : "bg-gray-300 hover:bg-gray-400"
-                  }`}
                   onClick={() => handleChoiceSelect(index)}
+                  className="w-full px-4 py-2 bg-white rounded-lg border hover:bg-gray-100"
                 >
                   {choice}
                 </button>
@@ -112,26 +129,19 @@ export default function ProblemDisplay({
           )}
         </div>
 
-        {/* TODO: display the action buttons 
+        {showAnswerResult && (
+          <AnswerResult message="Correct!" isSuccess={true} />
+        )}
         
-        Implement the onClick listener functions 
-        (use the handle funcs defined above)*/}
-        <div className="flex space-x-4">
+        <div className="mt-6">
           <button
-            className="px-8 py-3 bg-gray-400 hover:bg-gray-500 text-black font-medium rounded-md"
             onClick={handleTryNow}
+            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
             Try Now
-          </button>
-          <button
-            className="px-8 py-3 bg-gray-400 hover:bg-gray-500 text-black font-medium rounded-md"
-            onClick={handleContinue}
-          >
-            Continue
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

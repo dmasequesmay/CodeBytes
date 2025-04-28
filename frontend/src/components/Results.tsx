@@ -2,11 +2,19 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useParams } from "next/navigation"
-import { lessonDifficulty } from "../../../backend/app/types/enums"
 import ContinueButton from "./ContinueButton"
 
 // Define difficulty settings
-const difficultySettings = {
+const lessonDifficulty = {
+  easy: 1,
+  medium: 2,
+  hard: 3,
+  extreme: 4
+} as const;
+
+export type LessonDifficulty = typeof lessonDifficulty[keyof typeof lessonDifficulty];
+
+const difficultySettings: { [key in LessonDifficulty]: { label: string, level: string, color: string, image: string } } = {
   [lessonDifficulty.easy]: {
     label: "BEGINNER",
     level: "Beginner",
@@ -38,7 +46,7 @@ const difficultySettings = {
 interface ResultWindowProps {
   current: number
   total: number
-  difficulty: lessonDifficulty
+  difficulty: LessonDifficulty
   subject: string
   message:string
 }
@@ -74,9 +82,9 @@ export default function Results({
           {/* TODO: The two circle elements below should have a center at (size/2, size/2). also use the radius attribute */}
           {/* Background circle */}
           <circle
-            circle_x = {size/2}
-            circle_y = {size/2}
-            radius = {radius}
+            cx={size/2}
+            cy={size/2}
+            r={radius}
             fill="transparent"
             stroke="#e0e0e0"
             strokeWidth={strokeWidth}
@@ -87,9 +95,9 @@ export default function Results({
           - for stroke, use the color within the settings object
           */}
           <circle
-            circle_x = {size/2}
-            circle_y = {size/2}
-            radius = {radius}
+            cx={size/2}
+            cy={size/2}
+            r={radius}
             fill="transparent"
             stroke = {settings.color}
             strokeWidth = {strokeWidth}
@@ -103,7 +111,7 @@ export default function Results({
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="relative w-20 h-20 mb-1">
             {/* TODO: use the image found in settings for the belwo <img> */}
-            <img src={"/placeholder.svg?height=80&width=80"} alt="Badge" className="object-contain w-full h-full" />
+            <img src={settings.image} alt="Badge" className="object-contain w-full h-full" />
             {/* Ribbon with label */}
             {/* TODO: use the color found in settings for the below <div>'s style attribute */}
             <div
@@ -141,7 +149,7 @@ export default function Results({
       </div>
 
       {/* TODO: Implement Continue Button. use the image found in settings as well */}
-      <ContinueButton imgSrc={settings.image} onClickEvent={}/>
+      <ContinueButton imgSrc={settings.image} onClickEvent={() => {}}/>
 
     </div>
   )
