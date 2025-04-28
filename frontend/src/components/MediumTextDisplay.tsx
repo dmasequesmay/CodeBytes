@@ -3,7 +3,7 @@ export default function MediumTextDisplay({text}:{
 }){
     return <div>
         <h2>
-            
+            {text}
         </h2>
     </div>;
 }
