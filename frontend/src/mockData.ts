@@ -1,4 +1,6 @@
 // Used for demo purposes 
+import { Question } from "./types/questions";
+
 export const mockUsers = [
     {
       id: 1,
@@ -235,40 +237,38 @@ export const mockUsers = [
     totalQuestions: 5
   };
 
-export interface Question {
-  id: number;
-  prompt: string;
-  questionType: "code" | "multiple-choice";
-  codeTemplate?: string;
-  choices?: string[];
-  correctAnswer: string | string[];
-  difficulty: string;
-  language?: string;
-}
+// export interface Question {
+//   id: number;
+//   prompt: string;
+//   questionType: "code" | "multiple-choice";
+//   codeTemplate?: string;
+//   choices?: string[];
+//   correctAnswer: string | string[];
+//   difficulty: string;
+//   language?: string;
+// }
 
 export const mockQuestions: Question[] = [
   {
-    id: 1,
-    prompt: "Write a function that takes two numbers and returns their sum",
-    questionType: "code",
-    codeTemplate: "function sum(a, b) {\n  // TODO: Implement\n}",
-    correctAnswer: "return a + b;",
-    difficulty: "easy",
-    language: "javascript"
+    prompt: "Write a function that adds two numbers",
+    questionType: 'code',
+    languageId: 71, // JavaScript
+    languageName: "JavaScript",
+    codeTemplate: "// Write your code here\nfunction add(a, b) {\n  \n}",
+    inputOutput: {
+      input: "10\n5",
+      expectedOutput: "15"
+    }
   },
   {
-    id: 2,
-    prompt: "Which of these is a valid JavaScript variable declaration?",
-    questionType: "multiple-choice",
+    prompt: "What is the capital of France?",
+    questionType: 'multiple-choice',
     choices: [
-      "var x = 5;",
-      "let x = 5;",
-      "const x = 5;",
-      "all of the above"
+      "Paris",
+      "London",
+      "Berlin",
+      "Madrid"
     ],
-    correctAnswer: "all of the above",
-    difficulty: "easy",
-    language: "javascript"
-  },
-  // Add more questions as needed
+    correctAnswer: 0 // Index of "Paris"
+  }
 ];

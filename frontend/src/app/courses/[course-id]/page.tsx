@@ -85,7 +85,8 @@ export default function Course() {
               key={index}
               className="bg-gray-100 p-6 rounded-lg shadow-sm"
             >
-              <Link href={`/courses/${courseId}/${index}`} className="block">
+              {/* TODO: change the queries to be dynamic! */}
+              <Link href={{pathname: `/courses/${courseId}/${index}`, query: { totalProblems: 2, currentProgress: 1 }}} className="block">
                 <h2 className="text-xl font-semibold text-gray-800 mb-2">
                   {section.title}
                 </h2>

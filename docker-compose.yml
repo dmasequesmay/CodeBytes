@@ -17,7 +17,6 @@ services:
       - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
-      - JUDGE0_API_URL=http://judge0-api:9000 # Add this for Judge0
     volumes:
       - .:/root/codebytes
     depends_on:
@@ -25,7 +24,6 @@ services:
       - elasticsearch
       - pgadmin
       # - firebase
-      - judge0-api
     working_dir: /root
 
   db:
@@ -71,22 +69,6 @@ services:
   #     - "5001:5000"
   #     - "9199:9199"
 
-  judge0-api:
-    image: judge0/judge0:latest
-    ports:
-      - "9000:9000"
-    environment:
-      - JUDGE0_API_JUDGE0_RUNTIME_URL=http://judge0-runtime:8080
-      - JUDGE0_API_JUDGE0_RUNTIME_TOKEN=your-secret-token
-    depends_on:
-      - judge0-runtime
-
-  judge0-runtime:
-    image: judge0/judge0:latest
-    environment:
-      - JUDGE0_RUNTIME_TOKEN=your-secret-token
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   pgdata:
