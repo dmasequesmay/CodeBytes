@@ -9,6 +9,7 @@ import  AnswerResult  from "../../../../components/AnswerResult"
 import  Results  from "../../../../components/Results"
 import { mockQuestions, mockResults } from "../../../../mockData"
 import { useParams, useRouter } from 'next/navigation';
+import { executeCode } from '../../../../services/judge0';
 
 type QuestionType = "code" | "multiple-choice"
 
@@ -32,8 +33,52 @@ export default function ProblemDisplay({
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showAnswerResult, setShowAnswerResult] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [code, setCode] = useState('');
+  const [selectedChoice, setSelectedChoice] = useState(null);
   const params = useParams();
   const difficulty = params.difficulty;
+  const [result, setResult] = useState<{ status?: string; output?: string; correct?: boolean }>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleRunCode = async () => {
+    if (!code && currentQuestionData.questionType === "code") return;
+    if (currentQuestionData.questionType === "multiple-choice" && selectedChoice === null) return;
+  
+    setLoading(true);
+    try {
+      if (currentQuestionData.questionType === "multiple-choice") {
+        const isCorrect = selectedChoice === currentQuestionData.correctAnswer;
+        setResult({
+          status: 'success',
+          output: isCorrect ? 'Correct!' : 'Incorrect',
+          correct: isCorrect
+        });
+        if (isCorrect) {
+          handleContinue();
+        }
+      } else {
+        const result = await executeCode(
+          code,
+          currentQuestionData.languageId,
+          currentQuestionData.stdin
+        );
+        setResult(result);
+        if (result.correct) {
+          handleContinue();
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setResult({
+        status: 'error',
+        output: 'Failed to execute code',
+        correct: false
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleContinue = () => {
     if (currentQuestion === mockQuestions.length - 1) {
@@ -43,17 +88,17 @@ export default function ProblemDisplay({
     }
   };
 
-  const handleTryNow = () => {
-    setShowAnswerResult(true);
-    setTimeout(() => {
-      setShowAnswerResult(false);
-      handleContinue();
-    }, 2000);
-  };
+
 
   const handleChoiceSelect = (index: number) => {
-    // Mock selection for multiple choice
+    setSelectedChoice(index);
     console.log('Selected choice:', index);
+  };
+
+  const evaluateMultipleChoice = (selectedChoice: number) => {
+    const currentQuestionData = mockQuestions[currentQuestion];
+    const { correctAnswer } = currentQuestionData;
+    return null;
   };
 
   if (showResults) {
@@ -75,7 +120,7 @@ export default function ProblemDisplay({
   }
 
   const currentQuestionData = mockQuestions[currentQuestion];
-  const { prompt, questionType, codeTemplate, choices } = currentQuestionData;
+  const { prompt, questionType, codeTemplate, choices, correctAnswer } = currentQuestionData;
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -112,6 +157,7 @@ export default function ProblemDisplay({
                   minimap: { enabled: false },
                   fontSize: 14,
                 }}
+                onChange={(value) => setCode(value)}
               />
             </div>
           ) : (
@@ -130,12 +176,13 @@ export default function ProblemDisplay({
         </div>
 
         {showAnswerResult && (
-          <AnswerResult message="Correct!" isSuccess={true} />
+          <AnswerResult message={result?.output || ""} isSuccess={result?.correct || false} />
         )}
         
         <div className="mt-6">
           <button
-            onClick={handleTryNow}
+            onClick={handleRunCode}
+            disabled={loading}
             className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
             Try Now

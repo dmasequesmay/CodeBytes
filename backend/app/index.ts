@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import * as fs from "fs";
 import bodyParser from 'body-parser';
+import { Judge0Service } from './services/judge0.js';
 // import { createLeaderboard } from './keepTheScoreConfig.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +27,7 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 let dpool = pool;
+let judge0Service = new Judge0Service();
 
 const waitForDatabase = async (pool: any, maxAttempts: number = 10, delayMs: number = 1000) => {
     let attempts = 0;
@@ -158,6 +160,26 @@ const startServer = async () => {
         console.error('Error inserting data:', error);
         res.status(500).send('Internal Server Error');
       });
+    });
+
+    app.post('/execute-code', async (req, res) => {
+      try {
+        const { code, languageId, stdin } = req.body;
+        const submission = {
+          source_code: code,
+          language_id: languageId,
+          stdin: stdin || ''
+        };
+    
+        const result = await judge0Service.submitAndCheckStatus(submission);
+        res.json({
+          status: result.status,
+          output: result.output,
+          correct: result.correct
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to execute code' });
+      }
     });
 
     app.listen(5000, () => {
