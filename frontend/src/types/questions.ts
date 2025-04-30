@@ -1,6 +1,7 @@
 export interface QuestionBase {
   prompt: string;
   questionType: 'code' | 'multiple-choice';
+  id: number;
 }
 
 export interface CodeQuestion extends QuestionBase {
@@ -8,10 +9,12 @@ export interface CodeQuestion extends QuestionBase {
   languageId: number;
   languageName: string;
   codeTemplate?: string;
-  inputOutput: {
+  testCases: {
     input: string;
     expectedOutput: string;
-  };
+    isSample: boolean;
+    score: number;
+  }[];
 }
 
 export interface MultipleChoiceQuestion extends QuestionBase {

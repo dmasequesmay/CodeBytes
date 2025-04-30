@@ -164,18 +164,23 @@ const startServer = async () => {
 
     app.post('/execute-code', async (req, res) => {
       try {
-        const { code, languageId, stdin } = req.body;
-        const submission = {
-          source_code: code,
-          language_id: languageId,
-          stdin: stdin || ''
-        };
+        const { problemId, code } = req.body;
+        const problem = await dpool.query('SELECT * FROM problems WHERE id = $1', [problemId]);
+        const test_cases = await dpool.query('SELECT * FROM test_cases WHERE problem_id = $1', [problemId]);
+        const submissions = test_cases.rows.map(test_case => {
+          return {
+            source_code: code,
+            language_id: problem.rows[0].judge0_language_id,
+            stdin: test_case.input,
+            expected_output: test_case.expected_output,
+            cpu_time_limit: problem.rows[0].time_limit,
+            memory_limit: problem.rows[0].memory_limit
+          };
+        });
     
-        const result = await judge0Service.submitAndCheckStatus(submission);
+        const result = await judge0Service.submitMultipleAndCheckStatus(submissions);
         res.json({
-          status: result.status,
-          output: result.output,
-          correct: result.correct
+          correct: result
         });
       } catch (error) {
         res.status(500).json({ error: 'Failed to execute code' });
