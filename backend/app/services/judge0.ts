@@ -58,4 +58,16 @@ export class Judge0Service {
       correct: status.status.id === 3
     };
   }
+
+  async submitMultipleAndCheckStatus(submissions: Judge0Submission[]) : Promise<boolean> {
+    const results = await Promise.all(
+      submissions.map(submission => this.submitAndCheckStatus(submission))
+    );
+    for (let i = 0; i < results.length; i++) {
+      if (!results[i].correct) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

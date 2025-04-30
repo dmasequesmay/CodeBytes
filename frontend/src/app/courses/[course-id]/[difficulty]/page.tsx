@@ -48,7 +48,7 @@ export default function ProblemDisplay({
     throw new Error('Difficulty must be a string');
   }
   const difficultyInt = parseInt(difficulty);
-  const [result, setResult] = useState<{ status?: string; output?: string; correct?: boolean }>(null);
+  const [result, setResult] = useState<{ correct?: boolean }>(null);
   const [loading, setLoading] = useState(false);
 
   const currentQuestionData = mockQuestions[currentQuestion] as Question;
@@ -64,10 +64,11 @@ export default function ProblemDisplay({
         const question = currentQuestionData as CodeQuestion;
         const result = await executeCode(
           code,
-          question.languageId,
-          question.inputOutput.input
+          question.id
         );
-        setResult(result);
+        setResult({
+          correct: result.correct
+        });
         if (result.correct) {
           handleContinue();
         }
@@ -75,8 +76,6 @@ export default function ProblemDisplay({
         const question = currentQuestionData as MultipleChoiceQuestion;
         const isCorrect = selectedChoice === question.correctAnswer;
         setResult({
-          status: 'success',
-          output: isCorrect ? 'Correct!' : 'Incorrect',
           correct: isCorrect
         });
         if (isCorrect) {
@@ -86,8 +85,6 @@ export default function ProblemDisplay({
     } catch (error) {
       console.error('Error:', error);
       setResult({
-        status: 'error',
-        output: 'Failed to execute code',
         correct: false
       });
     } finally {
@@ -173,7 +170,7 @@ export default function ProblemDisplay({
         )}
 
         {showAnswerResult && (
-          <AnswerResult message={result?.output || ""} isSuccess={result?.correct || false} />
+          <AnswerResult message={result?.correct ? "Correct!" : "Incorrect"} isSuccess={result?.correct || false} />
         )}
         
         <div className="mt-6">

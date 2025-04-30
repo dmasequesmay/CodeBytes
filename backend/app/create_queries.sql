@@ -1,21 +1,27 @@
--- CREATE TABLE IF NOT EXISTS foo(
---     id SERIAL PRIMARY KEY,
---     bar VARCHAR(20) NOT NULL,
---     baz TEXT,
---     fee enum_type_name NOT NULL DEFAULT 'enumVal1'
---     fk_baz VARCHAR(10) REFERENCES other_table(baz)
--- );
-
--- CREATE TYPE your_enum_type AS ENUM ('value1', 'value2', 'value3');
 
 -- TODO: create ENUM for lesson_diff
-CREATE TYPE IF NOT EXISTS lesson_diff AS ENUM ('easy', 'medium', 'hard', 'extreme');
+DO $$
+BEGIN
+    CREATE TYPE lesson_diff AS ENUM ('easy', 'medium', 'hard', 'extreme');
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
 
 -- TODO: create ENUM for class_role
-CREATE TYPE IF NOT EXISTS class_role AS ENUM ('student', 'assistant', 'teacher');
+DO $$
+BEGIN
+    CREATE TYPE class_role AS ENUM ('student', 'assistant', 'teacher');
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
 
 -- TODO: create ENUM for user_info
-CREATE TYPE IF NOT EXISTS user_info AS ENUM ('student', 'mentor', 'admin');
+DO $$
+BEGIN
+    CREATE TYPE user_info AS ENUM ('student', 'mentor', 'admin');
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
 -- TODO: write CREATE TABLE statement for badges
 
 CREATE TABLE IF NOT EXISTS Badges (
@@ -86,12 +92,24 @@ CREATE TABLE IF NOT EXISTS user_lesson_progress(
     FOREIGN KEY (lessonId) REFERENCES Lessons(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS problems(
+-- A table for test cases for each problem
+CREATE TABLE IF NOT EXISTS test_cases (
+    id SERIAL PRIMARY KEY,
+    problem_id INTEGER REFERENCES problems(id) ON DELETE CASCADE,
+    input TEXT NOT NULL,
+    expected_output TEXT NOT NULL,
+    is_sample BOOLEAN DEFAULT false,
+    score FLOAT DEFAULT 1.0
+);
+
+CREATE TABLE IF NOT EXISTS problems (
     id SERIAL PRIMARY KEY,
     question VARCHAR(200) NOT NULL,
     difficulty lesson_diff NOT NULL DEFAULT 'medium',
-    problem_io TEXT,
     source VARCHAR(200),
     is_coding BOOLEAN NOT NULL DEFAULT false,
-    language VARCHAR(200)
+    language VARCHAR(200),
+    judge0_language_id INTEGER,
+    time_limit FLOAT DEFAULT 2.0,
+    memory_limit INTEGER DEFAULT 262144
 );
