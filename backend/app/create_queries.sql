@@ -86,12 +86,24 @@ CREATE TABLE IF NOT EXISTS user_lesson_progress(
     FOREIGN KEY (lessonId) REFERENCES Lessons(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS problems(
+-- A table for test cases for each problem
+CREATE TABLE IF NOT EXISTS test_cases (
+    id SERIAL PRIMARY KEY,
+    problem_id INTEGER REFERENCES problems(id) ON DELETE CASCADE,
+    input TEXT NOT NULL,
+    expected_output TEXT NOT NULL,
+    is_sample BOOLEAN DEFAULT false,
+    score FLOAT DEFAULT 1.0
+);
+
+CREATE TABLE IF NOT EXISTS problems (
     id SERIAL PRIMARY KEY,
     question VARCHAR(200) NOT NULL,
     difficulty lesson_diff NOT NULL DEFAULT 'medium',
-    problem_io TEXT,
     source VARCHAR(200),
     is_coding BOOLEAN NOT NULL DEFAULT false,
-    language VARCHAR(200)
+    language VARCHAR(200),
+    judge0_language_id INTEGER,
+    time_limit FLOAT DEFAULT 2.0,
+    memory_limit INTEGER DEFAULT 262144
 );
