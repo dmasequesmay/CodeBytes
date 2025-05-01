@@ -102,6 +102,16 @@ CREATE TABLE IF NOT EXISTS test_cases (
     score FLOAT DEFAULT 1.0
 );
 
+-- A table to store multiple choice answers for non-coding questions
+CREATE TABLE IF NOT EXISTS multiple_choice_answers (
+    id SERIAL PRIMARY KEY,
+    problem_id INTEGER REFERENCES problems(id) ON DELETE CASCADE,
+    choice_text TEXT NOT NULL,
+    is_correct BOOLEAN NOT NULL DEFAULT false,
+    choice_order INTEGER NOT NULL,
+    UNIQUE(problem_id, choice_order)
+);
+
 CREATE TABLE IF NOT EXISTS problems (
     id SERIAL PRIMARY KEY,
     question VARCHAR(200) NOT NULL,
