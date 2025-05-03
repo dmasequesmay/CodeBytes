@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-// import { signInWithGoogle } from '../../services/auth';
+// import { signInWithGoogle, signIn, signUp } from '../../services/auth';
 import { signInWithGoogle, signIn, signUp } from '../../mockAuth';
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
 export default function Signup() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,6 +36,8 @@ export default function Signup() {
     e.preventDefault()
     console.log("Form submitted:", formData)
     // We'll be integrating firebase here later, but for now, go straight to the survey
+    signUp(formData.email, formData.password);
+    axios.post(`http://localhost:5000/add-user?firstName=${formData.firstName}&lastName=${formData.lastName}&email=${formData.email}&bio=${"Default"}&role=${"User"}&dateJoined=${new Date()}`);
     router.push(`/signup/survey?firstName=${formData.firstName}`);
   }
   
