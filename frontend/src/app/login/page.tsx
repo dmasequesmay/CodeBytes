@@ -30,6 +30,7 @@ export default function Login() {
     signIn(formData.email, formData.password)
       .then(() => {
         // Handle successful login
+        signIn(formData.email, formData.password);
         console.log("Login successful");
         // navigate to dashboard
         router.push("/dashboard");
