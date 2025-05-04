@@ -249,26 +249,32 @@ export const mockUsers = [
 // }
 
 export const mockQuestions: Question[] = [
-  {
-    prompt: "Write a function that adds two numbers",
-    questionType: 'code',
-    languageId: 71, // JavaScript
-    languageName: "JavaScript",
-    codeTemplate: "// Write your code here\nfunction add(a, b) {\n  \n}",
-    inputOutput: {
-      input: "10\n5",
-      expectedOutput: "15"
-    }
-  },
-  {
-    prompt: "What is the capital of France?",
-    questionType: 'multiple-choice',
-    choices: [
-      "Paris",
-      "London",
-      "Berlin",
-      "Madrid"
-    ],
-    correctAnswer: 0 // Index of "Paris"
-  }
+{
+id: 1,
+prompt: "Write a function that adds two numbers",
+questionType: 'code',
+languageId: 71, // JavaScript
+languageName: "JavaScript",
+codeTemplate: "// Write your code here\nfunction add(a, b) {\n  \n}",
+testCases: [
+{
+input: "10\n5",
+expectedOutput: "15",
+isSample: true,
+score: 100
+}
+]
+},
+{
+id: 2,
+prompt: "What is the capital of France?",
+questionType: 'multiple-choice',
+choices: [
+"Paris",
+"London",
+"Berlin",
+"Madrid"
+],
+correctAnswer: 0 // Index of "Paris"
+}
 ];
