@@ -62,7 +62,9 @@ CREATE TABLE IF NOT EXISTS UserOwnedBadges (
 CREATE TABLE IF NOT EXISTS Lessons(
     id SERIAL PRIMARY KEY,
     lessonName VARCHAR(200) NOT NULL,
-    difficulty lesson_diff NOT NULL DEFAULT 'medium'
+    difficulty lesson_diff NOT NULL DEFAULT 'medium',
+    languageId INTEGER,
+    FOREIGN KEY (languageId) REFERENCES judge0_languages(id)
 );
 -- TODO: write CREATE TABLE statement for classes
 CREATE TABLE IF NOT EXISTS Classes (
