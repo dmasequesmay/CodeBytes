@@ -37,7 +37,16 @@ export default function Signup() {
     console.log("Form submitted:", formData)
     // We'll be integrating firebase here later, but for now, go straight to the survey
     signUp(formData.email, formData.password);
-    axios.post(`http://localhost:5000/add-user?firstName=${formData.firstName}&lastName=${formData.lastName}&email=${formData.email}&bio=${"Default"}&role=${"User"}&dateJoined=${new Date()}`);
+    axios.post('http://localhost:5000/add-user', null, {
+      params: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        bio: "Default",
+        role: "User",
+        dateJoined: new Date().toISOString()
+      }
+    });
     router.push(`/signup/survey?firstName=${formData.firstName}`);
   }
   
