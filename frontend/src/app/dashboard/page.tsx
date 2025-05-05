@@ -1,44 +1,85 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, Trophy, BookOpen, UserPlus, Monitor } from "lucide-react"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Menu, Trophy, BookOpen, UserPlus, Monitor } from "lucide-react";
 import ContinueButton from "../../components/ContinueButton";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+
+interface Course {
+  name: string;
+  progress: number;
+  id: number;
+}
+
+interface Badge{
+  badge_name: string;
+}
 
 export default function DashboardLanding() {
   const router = useRouter();
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [badges, setBadges] = useState<Badge[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const courses = [
-    { name: "Java", progress: 70, id: 1 },
-    { name: "C++", progress: 100, id: 2 },
-    { name: "Python", progress: 55, id: 3 },
-    { name: "React", progress: 20, id: 4 },
-    // Static for now; will be getting this info dynamically later
-  ];
+  const userEmail = "user@example.com"; // replace later on
 
-  const chartData = [
-    { name: "C++", progress: 30 },
-    { name: "Python", progress: 60 },
-    { name: "JavaScript", progress: 95 }
-     // Static for now; will be getting this info dynamically later
-  ];
-  const trophyIcons = [
-    { content: "8K", isBold: true },
-    { content: <Trophy className="" /> },
-    { content: "☺" },
-    { content: "⚔️" },
-    { content: "AR", isBold: true },
-    { content: "★" },
-    { content: "👥" },
-    { content: "🔄" }
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try{
+        const [progresRes, badgeRes] = await Promise.all([
+          axios.get('/api/user-progress/${userEmail}'),
+          axios.get('/api/user-badges/${userEmail}'),
+        ]);
+        setCourses(progressRes.data.map((c: any) => ({
+          name: c.course_name,
+          progress: c.progress,
+          id: c.course_id,
+        })));
+        setBadges(badgesRes.data);
+      } catch(err) {
+        console.error("Failed to fetch data", err);
+      } finally{
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  // const courses = [
+  //   { name: "Java", progress: 70, id: 1 },
+  //   { name: "C++", progress: 100, id: 2 },
+  //   { name: "Python", progress: 55, id: 3 },
+  //   { name: "React", progress: 20, id: 4 },
+  //   // Static for now; will be getting this info dynamically later
+  // ];
+
+  // const chartData = [
+  //   { name: "C++", progress: 30 },
+  //   { name: "Python", progress: 60 },
+  //   { name: "JavaScript", progress: 95 }
+  //    // Static for now; will be getting this info dynamically later
+  // ];
+  // const trophyIcons = [
+  //   { content: "8K", isBold: true },
+  //   { content: <Trophy className="" /> },
+  //   { content: "☺" },
+  //   { content: "⚔️" },
+  //   { content: "AR", isBold: true },
+  //   { content: "★" },
+  //   { content: "👥" },
+  //   { content: "🔄" }
+  // ];
 
   return (
     <div className="flex-1 p-6">{/* Main Content */}
       {/* Programming Language Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        {courses.length === 0 && !loading && (
+          <p className="text-black">You are not enrolled in any courses.</p>
+        )}
         {courses.map((language, index) => (
           <div 
             key={index}
@@ -73,7 +114,7 @@ export default function DashboardLanding() {
           {/* TODO: add make the border of this gray with a width of 400*/}
           <div className="h-64 flex items-center justify-between gap-4 pt-4 border-t border-l border-gray-400">
             {/* Chart bars */}
-            {chartData.map((item, index) => (
+            {courses.map((item, index) => (
               <div key={index} className="flex flex-col items-center w-1/3 h-full">
                 <div 
                   className="w-4 h-0 mt-auto rounded-full bg-purple-700"
@@ -95,20 +136,24 @@ export default function DashboardLanding() {
           {/* TODO: Add Trophy icon with height & width of 5 units*/}
           <Trophy className="w-5 h-5 ml-2" />
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          {/* Trophy icons */}
-          {trophyIcons.map((icon, index) => (
-            <div 
-              key={index}
-              className="bg-black h-16 w-16 rounded-lg flex items-center justify-center"
-            >
-              {/* TODO: Dynamically ad the icon here.
-              Add appropriate text styling based on the Midfi design */}
-              <span className="text-white text-2xl">{icon.content}</span>
-            </div>
-          ))}
+        {badges.length === 0 && !loading ? (
+          <p className="text-black">No badges earned yet.</p>
+        ) : (
+          <div className="grid grid-cols-4 gap-4">
+            {/* Trophy icons */}
+            {badges.map((badge, index) => (
+              <div 
+                key={index}
+                className="bg-black h-16 w-16 rounded-lg flex items-center justify-center"
+              >
+                {/* TODO: Dynamically ad the icon here.
+                Add appropriate text styling based on the Midfi design */}
+                <span className="text-white text-2xl">{badge.badge_name}</span>
+              </div>
+            ))}
         </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
