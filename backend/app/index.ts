@@ -74,6 +74,36 @@ const startServer = async () => {
       res.send('Backend is running');
     });
 
+    // New endpoint to get user's course progress
+    app.get('/api/user-progress/:email', async(req, res) =>{
+      const email = req.params.email;
+      try{
+        const result = await dpool.quer(
+          'SELECT course_name, progress, course_id FROM user_courses WHERE email = $1',
+          [email]
+        );
+        res.json(result.rows);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch user progress'});
+      }
+    });
+
+    // New endpoint to get user's badges
+    app.get('/api/user-badges/:email', async (req, res) => {
+      const email = req.params.email;
+      try{
+        const result = await dpool.query(
+          'SELECT badge_name FROM user_badges WHERE email = $1',
+          [email]
+        );
+        res.json(result.rows);
+      } catch (err) {
+          console.error(err);
+          res.statue(500).json({ error: 'Failed to fetch user badges'});
+      }
+    });
+
     app.post("/add-user ", (req, res) => {
       const { userName, firstName, lastName, bio, email, role, dateJoined }:{
         userName:string,
