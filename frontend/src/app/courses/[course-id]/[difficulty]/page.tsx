@@ -109,8 +109,8 @@ export default function ProblemDisplay({
 
   if (showResults) {
     return (
-      <div className="flex min-h-screen bg-white">
-        <div className="flex-1 p-8 flex flex-col items-center">
+      <div className="flex min-h-screen bg-white items-center justify-center">
+        <div className="p-8">
           <Results 
             current={currentProgress} 
             total={totalProblems} 
