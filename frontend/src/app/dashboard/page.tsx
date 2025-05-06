@@ -10,11 +10,15 @@ import axios from "axios";
 interface Course {
   name: string;
   progress: number;
-  id: number;
+  languageId: number;
 }
 
 interface Badge{
   badge_name: string;
+  badge_desc: string;
+  requirement: string;
+  badge_image_src: string;
+  date_earned: string;
 }
 
 export default function DashboardLanding() {
@@ -28,16 +32,23 @@ export default function DashboardLanding() {
   useEffect(() => {
     async function fetchData() {
       try{
-        const [progresRes, badgeRes] = await Promise.all([
-          axios.get('/api/user-progress/${userEmail}'),
-          axios.get('/api/user-badges/${userEmail}'),
+        const [progressRes, badgeRes] = await Promise.all([
+          axios.get(`/api/user-progress/${userEmail}`),
+          axios.get(`/api/user-badges/${userEmail}`),
         ]);
         setCourses(progressRes.data.map((c: any) => ({
           name: c.course_name,
           progress: c.progress,
-          id: c.course_id,
+          languageId: c.language
         })));
-        setBadges(badgesRes.data);
+        setBadges(badgeRes.data.map((b: any) => ({
+          badge_name: b.badge_name,
+          badge_desc: b.badge_desc,
+          requirement: b.requirement,
+          badge_image_src: b.badge_image_src,
+          date_earned: b.date_earned,
+        })));
+        
       } catch(err) {
         console.error("Failed to fetch data", err);
       } finally{
@@ -80,22 +91,22 @@ export default function DashboardLanding() {
         {courses.length === 0 && !loading && (
           <p className="text-black">You are not enrolled in any courses.</p>
         )}
-        {courses.map((language, index) => (
+        {courses.map((course, index) => (
           <div 
             key={index}
             className="bg-[#a5a6f6] p-6 rounded-lg shadow-lg relative"
           >
-            <h2 className="text-3xl font-bold mb-2">{language.name}</h2>
-            {/* TODO: Implement a ContinueButton with imgSrc pointing to an image of a monitor
+            <h2 className="text-3xl font-bold mb-2">{course.name}</h2>
+              {/* TODO: Implement a ContinueButton with imgSrc pointing to an image of a monitor
             (can be a placeholder for now) */}
-            <ContinueButton imgSrc="" onClickEvent={() => {router.push(`/courses/${language.id}?`)}} />
+            <ContinueButton imgSrc="" onClickEvent={() => {router.push(`/courses/${course.languageId}`)}} />
             <div className="mt-4 relative">
               <div className="h-2 bg-gray-300 rounded-full overflow-hidden">
                 {/* The width of the progress bar should be the progress percentage from language */}
-                <div className="h-2 bg-purple-700 rounded-full" style={{ width: `${language.progress}%` }}></div>
+                <div className="h-2 bg-purple-700 rounded-full" style={{ width: `${course.progress}%` }}></div>
               </div>
               {/* add language.progress here */}
-              <span className="absolute right-0 -top-6 text-black">{language.progress}%</span>
+              <span className="absolute right-0 -top-6 text-black">{course.progress}%</span>
             </div>
           </div>
         ))}
@@ -114,13 +125,13 @@ export default function DashboardLanding() {
           {/* TODO: add make the border of this gray with a width of 400*/}
           <div className="h-64 flex items-center justify-between gap-4 pt-4 border-t border-l border-gray-400">
             {/* Chart bars */}
-            {courses.map((item, index) => (
+            {courses.map((course, index) => (
               <div key={index} className="flex flex-col items-center w-1/3 h-full">
                 <div 
                   className="w-4 h-0 mt-auto rounded-full bg-purple-700"
-                  style={{ height: `${item.progress}%` }}
+                  style={{ height: `${course.progress}%` }}
                 ></div>
-                <span className="text-black mt-2">{item.name}</span>
+                <span className="text-black mt-2">{course.name}</span>
               </div>
             ))}
           </div>

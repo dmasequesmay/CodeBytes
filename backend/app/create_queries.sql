@@ -62,9 +62,7 @@ CREATE TABLE IF NOT EXISTS UserOwnedBadges (
 CREATE TABLE IF NOT EXISTS Lessons(
     id SERIAL PRIMARY KEY,
     lessonName VARCHAR(200) NOT NULL,
-    difficulty lesson_diff NOT NULL DEFAULT 'medium',
-    languageId INTEGER,
-    FOREIGN KEY (languageId) REFERENCES judge0_languages(id)
+    languageId INTEGER NOT NULL
 );
 -- TODO: write CREATE TABLE statement for classes
 CREATE TABLE IF NOT EXISTS Classes (
@@ -124,4 +122,14 @@ CREATE TABLE IF NOT EXISTS problems (
     judge0_language_id INTEGER,
     time_limit FLOAT DEFAULT 2.0,
     memory_limit INTEGER DEFAULT 262144
+);
+
+CREATE TABLE IF NOT EXISTS user_problem_progress(
+    userId INT NOT NULL,
+    problemId INT NOT NULL,
+    dateStart DATE NOT NULL,
+    dateFinished DATE,
+    PRIMARY KEY (userId, problemId),
+    FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (problemId) REFERENCES problems(id) ON DELETE CASCADE
 );

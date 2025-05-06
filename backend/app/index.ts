@@ -78,8 +78,21 @@ const startServer = async () => {
     app.get('/api/user-progress/:email', async(req, res) =>{
       const email = req.params.email;
       try{
-        const result = await dpool.quer(
-          'SELECT course_name, progress, course_id FROM user_courses WHERE email = $1',
+        // progress = completed_difficulties / total_difficulties for each language
+        const result = await dpool.query(
+          `SELECT 
+    l.languageId AS language,
+    l.lessonName AS course_name,
+    COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS completed_problems,
+    COUNT(DISTINCT p.id) AS total_problems,
+    CAST(COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 AS progress
+FROM user_lesson_progress lp
+JOIN Lessons l ON lp.lessonId = l.id
+LEFT JOIN problems p ON p.language = l.languageId
+LEFT JOIN user_problem_progress upp ON upp.problemId = p.id AND upp.userId = lp.userId
+WHERE lp.userId = (SELECT id FROM Users WHERE email = $1)
+GROUP BY l.languageId, l.lessonName
+ORDER BY l.languageId, l.lessonName;`,
           [email]
         );
         res.json(result.rows);
@@ -94,13 +107,21 @@ const startServer = async () => {
       const email = req.params.email;
       try{
         const result = await dpool.query(
-          'SELECT badge_name FROM user_badges WHERE email = $1',
+          `SELECT 
+      b.badgeName AS badge_name, 
+      b.badgeDesc AS badge_desc, 
+      b.requirement AS requirement, 
+      b.badgeImageSrc AS badge_image_src, 
+      uob.dateEarned AS date_earned
+      FROM UserOwnedBadges uob
+      JOIN Badges b ON uob.badgeId = b.id
+      WHERE uob.userId = (SELECT id FROM Users WHERE email = $1);`,
           [email]
         );
         res.json(result.rows);
       } catch (err) {
           console.error(err);
-          res.statue(500).json({ error: 'Failed to fetch user badges'});
+          res.status(500).json({ error: 'Failed to fetch user badges'});
       }
     });
 
@@ -151,14 +172,14 @@ const startServer = async () => {
 
     /*TODO: write the backend endpoint for adding to the lessons table */
     app.post("/add-lesson ", (req, res) => {
-      const { lessonName, difficulty } : {
+      const { lessonName, languageId } : {
         lessonName:string,
-        difficulty:typeof lessonDifficulty,
+        languageId:number,
       } = req.body;
 
       dpool.query(
-        'INSERT INTO lessons (lessonName, difficulty) VALUES ($1, $2)',
-        [lessonName, difficulty]
+        'INSERT INTO lessons (lessonName, languageId) VALUES ($1, $2)',
+        [lessonName, languageId]
       )
       .then(() => {
         res.status(200).send("success!");
