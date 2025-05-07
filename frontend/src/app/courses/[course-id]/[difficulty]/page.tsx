@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react"
 import { Editor } from "@monaco-editor/react"
 import  AnswerResult  from "../../../../components/AnswerResult"
@@ -11,6 +11,7 @@ import { mockQuestions, mockResults } from "../../../../mockData"
 import { Question, CodeQuestion, MultipleChoiceQuestion } from '../../../../types/questions';
 import { useParams, useRouter } from 'next/navigation';
 import { executeCode } from '../../../../services/judge0';
+import axios from 'axios';
 
 type QuestionType = "code" | "multiple-choice"
 
@@ -43,13 +44,19 @@ export default function ProblemDisplay({
   const [code, setCode] = useState('');
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const params = useParams();
-  const difficulty = params.difficulty;
-  if (typeof difficulty !== 'string') {
-    throw new Error('Difficulty must be a string');
-  }
+  const difficulty = params.difficulty as string;
+  const languageId = params['course-id'] as string;
   const difficultyInt = parseInt(difficulty);
   const [result, setResult] = useState<{ correct?: boolean }>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      const problems = await axios.get(`/api/problems/${languageId}/${difficultyInt}`);
+      
+    }
+    fetchData();
+  }, []);
 
   const currentQuestionData = mockQuestions[currentQuestion] as Question;
   const isCodeQuestion = currentQuestionData.questionType === 'code';
