@@ -49,17 +49,22 @@ export default function ProblemDisplay({
   const difficultyInt = parseInt(difficulty);
   const [result, setResult] = useState<{ correct?: boolean }>(null);
   const [loading, setLoading] = useState(false);
+  const [problemData, setProblemData] = useState<Question[]>([]);
+  const [courseTitle, setCourseTitle] = useState('');
 
   useEffect(() => {
     async function fetchData() {
-      const problems = await axios.get(`/api/problems/${languageId}/${difficultyInt}`);
-      
+      const problemsAndSolutions = await axios.get(`/api/problems/${languageId}/${difficultyInt}`);
+      const course = await axios.get(`/api/courses/${languageId}`);
+      const problemData = problemsAndSolutions.data;
+      setCourseTitle(course.data.language);
+      setProblemData(problemData);
     }
     fetchData();
   }, []);
 
-  const currentQuestionData = mockQuestions[currentQuestion] as Question;
-  const isCodeQuestion = currentQuestionData.questionType === 'code';
+  const currentQuestionData = problemData[currentQuestion];
+  const isCodeQuestion = currentQuestionData['is_coding'];
 
   const handleRunCode = async () => {
     if (isCodeQuestion && !code) return;
@@ -73,22 +78,40 @@ export default function ProblemDisplay({
           code,
           question.id
         );
-        setResult({
-          correct: result.correct
-        });
         if (result.correct) {
-          handleContinue();
-        }
+          setResult({
+            correct: true
+        });
+        axios.post('/api/user-completed-problem', {
+          userId: 1, // TODO: get user id from session
+          problemId: question.id
+        });
+        handleContinue();
+      }
+      else{
+        setResult({
+          correct: false
+        });
+      }
       } else {
         const question = currentQuestionData as MultipleChoiceQuestion;
-        const isCorrect = selectedChoice === question.correctAnswer;
+        const selectedCorrect = selectedChoice === question.answers.find((answer) => answer.is_correct)?.choice_order - 1;
+        if (selectedCorrect) {
         setResult({
-          correct: isCorrect
+          correct: true
         });
-        if (isCorrect) {
-          handleContinue();
-        }
+        axios.post('/api/user-completed-problem', {
+          userId: 1, // TODO: get user id from session
+          problemId: question.id
+        });
+        handleContinue();
       }
+      else{
+        setResult({
+          correct: false
+        });
+      }
+    }
     } catch (error) {
       console.error('Error:', error);
       setResult({
@@ -100,7 +123,7 @@ export default function ProblemDisplay({
   };
 
   const handleContinue = () => {
-    if (currentQuestion === mockQuestions.length - 1) {
+    if (currentQuestion === problemData.length - 1) {
       setShowResults(true);
     } else {
       setCurrentQuestion(currentQuestion + 1);
@@ -122,7 +145,7 @@ export default function ProblemDisplay({
             current={currentProgress} 
             total={totalProblems} 
             difficulty={lessonDifficulty[difficultyInt]} 
-            subject="[Course Name]" // get the corresponding name of the id from backend
+            subject={courseTitle} // get the corresponding name of the id from backend
             message="Great job! You've completed this section." 
           />
         </div>
@@ -143,7 +166,7 @@ export default function ProblemDisplay({
         </div>
 
         <div className="w-full max-w-2xl mb-6 text-center">
-          <p className="text-lg">{currentQuestionData.prompt}</p>
+          <p className="text-lg">{currentQuestionData.question}</p>
         </div>
 
         {isCodeQuestion ? (
@@ -151,7 +174,7 @@ export default function ProblemDisplay({
             <div className="w-full h-[400px] border rounded-md overflow-hidden">
               <Editor
                 height="100%"
-                language={(currentQuestionData as CodeQuestion).languageName}
+                language={currentQuestionData.language}
                 defaultValue={code}
                 theme="vs-dark"
                 options={{
@@ -164,20 +187,25 @@ export default function ProblemDisplay({
           </div>
         ) : (
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(currentQuestionData as MultipleChoiceQuestion).choices.map((choice, index) => (
+            {currentQuestionData.answers.map((choice, index) => (
               <button
                 key={index}
                 onClick={() => handleChoiceSelect(index)}
                 className={`px-4 py-2 rounded ${selectedChoice === index ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
               >
-                {choice}
+                {choice.choice_text}
               </button>
             ))}
           </div>
         )}
 
         {showAnswerResult && (
-          <AnswerResult message={result?.correct ? "Correct!" : "Incorrect"} isSuccess={result?.correct || false} />
+          // so that it shows up in the center of the screen
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <AnswerResult message={result?.correct ? "Correct!" : "Incorrect"} isSuccess={result?.correct || false} />
+            </div>
+          </div>
         )}
         
         <div className="mt-6">
