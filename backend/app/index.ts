@@ -145,10 +145,15 @@ ORDER BY l.languageId, l.lessonName;`,
 
     app.get('/api/problems-count/:languageId', async (req, res) => {
       const languageId = req.params.languageId;
+      const userId = req.headers['user-id'] as string; // TODO: Get user ID from authentication
       try{
         const result = await dpool.query(
-          `SELECT COUNT(*) FROM problems WHERE judge0_language_id = $1;`,
-          [languageId]
+          `SELECT COUNT(*) 
+          FROM problems p
+          LEFT JOIN user_problem_progress upp ON upp.problem_id = p.id AND upp.user_id = $2
+          WHERE p.judge0_language_id = $1 
+          AND upp.date_finished IS NULL;`,
+          [languageId, userId]
         );
         res.json(result.rows);
       } catch (err) {
@@ -166,15 +171,69 @@ ORDER BY l.languageId, l.lessonName;`,
         4: "extreme"
       };
       const difficulty = numberToDifficulty[parseInt(req.params.difficulty) as keyof typeof numberToDifficulty];
+      const userId = req.headers['user-id'] as string; // TODO: Get user ID from authentication
       try{
         const result = await dpool.query(
-          `SELECT * FROM problems WHERE judge0_language_id = $1 AND difficulty = $2;`,
-          [languageId, difficulty]
+          `SELECT 
+            p.*, 
+            CASE 
+              WHEN p.is_coding THEN (
+                SELECT json_agg(
+                  json_build_object(
+                    'id', tc.id,
+                    'input', tc.input,
+                    'expected_output', tc.expected_output,
+                    'is_sample', tc.is_sample,
+                    'score', tc.score
+                  )
+                )
+                FROM test_cases tc
+                WHERE tc.problem_id = p.id
+              )
+              ELSE (
+                SELECT json_agg(
+                  json_build_object(
+                    'id', mca.id,
+                    'choice_text', mca.choice_text,
+                    'is_correct', mca.is_correct,
+                    'choice_order', mca.choice_order
+                  )
+                )
+                FROM multiple_choice_answers mca
+                WHERE mca.problem_id = p.id
+                ORDER BY mca.choice_order
+              )
+            END as answers
+          FROM problems p
+          LEFT JOIN user_problem_progress upp ON upp.problem_id = p.id AND upp.user_id = $3
+          WHERE p.judge0_language_id = $1 
+          AND p.difficulty = $2
+          AND upp.date_finished IS NULL
+          LIMIT 6;`,
+          [languageId, difficulty, userId]
         );
         res.json(result.rows);
       } catch (err) {
           console.error(err);
           res.status(500).json({ error: 'Failed to fetch problems'});
+      }
+    });
+
+    app.post('/api/user-completed-problem', async (req, res) => {
+      const { userId, problemId }:{
+        userId: number,
+        problemId: number
+      } = req.body;
+      try{
+        await dpool.query(
+          `INSERT INTO user_problem_progress (user_id, problem_id, date_finished)
+          VALUES ($1, $2, CURRENT_TIMESTAMP);`,
+          [userId, problemId]
+        );
+        res.status(200).send("success!");
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
       }
     });
 

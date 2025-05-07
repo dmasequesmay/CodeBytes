@@ -17,6 +17,7 @@ export default function Course() {
       const course = await axios.get(`/api/courses/${courseId}`);
       setCourseTitle(course.data.language);
       const totalProblems = await axios.get(`/api/problems-count/${courseId}`);
+      // TODO: Limit this to a maximum!
       setTotalProblems(totalProblems.data[0].count);
     }
     fetchData();
