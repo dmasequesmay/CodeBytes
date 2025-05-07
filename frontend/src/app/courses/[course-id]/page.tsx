@@ -3,15 +3,25 @@ import { useParams } from "next/navigation"
 import { getCourseById } from '../../../services/mockDataService';
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
 import Link from 'next/link';
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 export default function Course() {
   // TODO: access the courseId attribute from params (hint: look at the top import)
   const params = useParams(); // TODO: access the courseId attribute from params
   const courseId:string = params['course-id'].toString();
-  const course = getCourseById(courseId);
-  // placeholder (for now)
-  const courseTitle = course.title;
-  
+  const [courseTitle, setCourseTitle] = useState('');
+  const [totalProblems, setTotalProblems] = useState(0);
+  useEffect(() => {
+    async function fetchData() {
+      const course = await axios.get(`/api/courses/${courseId}`);
+      setCourseTitle(course.data.language);
+      const totalProblems = await axios.get(`/api/problems-count/${courseId}`);
+      setTotalProblems(totalProblems.data[0].count);
+    }
+    fetchData();
+  }, []);
+
   // for now, use placeholder text for goals. refer to Mid-Fi for details.
   const courseSections = [
     {
@@ -86,7 +96,7 @@ export default function Course() {
               className="bg-gray-100 p-6 rounded-lg shadow-sm"
             >
               {/* TODO: change the queries to be dynamic! */}
-              <Link href={{pathname: `/courses/${courseId}/${index}`, query: { totalProblems: 2, currentProgress: 1 }}} className="block">
+              <Link href={{pathname: `/courses/${courseId}/${index}`, query: { totalProblems: totalProblems, currentProgress: 1 }}} className="block">
                 <h2 className="text-xl font-semibold text-gray-800 mb-2">
                   {section.title}
                 </h2>

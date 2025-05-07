@@ -28,6 +28,10 @@ app.use(express.json());
 app.use(bodyParser.json());
 let dpool = pool;
 let judge0Service = new Judge0Service();
+const judge0LanguageIdToLanguageName = {
+      
+};    
+
 
 const waitForDatabase = async (pool: any, maxAttempts: number = 10, delayMs: number = 1000) => {
     let attempts = 0;
@@ -122,6 +126,55 @@ ORDER BY l.languageId, l.lessonName;`,
       } catch (err) {
           console.error(err);
           res.status(500).json({ error: 'Failed to fetch user badges'});
+      }
+    });
+
+    app.get('/api/courses/:languageId', async (req, res) => {
+      const languageId = req.params.languageId;
+      try{
+        const result = await dpool.query(
+          `SELECT language FROM problems WHERE judge0_language_id = $1 LIMIT 1;`,
+          [languageId]
+        );
+        res.json(result.rows);
+      } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Failed to fetch courses'});
+      }
+    });
+
+    app.get('/api/problems-count/:languageId', async (req, res) => {
+      const languageId = req.params.languageId;
+      try{
+        const result = await dpool.query(
+          `SELECT COUNT(*) FROM problems WHERE judge0_language_id = $1;`,
+          [languageId]
+        );
+        res.json(result.rows);
+      } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Failed to fetch problems count'});
+      }
+    });
+
+    app.get('/api/problems/:languageId/:difficulty', async (req, res) => {
+      const languageId = req.params.languageId;
+      const numberToDifficulty = {
+        1: "easy",
+        2: "medium",
+        3: "hard",
+        4: "extreme"
+      };
+      const difficulty = numberToDifficulty[parseInt(req.params.difficulty) as keyof typeof numberToDifficulty];
+      try{
+        const result = await dpool.query(
+          `SELECT * FROM problems WHERE judge0_language_id = $1 AND difficulty = $2;`,
+          [languageId, difficulty]
+        );
+        res.json(result.rows);
+      } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Failed to fetch problems'});
       }
     });
 
