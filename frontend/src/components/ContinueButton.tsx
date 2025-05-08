@@ -4,8 +4,8 @@ export default function ContinueButton({imgSrc, onClickEvent=()=>{}}:{
     imgSrc?:string,
     onClickEvent:MouseEventHandler<HTMLButtonElement>
 }){
-    return <button className="rounded-lg bg-white font-bold flex items-center px-4 py-2" onClick={onClickEvent}>
-        <span>CONTINUE</span>
+    return <button className="border-4 border-purple-500 bg-purple-500 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all duration-400 ease-in-out px-10 mx-auto py-0.5" onClick={onClickEvent}>
+        <span className="text-white">CONTINUE</span>
         {imgSrc && <img src={imgSrc} />}
     </button>;
 }
