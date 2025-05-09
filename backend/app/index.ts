@@ -145,8 +145,18 @@ ORDER BY l.languageId, l.lessonName;`,
 
     app.get('/api/problems-count/:languageId', async (req, res) => {
       const languageId = req.params.languageId;
-      const userId = req.headers['user-id'] as string; // TODO: Get user ID from authentication
+      const email = req.headers['user-email'] as string;
+      if (!email) {
+        res.status(400).json({ error: 'User email is required' });
+        return;
+      }
       try{
+        const userResult = await dpool.query('SELECT id FROM Users WHERE email = $1', [email]);
+        if (userResult.rows.length === 0) {
+          res.status(404).json({ error: 'User not found' });
+          return;
+        }
+        const userId = userResult.rows[0].id;
         const result = await dpool.query(
           `SELECT COUNT(*) 
           FROM problems p
@@ -171,8 +181,18 @@ ORDER BY l.languageId, l.lessonName;`,
         4: "extreme"
       };
       const difficulty = numberToDifficulty[parseInt(req.params.difficulty) as keyof typeof numberToDifficulty];
-      const userId = req.headers['user-id'] as string; // TODO: Get user ID from authentication
+      const email = req.headers['user-email'] as string;
+      if (!email) {
+        res.status(400).json({ error: 'User email is required' });
+        return;
+      }
       try{
+        const userResult = await dpool.query('SELECT id FROM Users WHERE email = $1', [email]);
+        if (userResult.rows.length === 0) {
+          res.status(404).json({ error: 'User not found' });
+          return;
+        }
+        const userId = userResult.rows[0].id;
         const result = await dpool.query(
           `SELECT 
             p.*, 
@@ -220,15 +240,20 @@ ORDER BY l.languageId, l.lessonName;`,
     });
 
     app.post('/api/user-completed-problem', async (req, res) => {
-      const { userId, problemId }:{
-        userId: number,
+      const { email, problemId }:{
+        email: string,
         problemId: number
       } = req.body;
       try{
+        const userResult = await dpool.query('SELECT id FROM Users WHERE email = $1', [email]);
+        if (userResult.rows.length === 0) {
+          res.status(404).json({ error: 'User not found' });
+          return;
+        }
         await dpool.query(
           `INSERT INTO user_problem_progress (user_id, problem_id, date_finished)
           VALUES ($1, $2, CURRENT_TIMESTAMP);`,
-          [userId, problemId]
+          [userResult.rows[0].id, problemId]
         );
         res.status(200).send("success!");
       } catch (err) {

@@ -12,6 +12,7 @@ import { Question, CodeQuestion, MultipleChoiceQuestion } from '../../../../type
 import { useParams, useRouter } from 'next/navigation';
 import { executeCode } from '../../../../services/judge0';
 import axios from 'axios';
+import { getUserEmail } from '../../../../lib/authUtils';
 
 type QuestionType = "code" | "multiple-choice"
 
@@ -81,37 +82,41 @@ export default function ProblemDisplay({
         if (result.correct) {
           setResult({
             correct: true
-        });
-        axios.post('/api/user-completed-problem', {
-          userId: 1, // TODO: get user id from session
-          problemId: question.id
-        });
-        handleContinue();
-      }
-      else{
-        setResult({
-          correct: false
-        });
-      }
+          });
+          await axios.post('/api/user-completed-problem', {
+            problemId: question.id
+          }, {
+            headers: {
+              'user-email': getUserEmail() || ''
+            }
+          });
+          handleContinue();
+        } else {
+          setResult({
+            correct: false
+          });
+        }
       } else {
         const question = currentQuestionData as MultipleChoiceQuestion;
         const selectedCorrect = selectedChoice === question.answers.find((answer) => answer.is_correct)?.choice_order - 1;
         if (selectedCorrect) {
-        setResult({
-          correct: true
-        });
-        axios.post('/api/user-completed-problem', {
-          userId: 1, // TODO: get user id from session
-          problemId: question.id
-        });
-        handleContinue();
+          setResult({
+            correct: true
+          });
+          await axios.post('/api/user-completed-problem', {
+            problemId: question.id
+          }, {
+            headers: {
+              'user-email': getUserEmail() || ''
+            }
+          });
+          handleContinue();
+        } else {
+          setResult({
+            correct: false
+          });
+        }
       }
-      else{
-        setResult({
-          correct: false
-        });
-      }
-    }
     } catch (error) {
       console.error('Error:', error);
       setResult({
