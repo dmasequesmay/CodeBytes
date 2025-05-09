@@ -71,11 +71,11 @@ const startServer = async () => {
         path.join(__dirname, 'create_queries.sql'),
         path.join(__dirname, '../create_queries.sql'),
         // add paths to all sql files in problem/
-        path.join(__dirname, '../problem/sample_data.sql'),
-        path.join(__dirname, '../problem/additional_sample_data.sql'),
-        path.join(__dirname, '../problem/sample_questions.sql'),
-        path.join(__dirname, '../problem/multiple_choice_answers.sql'),
-        path.join(__dirname, '../problem/test_cases.sql')
+        path.join(__dirname, '../sample_data.sql'),
+        path.join(__dirname, '../additional_sample_data.sql'),
+        path.join(__dirname, '../sample_questions.sql'),
+        path.join(__dirname, '../multiple_choice_answers.sql'),
+        path.join(__dirname, '../test_cases.sql')
     ];
 
     await executeSQLFiles(sqlFiles, dpool);
