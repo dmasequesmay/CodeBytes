@@ -33,7 +33,7 @@ const judge0LanguageIdToLanguageName = {
 };    
 
 
-const waitForDatabase = async (pool: any, maxAttempts: number = 10, delayMs: number = 1000) => {
+const waitForDatabase = async (pool: any, maxAttempts: number = 900, delayMs: number = 1000) => {
     let attempts = 0;
     
     while (attempts < maxAttempts) {
@@ -69,13 +69,11 @@ const executeSQLFiles = async (files: string[], pool: any) => {
 const startServer = async () => {
     const sqlFiles = [
         path.join(__dirname, 'create_queries.sql'),
-        path.join(__dirname, '../create_queries.sql'),
-        // add paths to all sql files in problem/
-        path.join(__dirname, '../sample_data.sql'),
-        path.join(__dirname, '../additional_sample_data.sql'),
-        path.join(__dirname, '../sample_questions.sql'),
-        path.join(__dirname, '../multiple_choice_answers.sql'),
-        path.join(__dirname, '../test_cases.sql')
+        path.join(__dirname, 'sample_data.sql'),
+        path.join(__dirname, 'additional_sample_data.sql'),
+        path.join(__dirname, 'sample_questions.sql'),
+        path.join(__dirname, 'multiple_choice_answers.sql'),
+        path.join(__dirname, 'test_cases.sql')
     ];
 
     await executeSQLFiles(sqlFiles, dpool);

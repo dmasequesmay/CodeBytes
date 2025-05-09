@@ -10,8 +10,8 @@ COPY backend/app ./app
 RUN npm run build
 
 # Copy SQL file to both source and dist directories
-COPY backend/app/create_queries.sql ./app/
-COPY backend/app/create_queries.sql ./dist/app/
+COPY backend/app/*.sql ./app/
+COPY backend/app/*.sql ./dist/app/
 
 # Frontend setup
 WORKDIR /app/frontend
