@@ -1,3 +1,4 @@
+
 "use client"
 
 import type React from "react"
@@ -14,17 +15,17 @@ import { executeCode } from '../../../../services/judge0';
 import axios from 'axios';
 import { getUserEmail } from '../../../../lib/authUtils';
 
-type QuestionType = "code" | "multiple-choice"
+type QuestionType = "code" | "multiple-choice";
 
 interface ProblemProps {
-  problemNumber: number
-  prompt: string
-  questionType: QuestionType
-  codeTemplate?: string
-  choices?: string[]
-  totalProblems?: number
-  currentProgress?: number
-  language?: string
+  problemNumber: number;
+  prompt: string;
+  questionType: QuestionType;
+  codeTemplate?: string;
+  choices?: string[];
+  totalProblems?: number;
+  currentProgress?: number;
+  language?: string;
 }
 
 const lessonDifficulty = {
@@ -32,9 +33,9 @@ const lessonDifficulty = {
   medium: 2,
   hard: 3,
   extreme: 4
-}
+};
 
-export default function ProblemDisplay({ 
+export default function ProblemDisplay({
   problemNumber = 1,
   totalProblems = 2,
   currentProgress = 1,
@@ -44,6 +45,9 @@ export default function ProblemDisplay({
   const [showResults, setShowResults] = useState(false);
   const [code, setCode] = useState('');
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
+  const [result, setResult] = useState<{ correct?: boolean }>(null);
+  const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState<any[]>([]);  // Dynamic questions
   const params = useParams();
   const difficulty = params.difficulty as string;
   const languageId = params['course-id'] as string;
@@ -65,6 +69,10 @@ export default function ProblemDisplay({
   }, []);
 
   const currentQuestionData = problemData[currentQuestion];
+    
+  if (!currentQuestionData) {
+    return <div>Loading...</div>;  // Display a loading state until questions are fetched
+  }
   const isCodeQuestion = currentQuestionData['is_coding'];
 
   const handleRunCode = async () => {
@@ -162,11 +170,11 @@ export default function ProblemDisplay({
     <div className="flex min-h-screen bg-white">
       <div className="flex-1 p-8 flex flex-col items-center">
         <h1 className="text-2xl font-semibold mb-4">Problem {currentQuestion + 1}</h1>
-        
+
         <div className="w-full max-w-2xl h-6 bg-gray-300 rounded-full mb-8">
           <div 
             className="h-full bg-green-500 rounded-full" 
-            style={{ width: `${(currentQuestion + 1) / totalProblems * 100}%`}}
+            style={{ width: `${(currentQuestion + 1) / totalProblems * 100}%` }}
           />
         </div>
 
@@ -212,7 +220,7 @@ export default function ProblemDisplay({
             </div>
           </div>
         )}
-        
+
         <div className="mt-6">
           <button
             onClick={handleRunCode}
