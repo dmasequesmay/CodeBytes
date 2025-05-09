@@ -43,17 +43,14 @@ INSERT INTO test_cases (problem_id, input, expected_output, is_sample) VALUES
 ((SELECT id FROM problems WHERE question = 'Write a program to find the maximum number in an array' AND language = 'java'), '{10}', '10', false),
 ((SELECT id FROM problems WHERE question = 'Write a program to find the maximum number in an array' AND language = 'java'), '{}', 'Exception', false);
 
--- Question: Write a program to reverse a string
-((SELECT id FROM problems WHERE question = 'Write a program to reverse a string' AND language = 'java'), '"hello"', '"olleh"', true),
-((SELECT id FROM problems WHERE question = 'Write a program to reverse a string' AND language = 'java'), '"Java"', '"avaJ"', false),
-((SELECT id FROM problems WHERE question = 'Write a program to reverse a string' AND language = 'java'), '""', '""', false);
+
 
 -- Medium Coding Questions
 INSERT INTO test_cases (problem_id, input, expected_output, is_sample) VALUES
 -- Question: Write a program to implement binary search tree
 ((SELECT id FROM problems WHERE question = 'Write a program to implement binary search tree' AND language = 'java'), 'insert(5), insert(3), insert(7), contains(3)', 'true', true),
 ((SELECT id FROM problems WHERE question = 'Write a program to implement binary search tree' AND language = 'java'), 'insert(5), insert(3), insert(7), contains(4)', 'false', false),
-((SELECT id FROM problems WHERE question = 'Write a program to implement binary search tree' AND language = 'java'), 'insert(5), delete(5), contains(5)', 'false', false),
+((SELECT id FROM problems WHERE question = 'Write a program to implement binary search tree' AND language = 'java'), 'insert(5), delete(5), contains(5)', 'false', false);
 
 -- Question: Write a program to implement stack using array
 ((SELECT id FROM problems WHERE question = 'Write a program to implement stack using array' AND language = 'java'), 'push(1), push(2), pop(), pop()', '2, 1', true),

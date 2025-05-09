@@ -92,7 +92,7 @@ INSERT INTO test_cases (problem_id, input, expected_output, is_sample) VALUES
 INSERT INTO multiple_choice_answers (problem_id, choice_text, is_correct, choice_order) VALUES
 -- Question: What is the output of print(2 + 2 * 3)?
 ((SELECT id FROM problems WHERE question = 'What is the output of print(2 + 2 * 3)?' AND language = 'python'), '8', true, 1),
-((SELECT id FROM problems WHERE question = 'What is the output of print(2 + 2 * 3)?' AND language = 'python'), '12', false, 2),
+((SELECT id FROM problems WHERE question = 'What is the output of print(2 + 2 * 3)?' AND language = 'python'), '12', false, 2);
 
 -- Question: What is the correct way to create a dictionary in Python?
 ((SELECT id FROM problems WHERE question = 'What is the correct way to create a dictionary in Python?' AND language = 'python'), "{'key': 'value'}", true, 1),
