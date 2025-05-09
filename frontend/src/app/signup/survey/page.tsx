@@ -5,6 +5,7 @@ import ContinueButton from "@/components/ContinueButton"
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import Icon from "@/components/Icon";
 // For the survey items, use the button.tsx component found in the ui/ directory of components
 // Use the various TextField components as needed.
 
@@ -15,14 +16,18 @@ export default function Survey() {
   const displays: React.ReactNode[] = [
       (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-4 mx-auto">
-            <div className="w-60 h-60 bg-gray-200 rounded-full" />
+            <div className="w-60 h-60 bg-gray-200 rounded-full" >
+              <Icon image="/assets/Frame 4.png" />
+            </div>
             <h1 className="text-2xl font-semibold">Welcome {firstName}!</h1>
             <p className="text-lg">My name is BitBit.</p>
           </div>
         ),
         (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
-            <div className="w-60 h-60 bg-gray-200 rounded-full" />
+            <div className="w-60 h-60 bg-gray-200 rounded-full" >
+              <Icon image="/assets/Frame 7.png" />
+            </div>
             <h1 className="text-xl font-semibold">Let’s begin your journey!</h1>
             <p className="text-md">But first, a few questions~</p>
           </div>
@@ -71,7 +76,9 @@ export default function Survey() {
         ),
         (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
-            <div className="w-60 h-60 bg-gray-200 rounded-full" />
+            <div className="w-60 h-60 bg-gray-200 rounded-full" >
+              <Icon image="/assets/Frame 1.png" />
+            </div>
             <h1 className="text-2xl font-semibold">You’re all set!</h1>
           </div>
         ),
