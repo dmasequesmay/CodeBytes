@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Icon from "../components/Icon"
 
 export default function Home() {
   return (
@@ -6,7 +7,7 @@ export default function Home() {
       <header className="container mx-auto py-4 px-6 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-purple-600 rounded flex items-center justify-center">
-            <span className="sr-only">Logo</span>
+            <Icon image="/assets/Frame 14.png" />
           </div>
           <span className="text-xl font-bold">CodeBytes</span>
         </div>
@@ -38,7 +39,7 @@ export default function Home() {
               CodeBytes
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto md:mx-0">
-              Something something something slogan.
+              Begin your coding adventure!
             </p>
             <Link
               href="/signup"
