@@ -74,6 +74,23 @@ const startServer = async () => {
       res.send('Backend is running');
     });
 
+    // endpoint for user-info's email
+    app.get('/api/user-info/:email', async (req, res) => {
+      const email = req.params.email;
+      try {
+        const result = await dpool.query(
+          `SELECT firstName FROM Users WHERE email = $1`, [email]
+        );
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+        res.json(result.rows[0]);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch user info' });
+      }
+    });
+
     // New endpoint to get user's course progress
     app.get('/api/user-progress/:email', async(req, res) =>{
       const email = req.params.email;
