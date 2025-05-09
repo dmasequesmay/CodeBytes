@@ -243,7 +243,33 @@ ORDER BY l.languageId, l.lessonName;`,
           res.status(500).json({ error: 'Failed to fetch problems'});
       }
     });
+    //Endpoint to get profile info
+    app.get('/api/user-profile/:email', async (req, res) => {
+      const email = req.params.email;
+      try {
+        const result = await dpool.query(
+          `SELECT 
+            user_name AS "userName",
+            first_name AS "firstName",
+            last_name AS "lastName",
+            email,
+            bio,
+            role,
+            date_joined AS "dateJoined",
+            streak
+          FROM users
+          WHERE email = $1`,
+        [email]
+      );
+        res.json(result.rows[0]);
+      } catch (err) {
+          console.error('Error fetching user profile:', err);
+          res.status(500).json({ error: 'Internal Server Error' });
+    }
+    });
 
+
+    
     app.post('/api/user-completed-problem', async (req, res) => {
       const { email, problemId }:{
         email: string,
