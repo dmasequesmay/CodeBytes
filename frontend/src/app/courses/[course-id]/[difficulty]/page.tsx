@@ -1,12 +1,19 @@
-"use client";
 
-import { useState, useEffect } from "react";
-import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
-import { Editor } from "@monaco-editor/react";
-import AnswerResult from "../../../../components/AnswerResult";
-import Results from "../../../../components/Results";
-import { useParams } from 'next/navigation';
+"use client"
+
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react"
+import { Editor } from "@monaco-editor/react"
+import  AnswerResult  from "../../../../components/AnswerResult"
+import  Results  from "../../../../components/Results"
+import { mockQuestions, mockResults } from "../../../../mockData"
+import { Question, CodeQuestion, MultipleChoiceQuestion } from '../../../../types/questions';
+import { useParams, useRouter } from 'next/navigation';
 import { executeCode } from '../../../../services/judge0';
+import axios from 'axios';
+import { getUserEmail } from '../../../../lib/authUtils';
 
 type QuestionType = "code" | "multiple-choice";
 
@@ -42,37 +49,31 @@ export default function ProblemDisplay({
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<any[]>([]);  // Dynamic questions
   const params = useParams();
-  const difficulty = params.difficulty;
-  const courseId = params['course-id'];  // Assuming you have a course-id in params
-
-  if (typeof difficulty !== 'string') {
-    throw new Error('Difficulty must be a string');
-  }
-
+  const difficulty = params.difficulty as string;
+  const languageId = params['course-id'] as string;
   const difficultyInt = parseInt(difficulty);
+  const [result, setResult] = useState<{ correct?: boolean }>(null);
+  const [loading, setLoading] = useState(false);
+  const [problemData, setProblemData] = useState<Question[]>([]);
+  const [courseTitle, setCourseTitle] = useState('');
 
-  // Fetching course questions based on the courseId and difficulty level
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch(`/api/courses/${courseId}/difficulty/${difficulty}`);
-        const data = await response.json();
-        setQuestions(data.questions);  // Assuming the response contains the questions
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      }
-    };
+    async function fetchData() {
+      const problemsAndSolutions = await axios.get(`/api/problems/${languageId}/${difficultyInt}`);
+      const course = await axios.get(`/api/courses/${languageId}`);
+      const problemData = problemsAndSolutions.data;
+      setCourseTitle(course.data.language);
+      setProblemData(problemData);
+    }
+    fetchData();
+  }, []);
 
-    fetchQuestions();
-  }, [courseId, difficulty]);
-
-  const currentQuestionData = questions[currentQuestion];
-
+  const currentQuestionData = problemData[currentQuestion];
+    
   if (!currentQuestionData) {
     return <div>Loading...</div>;  // Display a loading state until questions are fetched
   }
-
-  const isCodeQuestion = currentQuestionData.questionType === 'code';
+  const isCodeQuestion = currentQuestionData['is_coding'];
 
   const handleRunCode = async () => {
     if (isCodeQuestion && !code) return;
@@ -81,22 +82,47 @@ export default function ProblemDisplay({
     setLoading(true);
     try {
       if (isCodeQuestion) {
-        const question = currentQuestionData;
-        const result = await executeCode(code, question.id);
-        setResult({
-          correct: result.correct
-        });
+        const question = currentQuestionData as CodeQuestion;
+        const result = await executeCode(
+          code,
+          question.id
+        );
         if (result.correct) {
+          setResult({
+            correct: true
+          });
+          await axios.post('/api/user-completed-problem', {
+            problemId: question.id
+          }, {
+            headers: {
+              'user-email': getUserEmail() || ''
+            }
+          });
           handleContinue();
+        } else {
+          setResult({
+            correct: false
+          });
         }
       } else {
-        const question = currentQuestionData;
-        const isCorrect = selectedChoice === question.correctAnswer;
-        setResult({
-          correct: isCorrect
-        });
-        if (isCorrect) {
+        const question = currentQuestionData as MultipleChoiceQuestion;
+        const selectedCorrect = selectedChoice === question.answers.find((answer) => answer.is_correct)?.choice_order - 1;
+        if (selectedCorrect) {
+          setResult({
+            correct: true
+          });
+          await axios.post('/api/user-completed-problem', {
+            problemId: question.id
+          }, {
+            headers: {
+              'user-email': getUserEmail() || ''
+            }
+          });
           handleContinue();
+        } else {
+          setResult({
+            correct: false
+          });
         }
       }
     } catch (error) {
@@ -110,7 +136,7 @@ export default function ProblemDisplay({
   };
 
   const handleContinue = () => {
-    if (currentQuestion === questions.length - 1) {
+    if (currentQuestion === problemData.length - 1) {
       setShowResults(true);
     } else {
       setCurrentQuestion(currentQuestion + 1);
@@ -132,7 +158,7 @@ export default function ProblemDisplay({
             current={currentProgress} 
             total={totalProblems} 
             difficulty={lessonDifficulty[difficultyInt]} 
-            subject="[Course Name]" // Get course name from API or state
+            subject={courseTitle} // get the corresponding name of the id from backend
             message="Great job! You've completed this section." 
           />
         </div>
@@ -153,7 +179,7 @@ export default function ProblemDisplay({
         </div>
 
         <div className="w-full max-w-2xl mb-6 text-center">
-          <p className="text-lg">{currentQuestionData.prompt}</p>
+          <p className="text-lg">{currentQuestionData.question}</p>
         </div>
 
         {isCodeQuestion ? (
@@ -161,7 +187,7 @@ export default function ProblemDisplay({
             <div className="w-full h-[400px] border rounded-md overflow-hidden">
               <Editor
                 height="100%"
-                language={currentQuestionData.languageName}
+                language={currentQuestionData.language}
                 defaultValue={code}
                 theme="vs-dark"
                 options={{
@@ -174,20 +200,25 @@ export default function ProblemDisplay({
           </div>
         ) : (
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-            {currentQuestionData.choices.map((choice, index) => (
+            {currentQuestionData.answers.map((choice, index) => (
               <button
                 key={index}
                 onClick={() => handleChoiceSelect(index)}
                 className={`px-4 py-2 rounded ${selectedChoice === index ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
               >
-                {choice}
+                {choice.choice_text}
               </button>
             ))}
           </div>
         )}
 
         {showAnswerResult && (
-          <AnswerResult message={result?.correct ? "Correct!" : "Incorrect"} isSuccess={result?.correct || false} />
+          // so that it shows up in the center of the screen
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <AnswerResult message={result?.correct ? "Correct!" : "Incorrect"} isSuccess={result?.correct || false} />
+            </div>
+          </div>
         )}
 
         <div className="mt-6">

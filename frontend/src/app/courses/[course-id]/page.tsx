@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LightbulbIcon, HomeIcon, UserIcon } from "lucide-react";
 import Link from 'next/link';
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 // The course section interface
 interface CourseSection {
@@ -12,37 +14,46 @@ interface CourseSection {
 }
 
 export default function Course() {
-  // Access the courseId from the URL params
-  const params = useParams();
-  const courseId: string = params['course-id'].toString();
-
-  // State to store course details and loading/error state
-  const [course, setCourse] = useState<any>(null);  // Update the type as needed for course data
+  // TODO: access the courseId attribute from params (hint: look at the top import)
+  const params = useParams(); // TODO: access the courseId attribute from params
+  const courseId:string = params['course-id'].toString();
+  const [courseTitle, setCourseTitle] = useState('');
+  const [totalProblems, setTotalProblems] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Fetch course data on mount
   useEffect(() => {
-    const fetchCourseData = async () => {
-      try {
-        // Make an API request to get the course details by ID
-        const response = await fetch(`/api/courses/${courseId}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch course data");
-        }
-        const data = await response.json();
-        setCourse(data);  // Assuming the response contains the course object
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to load course data");
-        setLoading(false);
-      }
-    };
+    async function fetchData() {
+      const course = await axios.get(`/api/courses/${courseId}`);
+      setCourseTitle(course.data.language);
+      const totalProblems = await axios.get(`/api/problems-count/${courseId}`);
+      // TODO: Limit this to a maximum!
+      setTotalProblems(totalProblems.data[0].count);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
 
-    fetchCourseData();
-  }, [courseId]);
-
-  // If loading, show loading indicator
+  // for now, use placeholder text for goals. refer to Mid-Fi for details.
+  const courseSections = [
+    {
+      title: "Beginner",
+      goals: "Learn the basics and understand the foundations of the subject.",
+    },
+    {
+      title: "Intermediate",
+      goals: "Build upon core concepts with practical examples and challenges.",
+    },
+    {
+      title: "Advanced",
+      goals: "Master advanced topics and explore real-world applications.",
+    },
+    {
+      title: "Expert",
+      goals: "Demonstrate deep expertise through complex, project-based learning.",
+    },
+  ];
+    
+   // If loading, show loading indicator
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -56,9 +67,6 @@ export default function Course() {
   if (!course) {
     return <div>No course found</div>;
   }
-
-  // Destructure course data (adjust based on your API response)
-  const { title, courseSections } = course;
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -81,17 +89,32 @@ export default function Course() {
         <h1 className="text-3xl font-bold text-center mb-8">{title}</h1>
 
         <div className="space-y-4 max-w-3xl mx-auto">
-          {/* Course Sections */}
-          {courseSections.map((section: CourseSection, index: number) => (
-            <div key={index} className="bg-gray-100 p-6 rounded-lg shadow-sm">
-              <Link
-                href={{
-                  pathname: `/courses/${courseId}/${index}`,
-                  query: { totalProblems: 2, currentProgress: 1 }, // Example query parameters, adjust as needed
-                }}
-                className="block"
-              >
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">{section.title}</h2>
+
+          {/* TODO: Dynamically loop through courseSections, generating a <div> for each one 
+          that follows this format:
+            <div key={index} className="...">
+              <h2 className="...">{title}</h2>
+              <p className="...">{content}</p>
+            </div>
+
+          Refer to Tailwind CSS documentation for more details:
+          https://tailwindcss.com/docs/background-color
+          https://tailwindcss.com/docs/padding
+          https://tailwindcss.com/docs/border-radius
+          https://tailwindcss.com/docs/font-weight
+          https://tailwindcss.com/docs/margin
+          https://tailwindcss.com/docs/text-color
+          */}
+          {courseSections.map((section, index) => (
+            <div
+              key={index}
+              className="bg-gray-100 p-6 rounded-lg shadow-sm"
+            >
+              {/* TODO: change the queries to be dynamic! */}
+              <Link href={{pathname: `/courses/${courseId}/${index}`, query: { totalProblems: totalProblems, currentProgress: 1 }}} className="block">
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  {section.title}
+                </h2>
                 <p className="text-gray-600">{section.goals}</p>
               </Link>
             </div>

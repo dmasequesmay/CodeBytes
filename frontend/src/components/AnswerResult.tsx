@@ -10,7 +10,7 @@ export default function AnswerResult({
   className = "",
 }) {
   const color = isSuccess ? successColor : errorColor
-  const imgSrc_string = isSuccess ? "checkmark" : "x"
+  const imgSrc_string = isSuccess ? "/assets/Frame 1.png" : "/assets/Frame 2.png"
   // ^ imgSrc wil be replaced with actual assets later
   return (
     <div

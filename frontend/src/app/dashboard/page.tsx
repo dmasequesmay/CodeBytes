@@ -6,6 +6,7 @@ import { Menu, Trophy, BookOpen, UserPlus, Monitor } from "lucide-react";
 import ContinueButton from "../../components/ContinueButton";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { getUserEmail } from "../../lib/authUtils";
 
 interface Course {
   name: string;
@@ -27,7 +28,7 @@ export default function DashboardLanding() {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const userEmail = "user@example.com"; // replace later on
+  const userEmail = getUserEmail() || "user@example.com"; // fallback to hardcoded value if no email in localStorage
 
   useEffect(() => {
     async function fetchData() {
