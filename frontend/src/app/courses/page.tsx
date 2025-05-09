@@ -1,18 +1,19 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Search, Home, User, Lightbulb } from "lucide-react"
-import { getCourses } from '../../services/mockDataService';
+import { useEffect, useState } from "react";
+import { Search, Home, User, Lightbulb } from "lucide-react";
+import { getCourses } from "../../services/mockDataService";
 import Link from "next/link";
-// TODO: Add interface for CourseProps with required properties
+
+// Interface for course data
 interface CourseProps {
   name: string;
   progress: number;
 }
 
-// Custom hook to fetch courses and user data
-const useUserData = (email) => {
-  const [courses, setCourses] = useState([]);
+// Custom hook to fetch user data and progress
+const useUserData = (email: string) => {
+  const [courses, setCourses] = useState<CourseProps[]>([]);
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const useUserData = (email) => {
 
         // Transform backend data to the format needed for CourseCard
         const transformedCourses = progressData.map((course) => ({
-          id: course.language,  // Assuming `language` is a unique identifier for the course
+          id: course.language, // Assuming `language` is a unique identifier for the course
           name: course.course_name,
           progress: course.progress,
         }));
@@ -46,29 +47,28 @@ const useUserData = (email) => {
   return { courses, userName };
 };
 
-
-// TODO: Create CourseCard component that displays course progress
+// CourseCard component that displays course progress
 const CourseCard = ({ name, progress }: CourseProps) => {
-  // TODO: Calculate circle circumference based on radius (Radius = 45 units)
+  // Calculate circle circumference (Radius = 45 units)
   const circumference = 2 * Math.PI * 45;
-  
-  // TODO: Calculate strokeDashoffset based on progress
+
+  // Calculate strokeDashoffset based on progress
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg flex flex-col items-center">
       <h3 className="font-medium text-lg mb-4">{name}</h3>
-      
+
       {/* Container for circular progress indicator */}
       <div className="w-24 h-24 relative">
         <svg className="w-full h-full" viewBox="0 0 100 100">
-          <circle 
+          <circle
             className="text-gray-300 stroke-current"
             cx="50"
             cy="50"
             r="45"
             strokeWidth="10"
-            fill="transparent" 
+            fill="transparent"
           />
           <circle
             className="text-green-600 stroke-current"
@@ -83,34 +83,22 @@ const CourseCard = ({ name, progress }: CourseProps) => {
             transform="rotate(-90 50 50)"
           />
         </svg>
-        
+
         {/* Absolute positioned container for percentage text */}
         <div className="absolute inset-0 flex items-center justify-center w-full h-full">
           <span className="text-xl font-bold">{progress}%</span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default function CourseLanding() {
-  // Add state management for user name
-  const [userName, setUserName] = useState("");
-  
-  // Add state management for current course
-  const [currentCourse, setCurrentCourse] = useState("Python");
-  
-  // Get the user's email from localStorage or another state management solution
-  const email = localStorage.getItem("userEmail");  // Example: Replace with actual method to get user email
+  // Get the user's email from localStorage
+  const email = localStorage.getItem("userEmail"); // Example: Replace with actual method to get user email
 
-  const { courses, userName: fetchedUserName } = useUserData(email);
-
-  // Set the user name once it's fetched
-  useEffect(() => {
-    if (fetchedUserName) {
-      setUserName(fetchedUserName);
-    }
-  }, [fetchedUserName]);
+  // Fetch courses and userName using the custom hook
+  const { courses, userName } = useUserData(email);
 
   // Handle case when no courses are available
   if (!courses.length) return <div>Loading courses...</div>;
@@ -124,7 +112,11 @@ export default function CourseLanding() {
             <div className="pl-4 pr-2 flex items-center">
               <span className="text-gray-700">Find Course</span>
             </div>
-            <input type="text" className="flex-1 py-2 px-4 outline-none" placeholder="Search courses..." />
+            <input
+              type="text"
+              className="flex-1 py-2 px-4 outline-none"
+              placeholder="Search courses..."
+            />
             <button className="bg-gray-200 p-3 rounded-r-lg">
               <Search className="h-5 w-5 text-gray-700" />
             </button>
@@ -136,7 +128,7 @@ export default function CourseLanding() {
       <div className="bg-gray-200 p-4 rounded-lg mb-6">
         <p className="text-center">
           Hello <span className="font-semibold">{userName || "Guest"}</span>! You are currently taking{" "}
-          <span className="font-semibold">{currentCourse || "no course yet"}</span>
+          <span className="font-semibold">no course yet</span>
         </p>
       </div>
 
