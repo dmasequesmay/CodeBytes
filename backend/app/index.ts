@@ -77,51 +77,50 @@ const startServer = async () => {
     // New endpoint to get user's course progress
     app.get('/api/user-progress/:email', async(req, res) =>{
       const email = req.params.email;
-      try{
-        // progress = completed_difficulties / total_difficulties for each language
-        const result = await dpool.query(
-          `SELECT 
-    l.languageId AS language,
-    l.lessonName AS course_name,
-    COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS completed_problems,
-    COUNT(DISTINCT p.id) AS total_problems,
-    CAST(COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 AS progress
-FROM user_lesson_progress lp
-JOIN Lessons l ON lp.lessonId = l.id
-LEFT JOIN problems p ON p.language = l.languageId
-LEFT JOIN user_problem_progress upp ON upp.problemId = p.id AND upp.userId = lp.userId
-WHERE lp.userId = (SELECT id FROM Users WHERE email = $1)
-GROUP BY l.languageId, l.lessonName
-ORDER BY l.languageId, l.lessonName;`,
-          [email]
-        );
-        res.json(result.rows);
+      try {
+          const result = await dpool.query(
+              `SELECT 
+                  l.languageId AS language,
+                  l.lessonName AS course_name,
+                  COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS completed_problems,
+                  COUNT(DISTINCT p.id) AS total_problems,
+                  CAST(COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 AS progress
+              FROM user_lesson_progress lp
+              JOIN Lessons l ON lp.lessonId = l.id
+              LEFT JOIN problems p ON p.language = l.languageId
+              LEFT JOIN user_problem_progress upp ON upp.problemId = p.id AND upp.userId = lp.userId
+              WHERE lp.userId = (SELECT id FROM Users WHERE email = $1)
+              GROUP BY l.languageId, l.lessonName
+              ORDER BY l.languageId, l.lessonName;`,
+              [email]
+          );
+          res.json(result.rows);
       } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to fetch user progress'});
+          console.error(err);
+          res.status(500).json({ error: 'Failed to fetch user progress' });
       }
     });
 
     // New endpoint to get user's badges
     app.get('/api/user-badges/:email', async (req, res) => {
       const email = req.params.email;
-      try{
-        const result = await dpool.query(
-          `SELECT 
-      b.badgeName AS badge_name, 
-      b.badgeDesc AS badge_desc, 
-      b.requirement AS requirement, 
-      b.badgeImageSrc AS badge_image_src, 
-      uob.dateEarned AS date_earned
-      FROM UserOwnedBadges uob
-      JOIN Badges b ON uob.badgeId = b.id
-      WHERE uob.userId = (SELECT id FROM Users WHERE email = $1);`,
-          [email]
-        );
-        res.json(result.rows);
+      try {
+          const result = await dpool.query(
+              `SELECT 
+                  b.badgeName AS badge_name, 
+                  b.badgeDesc AS badge_desc, 
+                  b.requirement AS requirement, 
+                  b.badgeImageSrc AS badge_image_src, 
+                  uob.dateEarned AS date_earned
+              FROM UserOwnedBadges uob
+              JOIN Badges b ON uob.badgeId = b.id
+              WHERE uob.userId = (SELECT id FROM Users WHERE email = $1);`,
+              [email]
+          );
+          res.json(result.rows);
       } catch (err) {
           console.error(err);
-          res.status(500).json({ error: 'Failed to fetch user badges'});
+          res.status(500).json({ error: 'Failed to fetch user badges' });
       }
     });
 

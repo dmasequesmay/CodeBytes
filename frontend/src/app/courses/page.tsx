@@ -10,50 +10,58 @@ interface CourseProps {
   progress: number;
 }
 
+// Custom hook to fetch courses and user data
+const useUserData = (email) => {
+  const [courses, setCourses] = useState([]);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch user name
+        const userResponse = await fetch(`/api/user-info/${email}`);
+        const userData = await userResponse.json();
+        setUserName(userData.firstName);
+
+        // Fetch user progress in courses
+        const progressResponse = await fetch(`/api/user-progress/${email}`);
+        const progressData = await progressResponse.json();
+
+        // Transform backend data to the format needed for CourseCard
+        const transformedCourses = progressData.map((course) => ({
+          id: course.language,  // Assuming `language` is a unique identifier for the course
+          name: course.course_name,
+          progress: course.progress,
+        }));
+
+        setCourses(transformedCourses);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, [email]);
+
+  return { courses, userName };
+};
+
+
 // TODO: Create CourseCard component that displays course progress
 const CourseCard = ({ name, progress }: CourseProps) => {
-  // TODO: Calculate circle circumference based on radius
-  // Radius should be 45 units
+  // TODO: Calculate circle circumference based on radius (Radius = 45 units)
   const circumference = 2 * Math.PI * 45;
   
   // TODO: Calculate strokeDashoffset based on progress
-  // Formula: circumference - (progress / 100) * circumference
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
-    // TODO: Create outer container with these properties:
-    // - Light gray background
-    // - 6 units of padding
-    // - Rounded corners
-    // - Flex layout with column direction and centered items
     <div className="bg-gray-100 p-6 rounded-lg flex flex-col items-center">
-      {/* TODO: Add course name heading with these properties:
-          - Medium font weight
-          - Large text size
-          - 4 units of bottom margin
-          - use name parameter here
-      */}
       <h3 className="font-medium text-lg mb-4">{name}</h3>
       
-      {/* TODO: Create container for circular progress indicator with:
-          - 24 units width and height
-          - Relative positioning
-      */}
+      {/* Container for circular progress indicator */}
       <div className="w-24 h-24 relative">
-        {/* TODO: Add SVG container with:
-            - Full width and height
-            - Viewbox of 0 0 100 100
-        */}
         <svg className="w-full h-full" viewBox="0 0 100 100">
-          {/* TODO: Add background circle with:
-              - Gray color (Font size 300)
-              - 10 units stroke width
-              - Center at 50,50
-              - Radius of 45
-              - Transparent fill
-
-              https://tailwindcss.com/docs/stroke
-          */}
           <circle 
             className="text-gray-300 stroke-current"
             cx="50"
@@ -62,18 +70,6 @@ const CourseCard = ({ name, progress }: CourseProps) => {
             strokeWidth="10"
             fill="transparent" 
           />
-          {/* TODO: Add progress circle with:
-              - Green color (Font size 300)
-              - 10 units stroke width
-              - Round line cap
-              - Center at 50,50
-              - Radius of 45
-              - Transparent fill
-              - Dynamic strokeDasharray and strokeDashoffset
-              - Rotated -90 degrees around center
-
-              https://tailwindcss.com/docs/stroke
-          */}
           <circle
             className="text-green-600 stroke-current"
             cx="50"
@@ -88,15 +84,8 @@ const CourseCard = ({ name, progress }: CourseProps) => {
           />
         </svg>
         
-        {/* TODO: Add absolute positioned container for percentage text with:
-            - Full width and height
-            - Flex layout with centered items
-        */}
+        {/* Absolute positioned container for percentage text */}
         <div className="absolute inset-0 flex items-center justify-center w-full h-full">
-          {/* TODO: Add percentage text with:
-              - Extra large font size
-              - Bold font weight
-          */}
           <span className="text-xl font-bold">{progress}%</span>
         </div>
       </div>
@@ -105,70 +94,37 @@ const CourseCard = ({ name, progress }: CourseProps) => {
 }
 
 export default function CourseLanding() {
-  // TODO: Add state management for user name
+  // Add state management for user name
   const [userName, setUserName] = useState("");
   
-  // TODO: Add state management for current course
+  // Add state management for current course
   const [currentCourse, setCurrentCourse] = useState("Python");
-  // note: this should be the last course the user interacted with; where to update?
-  useEffect(() => {
-    const savedName = localStorage.getItem("userName");
-    const savedCourse = localStorage.getItem("lastCourse");
-    if (savedName) setUserName(savedName);
-    if (savedCourse) setCurrentCourse(savedCourse);
-  }, []);
+  
+  // Get the user's email from localStorage or another state management solution
+  const email = localStorage.getItem("userEmail");  // Example: Replace with actual method to get user email
 
+  const { courses, userName: fetchedUserName } = useUserData(email);
+
+  // Set the user name once it's fetched
   useEffect(() => {
-    if (currentCourse) {
-      localStorage.setItem("lastCourse", currentCourse);
+    if (fetchedUserName) {
+      setUserName(fetchedUserName);
     }
-  }, [currentCourse]);
+  }, [fetchedUserName]);
 
-  // TODO: Add course data structure with these properties:
-  // - name: string (course name)
-  // - progress: number (0-100)
-  const courses = [
-    { id: 1, name: "Java", progress: 70 },
-    { id: 2, name: "C++", progress: 100 },
-    { id: 3, name: "Python", progress: 55 },
-    { id: 4, name: "React", progress: 20 },
-    // static for now; will be getting this info dynamically later
-  ]
+  // Handle case when no courses are available
+  if (!courses.length) return <div>Loading courses...</div>;
 
   return (
-    // TODO: Create main container with:
-    // - Maximum width of 4xl
-    // - Center horizontally
-    // - 4 units of padding
     <div className="max-w-4xl mx-auto p-4">
       {/* Search Bar */}
       <div className="flex items-center mb-6">
         <div className="relative flex-1">
-          {/* TODO: Create search input container with:
-              - Flex layout with centered items
-              - White background
-              - Rounded corners
-              - Border
-              - Overflow hidden
-          */}
           <div className="flex items-center bg-white rounded-lg border overflow-hidden">
-            {/* TODO: Add search text and initials avatar */}
             <div className="pl-4 pr-2 flex items-center">
               <span className="text-gray-700">Find Course</span>
             </div>
-            {/* TODO: Add search input field with:
-                - Flex layout with 1 unit
-                - 2 units top/bottom padding
-                - 4 units left/right padding
-                - No outline
-            */}
             <input type="text" className="flex-1 py-2 px-4 outline-none" placeholder="Search courses..." />
-            {/* TODO: Add search button with:
-                - Gray background (200)
-                - 3 units padding
-                - Rounded corners on right side
-                - Search icon
-            */}
             <button className="bg-gray-200 p-3 rounded-r-lg">
               <Search className="h-5 w-5 text-gray-700" />
             </button>
@@ -177,17 +133,7 @@ export default function CourseLanding() {
       </div>
 
       {/* User Greeting */}
-      {/* TODO: Create user greeting section with:
-          - Light gray background (200)
-          - 4 units padding
-          - Rounded corners
-          - 6 units bottom margin
-      */}
       <div className="bg-gray-200 p-4 rounded-lg mb-6">
-        {/* TODO: Add dynamic user greeting text with:
-            - Centered text (use in outer <p> tag below)
-            - Semi-Bold font weight for user name and course name (use within inner <span>)
-        */}
         <p className="text-center">
           Hello <span className="font-semibold">{userName || "Guest"}</span>! You are currently taking{" "}
           <span className="font-semibold">{currentCourse || "no course yet"}</span>
@@ -197,16 +143,6 @@ export default function CourseLanding() {
       {/* Main Layout */}
       <div className="flex">
         {/* Sidebar */}
-        {/* TODO: Create sidebar with:
-            - 20 units width
-            - Light gray background (200)
-            - Rounded corners
-            - 4 units right margin
-            - 4 units padding
-            - Flex layout with column direction
-            - Centered items
-            - 8 units spacing between items
-        */}
         <div className="w-20 bg-gray-200 rounded-lg mr-4 p-4 flex flex-col items-center space-y-8">
           <button className="p-2 hover:bg-gray-300 rounded-full">
             <Lightbulb className="h-6 w-6" />
@@ -224,35 +160,15 @@ export default function CourseLanding() {
         </div>
 
         {/* Main Content */}
-        {/* TODO: Create main content area with:
-            - Flex layout with 1 unit flex
-            - Large heading
-            - 4 units bottom margin
-        */}
         <div className="flex-1">
-          {/* TODO: Add heading<h2> Below: use text "Choose a Course"*/}
           <h2 className="text-2xl font-bold mb-4">Choose a Course</h2>
 
           {/* Scrollable Course Grid */}
-          {/* TODO: Create scrollable container with:
-              - Auto overflow in y direction
-              - Maximum height of 400 units
-              - 2 units right padding
-          */}
           <div className="overflow-y-auto max-h-[400px] pr-2">
-            {/* TODO: Create grid layout with:
-                - 2 columns
-                - 4 units gap between items
-            */}
             <div className="grid grid-cols-2 gap-4">
-              {/* TODO: Map through courses and render CourseCard component */}
               {courses.map((course) => (
-                <Link href={`/courses/${course.id}`}>
-                  <CourseCard
-                    key={course.id}
-                    name={course.name}
-                    progress={course.progress}
-                  />
+                <Link key={course.id} href={`/courses/${course.id}`}>
+                  <CourseCard name={course.name} progress={course.progress} />
                 </Link>
               ))}
             </div>
@@ -260,5 +176,5 @@ export default function CourseLanding() {
         </div>
       </div>
     </div>
-  )
+  );
 }
