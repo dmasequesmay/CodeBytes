@@ -21,6 +21,11 @@ export default function Signup() {
     password: "",
   })
   const router = useRouter();
+  const steps = [
+    { id: 1, label: "Sign up your account" },
+    { id: 2, label: "Set up your workspace" },
+    { id: 3, label: "Create your profile" }
+  ]
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // TODO: extract variables name and value from e.target
@@ -60,24 +65,26 @@ export default function Signup() {
 
   return (
     <div className="flex min-h-screen w-full">
-      <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-white p-8">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-700 via-purple-600 to-purple-500 relative overflow-hidden">
+        <div className="absolute w-[500px] h-[500px] rounded-full bg-purple-400/20 blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="max-w-md text-center">
             {/* TODO: Implement Styling for "Get Started" */}
-          <h1 className="text-black">Get Started with Us</h1>
-          <p className="text-black">Complete these steps to register your account!</p>
+            <h1 className="text-black text-2xl font-bold mb-1">CodeBytes</h1>
+            <h2 className="text-black text-xl font-semibold mb-2">Get Started with Us</h2>
+            <p className="text-black/80 text-sm mb-8">Complete these steps to register your account</p>
             {/* TODO: Implement Styling for the three steps (refer to Midfis) */}
-          <div className="space-y-4 text-left">
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm text-black">
-              <span>1. Sign up</span>
-            </div>
-
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm text-black">
-              <span>2. Set up your workspace</span>
-            </div>
-
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm text-black">
-              <span>3. Create your profile</span>
-            </div>
+            <div className="space-y-4">
+            {steps.map((step) => (
+              <button
+                key={step.id}
+                className="flex items-center w-full bg-white rounded-full py-3 px-4 text-gray-800 font-medium transition-all hover:shadow-lg"
+              >
+                <div className="w-6 h-6 rounded-full flex items-center justify-center mr-3 bg-purple-600">
+                  <span className="text-black text-xs">{step.id}</span>
+                </div>
+                {step.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>

@@ -51,7 +51,8 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-white p-8">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-700 via-purple-600 to-purple-500 relative overflow-hidden">
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-purple-400/20 blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
         <div className="max-w-md text-center">
           <h1 className="text-black">Welcome Back</h1>
           <p className="text-black">Sign in to continue your journey</p>
