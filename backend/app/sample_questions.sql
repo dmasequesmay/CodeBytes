@@ -2,187 +2,112 @@
 
 -- Easy Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
-('What is the output of print(2 + 2 * 3)?', 'easy', false, 'python'),
-('Write a function that takes a list and returns its length.', 'easy', true, 'python'),
-('What is the correct way to create a dictionary in Python?', 'easy', false, 'python'),
-('Write a program to check if a number is even or odd.', 'easy', true, 'python'),
-('What is the output of print("Hello" + " " + "World")?', 'easy', false, 'python'),
 ('Write a function to find the maximum number in a list.', 'easy', true, 'python'),
 ('What does the len() function do?', 'easy', false, 'python'),
-('Write a program to print numbers from 1 to 10.', 'easy', true, 'python'),
-('What is the output of print(list(range(1, 5)))?', 'easy', false, 'python'),
-('Write a function to check if a string is palindrome.', 'easy', true, 'python'),
-('What is the difference between list and tuple?', 'easy', false, 'python'),
-('Write a program to remove duplicates from a list.', 'easy', true, 'python');
+('Write a function to calculate the factorial of a number.', 'easy', true, 'python'),
+('What is the difference between list and tuple in Python?', 'easy', false, 'python');
 
 -- Medium Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('What is the difference between deep copy and shallow copy?', 'medium', false, 'python'),
-('Write a program to implement binary search.', 'medium', true, 'python'),
 ('Explain Python decorators with an example.', 'medium', false, 'python'),
-('Write a function to find all permutations of a string.', 'medium', true, 'python'),
-('What is the difference between class and instance variables?', 'medium', false, 'python'),
-('Write a program to implement a stack using list.', 'medium', true, 'python'),
 ('Explain Python generators with an example.', 'medium', false, 'python'),
-('Write a function to find the longest common subsequence.', 'medium', true, 'python'),
 ('What is the difference between append() and extend()?', 'medium', false, 'python'),
-('Write a program to implement a priority queue.', 'medium', true, 'python'),
-('Explain Python context managers with an example.', 'medium', false, 'python'),
-('Write a function to find all subsets of a set.', 'medium', true, 'python');
+('Explain Python context managers with an example.', 'medium', false, 'python');
 
 -- Hard Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain Python metaclasses with an example.', 'hard', false, 'python'),
-('Write a program to implement Dijkstra''s algorithm.', 'hard', true, 'python'),
 ('What is the Global Interpreter Lock (GIL)?', 'hard', false, 'python'),
-('Write a function to implement a concurrent web scraper.', 'hard', true, 'python'),
 ('Explain Python memory management.', 'hard', false, 'python'),
-('Write a program to implement a concurrent producer-consumer pattern.', 'hard', true, 'python'),
 ('What is the difference between __new__ and __init__?', 'hard', false, 'python'),
-('Write a function to implement a distributed cache.', 'hard', true, 'python'),
 ('Explain Python garbage collection.', 'hard', false, 'python'),
-('Write a program to implement a distributed task queue.', 'hard', true, 'python'),
-('What is the difference between __slots__ and regular attributes?', 'hard', false, 'python'),
-('Write a function to implement a distributed file system.', 'hard', true, 'python');
+('What is the difference between __slots__ and regular attributes?', 'hard', false, 'python');
 
 -- Extreme Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain Python bytecode and how it works.', 'extreme', false, 'python'),
-('Write a program to implement a distributed database.', 'extreme', true, 'python'),
 ('What is the Python C API and how does it work?', 'extreme', false, 'python'),
-('Write a function to implement a distributed machine learning system.', 'extreme', true, 'python'),
 ('Explain Python memory optimization techniques.', 'extreme', false, 'python'),
-('Write a program to implement a distributed blockchain system.', 'extreme', true, 'python'),
 ('What is the Python virtual machine and how does it work?', 'extreme', false, 'python'),
-('Write a function to implement a distributed real-time analytics system.', 'extreme', true, 'python'),
 ('Explain Python performance profiling techniques.', 'extreme', false, 'python'),
-('Write a program to implement a distributed AI training system.', 'extreme', true, 'python'),
-('What is the Python interpreter architecture?', 'extreme', false, 'python'),
-('Write a function to implement a distributed deep learning system.', 'extreme', true, 'python');
+('What is the Python interpreter architecture?', 'extreme', false, 'python');
 
 -- Java Questions
 
 -- Easy Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('What is the output of System.out.println(2 + 2 * 3)?', 'easy', false, 'java'),
-('Write a program to print numbers from 1 to 10.', 'easy', true, 'java'),
 ('What is the difference between == and equals()?', 'easy', false, 'java'),
-('Write a program to check if a number is prime.', 'easy', true, 'java'),
 ('What is the output of String.valueOf(123)?', 'easy', false, 'java'),
-('Write a program to reverse a string.', 'easy', true, 'java'),
 ('What is the purpose of main() method?', 'easy', false, 'java'),
-('Write a program to find maximum element in an array.', 'easy', true, 'java'),
 ('What is the difference between int and Integer?', 'easy', false, 'java'),
-('Write a program to sort an array.', 'easy', true, 'java'),
-('What is the difference between class and interface?', 'easy', false, 'java'),
-('Write a program to check if a string is palindrome.', 'easy', true, 'java');
+('What is the difference between class and interface?', 'easy', false, 'java');
 
 -- Medium Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain Java inheritance with an example.', 'medium', false, 'java'),
-('Write a program to implement binary search tree.', 'medium', true, 'java'),
 ('What is the difference between abstract class and interface?', 'medium', false, 'java'),
-('Write a program to implement stack using array.', 'medium', true, 'java'),
 ('Explain Java exception handling.', 'medium', false, 'java'),
-('Write a program to implement queue using linked list.', 'medium', true, 'java'),
 ('What is the difference between ArrayList and LinkedList?', 'medium', false, 'java'),
-('Write a program to implement hash table.', 'medium', true, 'java'),
 ('Explain Java thread synchronization.', 'medium', false, 'java'),
-('Write a program to implement priority queue.', 'medium', true, 'java'),
-('What is the difference between final, finally and finalize?', 'medium', false, 'java'),
-('Write a program to implement circular linked list.', 'medium', true, 'java');
+('What is the difference between final, finally and finalize?', 'medium', false, 'java');
 
 -- Hard Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain Java memory model.', 'hard', false, 'java'),
-('Write a program to implement concurrent hash map.', 'hard', true, 'java'),
 ('What is the difference between synchronized and volatile?', 'hard', false, 'java'),
-('Write a program to implement distributed cache.', 'hard', true, 'java'),
 ('Explain Java garbage collection.', 'hard', false, 'java'),
-('Write a program to implement distributed database.', 'hard', true, 'java'),
 ('What is the difference between Executor and ExecutorService?', 'hard', false, 'java'),
-('Write a program to implement distributed file system.', 'hard', true, 'java'),
 ('Explain Java reflection API.', 'hard', false, 'java'),
-('Write a program to implement distributed task queue.', 'hard', true, 'java'),
-('What is the difference between checked and unchecked exceptions?', 'hard', false, 'java'),
-('Write a program to implement distributed messaging system.', 'hard', true, 'java');
+('What is the difference between checked and unchecked exceptions?', 'hard', false, 'java');
 
 -- Extreme Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain Java bytecode and how it works.', 'extreme', false, 'java'),
-('Write a program to implement distributed blockchain system.', 'extreme', true, 'java'),
 ('What is the Java Virtual Machine architecture?', 'extreme', false, 'java'),
-('Write a program to implement distributed AI training system.', 'extreme', true, 'java'),
 ('Explain Java performance optimization techniques.', 'extreme', false, 'java'),
-('Write a program to implement distributed real-time analytics system.', 'extreme', true, 'java'),
 ('What is the Java Memory Model and how does it work?', 'extreme', false, 'java'),
-('Write a program to implement distributed deep learning system.', 'extreme', true, 'java'),
 ('Explain Java concurrency utilities.', 'extreme', false, 'java'),
-('Write a program to implement distributed machine learning system.', 'extreme', true, 'java'),
-('What is the Java Native Interface (JNI)?', 'extreme', false, 'java'),
-('Write a program to implement distributed cloud storage system.', 'extreme', true, 'java');
+('What is the Java Native Interface (JNI)?', 'extreme', false, 'java');
 
 -- C++ Questions
 
 -- Easy Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('What is the output of cout << 2 + 2 * 3 << endl?', 'easy', false, 'cpp'),
-('Write a program to print numbers from 1 to 10.', 'easy', true, 'cpp'),
 ('What is the difference between int and float?', 'easy', false, 'cpp'),
-('Write a program to check if a number is even.', 'easy', true, 'cpp'),
 ('What is the output of sizeof(int)?', 'easy', false, 'cpp'),
-('Write a program to reverse an array.', 'easy', true, 'cpp'),
 ('What is the difference between #include and #define?', 'easy', false, 'cpp'),
-('Write a program to find maximum element in an array.', 'easy', true, 'cpp'),
 ('What is the difference between struct and class?', 'easy', false, 'cpp'),
-('Write a program to sort an array.', 'easy', true, 'cpp'),
-('What is the difference between new and malloc?', 'easy', false, 'cpp'),
-('Write a program to check if a string is palindrome.', 'easy', true, 'cpp');
+('What is the difference between new and malloc?', 'easy', false, 'cpp');
 
 -- Medium Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain C++ templates with an example.', 'medium', false, 'cpp'),
-('Write a program to implement binary search.', 'medium', true, 'cpp'),
 ('What is the difference between pass by value and pass by reference?', 'medium', false, 'cpp'),
-('Write a program to implement stack using array.', 'medium', true, 'cpp'),
 ('Explain C++ virtual functions.', 'medium', false, 'cpp'),
-('Write a program to implement queue using linked list.', 'medium', true, 'cpp'),
 ('What is the difference between const and constexpr?', 'medium', false, 'cpp'),
-('Write a program to implement hash table.', 'medium', true, 'cpp'),
 ('Explain C++ exception handling.', 'medium', false, 'cpp'),
-('Write a program to implement priority queue.', 'medium', true, 'cpp'),
-('What is the difference between static and dynamic binding?', 'medium', false, 'cpp'),
-('Write a program to implement circular linked list.', 'medium', true, 'cpp');
+('What is the difference between static and dynamic binding?', 'medium', false, 'cpp');
 
 -- Hard Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain C++ memory management.', 'hard', false, 'cpp'),
-('Write a program to implement concurrent hash map.', 'hard', true, 'cpp'),
 ('What is the difference between RAII and smart pointers?', 'hard', false, 'cpp'),
-('Write a program to implement distributed cache.', 'hard', true, 'cpp'),
 ('Explain C++ move semantics.', 'hard', false, 'cpp'),
-('Write a program to implement distributed database.', 'hard', true, 'cpp'),
 ('What is the difference between std::unique_ptr and std::shared_ptr?', 'hard', false, 'cpp'),
-('Write a program to implement distributed file system.', 'hard', true, 'cpp'),
 ('Explain C++ template metaprogramming.', 'hard', false, 'cpp'),
-('Write a program to implement distributed task queue.', 'hard', true, 'cpp'),
-('What is the difference between noexcept and throw()?', 'hard', false, 'cpp'),
-('Write a program to implement distributed messaging system.', 'hard', true, 'cpp');
+('What is the difference between noexcept and throw()?', 'hard', false, 'cpp');
 
 -- Extreme Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Explain C++ compiler optimization techniques.', 'extreme', false, 'cpp'),
-('Write a program to implement distributed blockchain system.', 'extreme', true, 'cpp'),
 ('What is the C++ Standard Template Library (STL) architecture?', 'extreme', false, 'cpp'),
-('Write a program to implement distributed AI training system.', 'extreme', true, 'cpp'),
 ('Explain C++ memory alignment.', 'extreme', false, 'cpp'),
-('Write a program to implement distributed real-time analytics system.', 'extreme', true, 'cpp'),
 ('What is the C++ ABI and how does it work?', 'extreme', false, 'cpp'),
-('Write a program to implement distributed deep learning system.', 'extreme', true, 'cpp'),
 ('Explain C++ constexpr functions.', 'extreme', false, 'cpp'),
-('Write a program to implement distributed machine learning system.', 'extreme', true, 'cpp'),
-('What is the C++ memory model?', 'extreme', false, 'cpp'),
-('Write a program to implement distributed cloud storage system.', 'extreme', true, 'cpp');
+('What is the C++ memory model?', 'extreme', false, 'cpp');
 
 -- React Questions
 
@@ -261,7 +186,9 @@ INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('What is the difference between function declaration and expression?', 'easy', false, 'javascript'),
 ('Write a function to check if a string is palindrome.', 'easy', true, 'javascript'),
 ('What is the difference between map and forEach?', 'easy', false, 'javascript'),
-('Write a function to remove duplicates from an array.', 'easy', true, 'javascript');
+('Write a function to remove duplicates from an array.', 'easy', true, 'javascript'),
+('Write a function to find the sum of an array.', 'easy', true, 'javascript'),
+('What is the purpose of the "this" keyword in JavaScript?', 'easy', false, 'javascript');
 
 -- Medium Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES
@@ -290,8 +217,7 @@ INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('Write a function to implement a distributed task queue.', 'hard', true, 'javascript'),
 ('Explain JavaScript module system.', 'hard', false, 'javascript'),
 ('Write a function to implement a distributed messaging system.', 'hard', true, 'javascript'),
-('What is the difference between synchronous and asynchronous programming?', 'hard', false, 'javascript'),
-('Write a function to implement a distributed real-time analytics system.', 'hard', true, 'javascript');
+('What is the difference between synchronous and asynchronous programming?', 'hard', false, 'javascript');
 
 -- Extreme Questions (12)
 INSERT INTO problems (question, difficulty, is_coding, language) VALUES

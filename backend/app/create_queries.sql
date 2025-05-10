@@ -22,6 +22,26 @@ BEGIN
 EXCEPTION
     WHEN duplicate_object THEN NULL;
 END $$;
+
+DO $$
+BEGIN
+    DROP TABLE IF EXISTS 
+        user_problem_progress,
+        multiple_choice_answers,
+        test_cases,
+        problems,
+        user_lesson_progress,
+        class_membership,
+        Classes,
+        Lessons,
+        UserOwnedBadges,
+        Users,
+        Badges,
+        user_info,
+        class_role,
+        lesson_diff CASCADE;
+END $$;
+
 -- TODO: write CREATE TABLE statement for badges
 
 CREATE TABLE IF NOT EXISTS Badges (
@@ -92,6 +112,18 @@ CREATE TABLE IF NOT EXISTS user_lesson_progress(
     FOREIGN KEY (lessonId) REFERENCES Lessons(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS problems (
+    id SERIAL PRIMARY KEY,
+    question VARCHAR(200) NOT NULL UNIQUE,
+    difficulty lesson_diff NOT NULL DEFAULT 'medium',
+    source VARCHAR(200),
+    is_coding BOOLEAN NOT NULL DEFAULT false,
+    language VARCHAR(200),
+    judge0_language_id INTEGER,
+    time_limit FLOAT DEFAULT 2.0,
+    memory_limit INTEGER DEFAULT 262144
+);
+
 -- A table for test cases for each problem
 CREATE TABLE IF NOT EXISTS test_cases (
     id SERIAL PRIMARY KEY,
@@ -112,17 +144,6 @@ CREATE TABLE IF NOT EXISTS multiple_choice_answers (
     UNIQUE(problem_id, choice_order)
 );
 
-CREATE TABLE IF NOT EXISTS problems (
-    id SERIAL PRIMARY KEY,
-    question VARCHAR(200) NOT NULL,
-    difficulty lesson_diff NOT NULL DEFAULT 'medium',
-    source VARCHAR(200),
-    is_coding BOOLEAN NOT NULL DEFAULT false,
-    language VARCHAR(200),
-    judge0_language_id INTEGER,
-    time_limit FLOAT DEFAULT 2.0,
-    memory_limit INTEGER DEFAULT 262144
-);
 
 CREATE TABLE IF NOT EXISTS user_problem_progress(
     userId INT NOT NULL,

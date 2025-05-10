@@ -16,7 +16,7 @@ async function executeSQLFile(filePath: string, pool: any) {
     const sql = fs.readFileSync(filePath, "utf-8");
     await pool.query(sql);
     console.log(`Successfully executed SQL file: ${path.basename(filePath)}`);
-  } catch (error) {
+  } catch (error:any) {
     console.error(`Error executing SQL file: ${path.basename(filePath)}`, error);
   }
 }
@@ -40,16 +40,17 @@ const waitForDatabase = async (pool: any, maxAttempts: number = 900, delayMs: nu
             await pool.query('SELECT 1');
             console.log('Database connection is ready');
             return true;
-        } catch (error) {
+        } catch (error:any) {
             attempts++;
             console.log(`Waiting for database... Attempt ${attempts}/${maxAttempts}`);
             await new Promise(resolve => setTimeout(resolve, delayMs));
         }
     }
+     throw new Error("Database connection failed after maximum attempts");  
   }
 
-  throw new Error("Database connection failed after maximum attempts");
-};
+ 
+
 
 // Execute SQL files with proper error handling
 const executeSQLFiles = async (files: string[], pool: any) => {
@@ -57,11 +58,13 @@ const executeSQLFiles = async (files: string[], pool: any) => {
     // Wait for database to be ready
     await waitForDatabase(pool);
 
-    await Promise.all(files.map(file => executeSQLFile(file, pool)));
+    for (const file of files) {
+      await executeSQLFile(file, pool);
+    }
     console.log("All SQL files executed successfully");
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error executing SQL files:", error);
-    process.exit(1); // Exit the process if SQL execution fails
+    throw error; // Rethrow the error to stop the server from starting
   }
 };
 
@@ -79,12 +82,12 @@ const startServer = async () => {
 
     await executeSQLFiles(sqlFiles, dpool);
     
-    app.get('/', (req:any, res) => {
+    app.get('/', (req:any, res:any) => {
       res.send('Backend is running');
     });
 
     // New endpoint to get user's course progress
-    app.get('/api/user-progress/:email', async(req, res) =>{
+    app.get('/api/user-progress/:email', async(req:any, res:any) =>{
       const email = req.params.email;
       try{
         // progress = completed_difficulties / total_difficulties for each language
@@ -112,7 +115,7 @@ ORDER BY l.languageId, l.lessonName;`,
     });
 
     // New endpoint to get user's badges
-    app.get('/api/user-badges/:email', async (req, res) => {
+    app.get('/api/user-badges/:email', async (req:any, res:any) => {
       const email = req.params.email;
       try{
         const result = await dpool.query(
@@ -134,7 +137,7 @@ ORDER BY l.languageId, l.lessonName;`,
       }
     });
 
-    app.get('/api/courses/:languageId', async (req, res) => {
+    app.get('/api/courses/:languageId', async (req:any, res:any) => {
       const languageId = req.params.languageId;
       try{
         const result = await dpool.query(
@@ -148,7 +151,7 @@ ORDER BY l.languageId, l.lessonName;`,
       }
     });
 
-    app.get('/api/problems-count/:languageId', async (req, res) => {
+    app.get('/api/problems-count/:languageId', async (req:any, res:any) => {
       const languageId = req.params.languageId;
       const email = req.headers['user-email'] as string;
       if (!email) {
@@ -177,7 +180,7 @@ ORDER BY l.languageId, l.lessonName;`,
       }
     });
 
-    app.get('/api/problems/:languageId/:difficulty', async (req, res) => {
+    app.get('/api/problems/:languageId/:difficulty', async (req:any, res:any) => {
       const languageId = req.params.languageId;
       const numberToDifficulty = {
         1: "easy",
@@ -244,7 +247,7 @@ ORDER BY l.languageId, l.lessonName;`,
       }
     });
     //Endpoint to get profile info
-    app.get('/api/user-profile/:email', async (req, res) => {
+    app.get('/api/user-profile/:email', async (req:any, res:any) => {
       const email = req.params.email;
       try {
         const result = await dpool.query(
@@ -270,7 +273,7 @@ ORDER BY l.languageId, l.lessonName;`,
 
 
     
-    app.post('/api/user-completed-problem', async (req, res) => {
+    app.post('/api/user-completed-problem', async (req:any, res:any) => {
       const { email, problemId }:{
         email: string,
         problemId: number
@@ -293,7 +296,7 @@ ORDER BY l.languageId, l.lessonName;`,
       }
     });
 
-    app.post("/add-user ", (req, res) => {
+    app.post("/add-user ", (req:any, res:any) => {
       const { userName, firstName, lastName, bio, email, role, dateJoined }:{
         userName:string,
         firstName:string,
@@ -311,14 +314,14 @@ ORDER BY l.languageId, l.lessonName;`,
       .then(() => {
         res.status(200).send("success!");
       })
-      .catch((error) => {
+      .catch((error:any) => {
         console.error('Error inserting data:', error);
         res.status(500).send('Internal Server Error');
       });
     });
 
     /*TODO: write the backend endpoint for adding to the class table */
-    app.post("/add-class ", (req, res) => {
+    app.post("/add-class ", (req:any, res:any) => {
       const { className, teacherId }:{
         className:string,
         teacherId:number
@@ -331,7 +334,7 @@ ORDER BY l.languageId, l.lessonName;`,
       .then(() => {
         res.status(200).send("success!");
       })
-      .catch((error) => {
+      .catch((error:any) => {
         console.error('Error inserting data:', error);
         res.status(500).send('Internal Server Error');
       });
@@ -339,12 +342,12 @@ ORDER BY l.languageId, l.lessonName;`,
 
   await executeSQLFiles(sqlFiles, dpool);
 
-  app.get("/", (req: any, res) => {
+  app.get("/", (req: any, res:any) => {
     res.send("Backend is running");
   });
 
   // Endpoint to get user info by email
-  app.get("/api/user-info/:email", async (req, res) => {
+  app.get("/api/user-info/:email", async (req:any, res:any) => {
     const email = req.params.email;
     try {
       const result = await dpool.query(
@@ -362,7 +365,7 @@ ORDER BY l.languageId, l.lessonName;`,
   });
 
   // Endpoint to get user's course progress
-  app.get("/api/user-progress/:email", async (req, res) => {
+  app.get("/api/user-progress/:email", async (req:any, res:any) => {
     const email = req.params.email;
     try {
       const result = await dpool.query(
@@ -389,7 +392,7 @@ ORDER BY l.languageId, l.lessonName;`,
   });
 
   // Endpoint to get user's badges
-  app.get("/api/user-badges/:email", async (req, res) => {
+  app.get("/api/user-badges/:email", async (req:any, res:any) => {
     const email = req.params.email;
     try {
       const result = await dpool.query(
@@ -412,7 +415,7 @@ ORDER BY l.languageId, l.lessonName;`,
   });
 
   // Endpoint to get course questions based on courseId and difficulty level
-  app.get("/api/courses/:courseId/difficulty/:difficulty", async (req, res) => {
+  app.get("/api/courses/:courseId/difficulty/:difficulty", async (req:any, res:any) => {
     const { courseId, difficulty } = req.params;
     try {
       const questionsResult = await dpool.query(
@@ -433,7 +436,7 @@ ORDER BY l.languageId, l.lessonName;`,
     }
   });
 
-  app.post("/add-user", (req, res) => {
+  app.post("/add-user", (req:any, res:any) => {
     const {
       userName,
       firstName,
@@ -460,7 +463,7 @@ ORDER BY l.languageId, l.lessonName;`,
       .then(() => {
         res.status(200).send("success!");
       })
-      .catch((error) => {
+      .catch((error:any) => {
         console.error("Error inserting data:", error);
         res.status(500).send("Internal Server Error");
       });

@@ -21,7 +21,7 @@ services:
       - .:/root/codebytes
     depends_on:
       - db
-      - elasticsearch
+      # - elasticsearch
       - pgadmin
       # - firebase
     working_dir: /root
@@ -49,19 +49,19 @@ services:
     depends_on:
       - db
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.3
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.10.3
+  #   environment:
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
 
   # firebase:
   #   image: firebase/firebase-tools:latest
