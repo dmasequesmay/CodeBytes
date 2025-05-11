@@ -60,11 +60,35 @@ INSERT INTO user_lesson_progress (userId, lessonId, dateStart, dateFinished) VAL
  (SELECT id FROM Lessons WHERE lessonName = 'Python'), 
  '2025-01-01', '2025-01-02');
 
+-- Additional User Lesson Progress
+INSERT INTO user_lesson_progress (userId, lessonId, dateStart, dateFinished) VALUES
+((SELECT id FROM Users WHERE userName = 'student2'), 
+ (SELECT id FROM Lessons WHERE lessonName = 'JavaScript'), 
+ '2025-02-15', '2025-02-20'),
+((SELECT id FROM Users WHERE userName = 'student2'), 
+ (SELECT id FROM Lessons WHERE lessonName = 'React'), 
+ '2025-03-01', '2025-03-10'),
+((SELECT id FROM Users WHERE userName = 'student2'), 
+ (SELECT id FROM Lessons WHERE lessonName = 'C++'), 
+ '2025-01-03', '2025-01-10');
+
 -- User Owned Badges
 INSERT INTO UserOwnedBadges (userId, badgeId, dateEarned) VALUES
 ((SELECT id FROM Users WHERE userName = 'demoUser'), 
  (SELECT id FROM Badges WHERE badgeName = 'Python Beginner'), 
  '2025-01-02');
+
+-- Additional User Owned Badges
+INSERT INTO UserOwnedBadges (userId, badgeId, dateEarned) VALUES
+((SELECT id FROM Users WHERE userName = 'student2'), 
+ (SELECT id FROM Badges WHERE badgeName = 'JavaScript Pro'), 
+ '2025-02-20'),
+((SELECT id FROM Users WHERE userName = 'student2'), 
+ (SELECT id FROM Badges WHERE badgeName = 'React Developer'), 
+ '2025-03-10'),
+((SELECT id FROM Users WHERE userName = 'student2'), 
+ (SELECT id FROM Badges WHERE badgeName = 'C++ Expert'), 
+ '2025-01-10');
 
 -- Problems (Questions) - Python
 INSERT INTO problems (question, difficulty, is_coding, language, judge0_language_id, time_limit, memory_limit) VALUES
@@ -77,6 +101,12 @@ INSERT INTO problems (question, difficulty, is_coding, language, judge0_language
 ('Implement a binary search algorithm.', 'hard', true, 'python', 100, 2.0, 262144),
 ('Create a class that implements a stack data structure.', 'hard', true, 'python', 71, 2.0, 262144);
 
+-- Additional Problem Solving Activity
+INSERT INTO problems (question, difficulty, is_coding, language, judge0_language_id, time_limit, memory_limit) VALUES
+('Write a function to reverse a string.', 'easy', true, 'python', 100, 2.0, 262144),
+('Implement a queue using two stacks.', 'medium', true, 'python', 100, 2.0, 262144),
+('Write a program to find the factorial of a number.', 'easy', true, 'python', 100, 2.0, 262144);
+
 -- Test Cases for Python Questions
 INSERT INTO test_cases (problem_id, input, expected_output, is_sample) VALUES
 ((SELECT id FROM problems WHERE question = 'Write a function that takes a list and returns its length.' AND language = 'python'), '[1, 2, 3]', '3', true),
@@ -88,9 +118,24 @@ INSERT INTO test_cases (problem_id, input, expected_output, is_sample) VALUES
 ((SELECT id FROM problems WHERE question = 'Create a class that implements a stack data structure.' AND language = 'python'), 'push(5), pop()', '5', true),
 ((SELECT id FROM problems WHERE question = 'Create a class that implements a stack data structure.' AND language = 'python'), 'push(3), push(7), pop()', '7', false);
 
+-- Additional Test Cases for New Problems
+INSERT INTO test_cases (problem_id, input, expected_output, is_sample) VALUES
+((SELECT id FROM problems WHERE question = 'Write a function to reverse a string.' AND language = 'python'), '"hello"', '"olleh"', true),
+((SELECT id FROM problems WHERE question = 'Write a function to reverse a string.' AND language = 'python'), '"world"', '"dlrow"', false),
+((SELECT id FROM problems WHERE question = 'Implement a queue using two stacks.' AND language = 'python'), 'enqueue(1), enqueue(2), dequeue()', '1', true),
+((SELECT id FROM problems WHERE question = 'Write a program to find the factorial of a number.' AND language = 'python'), '5', '120', true),
+((SELECT id FROM problems WHERE question = 'Write a program to find the factorial of a number.' AND language = 'python'), '3', '6', false);
+
 -- Multiple Choice Answers for Python Questions
 INSERT INTO multiple_choice_answers (problem_id, choice_text, is_correct, choice_order) VALUES
 ((SELECT id FROM problems WHERE question = 'What is the output of print(2 + 2 * 3)?' AND language = 'python'), '8', true, 1),
 ((SELECT id FROM problems WHERE question = 'What is the output of print(2 + 2 * 3)?' AND language = 'python'), '12', false, 2),
 ((SELECT id FROM problems WHERE question = 'What is the correct way to create a dictionary in Python?' AND language = 'python'), '{''key'': ''value''}', true, 1),
 ((SELECT id FROM problems WHERE question = 'What is the correct way to create a dictionary in Python?' AND language = 'python'), '[key: value]', false, 2);
+
+-- Additional Multiple Choice Answers for New Problems
+INSERT INTO multiple_choice_answers (problem_id, choice_text, is_correct, choice_order) VALUES
+((SELECT id FROM problems WHERE question = 'Write a function to reverse a string.' AND language = 'python'), '"olleh"', true, 1),
+((SELECT id FROM problems WHERE question = 'Write a function to reverse a string.' AND language = 'python'), '"hello"', false, 2),
+((SELECT id FROM problems WHERE question = 'Write a program to find the factorial of a number.' AND language = 'python'), '120', true, 1),
+((SELECT id FROM problems WHERE question = 'Write a program to find the factorial of a number.' AND language = 'python'), '24', false, 2);

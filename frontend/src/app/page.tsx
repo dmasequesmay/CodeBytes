@@ -7,7 +7,7 @@ export default function Home() {
       <header className="container mx-auto py-4 px-6 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-purple-600 rounded flex items-center justify-center">
-            <Icon image="/assets/Frame 14.png" />
+            <img src="/assets/Frame 14.png" alt="Logo" className="w-6 h-6" />
           </div>
           <span className="text-xl font-bold">CodeBytes</span>
         </div>

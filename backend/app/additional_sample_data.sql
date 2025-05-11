@@ -98,6 +98,9 @@ INSERT INTO user_problem_progress (userId, problemId, dateStart, dateFinished) V
 ((SELECT id FROM Users WHERE userName = 'student2'),
  (SELECT id FROM problems WHERE question = 'Implement a Java class for a linked list node.' AND language = 'java'),
  '2025-02-15', '2025-02-15'),
+ ((SELECT id FROM Users WHERE userName = 'student2'),
+ (SELECT id FROM problems WHERE question = 'Write a function that takes a list and returns its length.' AND language = 'python'),
+ '2025-01-01', '2025-01-01'),
 ((SELECT id FROM Users WHERE userName = 'student3'),
  (SELECT id FROM problems WHERE question = 'Implement a simple calculator class with basic operations.' AND language = 'python'),
  '2025-02-20', '2025-02-20');

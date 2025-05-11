@@ -178,7 +178,6 @@ INSERT INTO problems (question, difficulty, is_coding, language) VALUES
 ('What is the output of console.log(2 + 2 * 3)?', 'easy', false, 'javascript'),
 ('Write a function to check if a number is even.', 'easy', true, 'javascript'),
 ('What is the difference between var and let?', 'easy', false, 'javascript'),
-('Write a function to reverse a string.', 'easy', true, 'javascript'),
 ('What is the output of typeof null?', 'easy', false, 'javascript'),
 ('Write a function to find maximum element in an array.', 'easy', true, 'javascript'),
 ('What is the difference between == and ===?', 'easy', false, 'javascript'),
