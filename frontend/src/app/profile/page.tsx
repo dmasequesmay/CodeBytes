@@ -121,7 +121,7 @@ export default function Profile() {
               <div 
                 key={badge.id} 
                 className="w-40 h-40 bg-slate-400 rounded-lg flex items-center justify-center">
-                <Badge image="" name={badge.name} desc="placeholder" />
+                <Badge image="/assets/Frame 10.png" name={badge.name} desc="" />
               </div>
             ))}
           </div>

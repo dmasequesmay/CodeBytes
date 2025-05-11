@@ -53,7 +53,9 @@ export default function Home() {
           <div className="flex-1 flex justify-center">
             <div className="w-64 h-64 bg-purple-900/20 rounded-full flex items-center justify-center">
               <div className="w-48 h-48 bg-purple-800/30 rounded-full flex items-center justify-center">
-                <div className="w-32 h-32 bg-purple-700/40 rounded-full">{/* image goes here */}</div>
+                <div className="w-32 h-32 bg-purple-700/40 rounded-full">
+                  <img src="/assets/Frame 14.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
+                </div>
               </div>
             </div>
           </div>
