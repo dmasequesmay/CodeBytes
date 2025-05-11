@@ -51,8 +51,9 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-700 via-purple-600 to-purple-500 relative overflow-hidden">
+      <div className="min-h-screen md:w-1/2 flex items-center justify-center bg-gradient-to-b from-purple-700 via-purple-600 to-purple-500 relative overflow-hidden">
       <div className="absolute w-[500px] h-[500px] rounded-full bg-purple-400/20 blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+        <img src="/assets/Frame 4.png" alt="Login" className="w-[100px] h-[100px] object-cover opacity-50 -mb-20" />
         <div className="max-w-md text-center">
           <h1 className="text-black">Welcome Back</h1>
           <p className="text-black">Sign in to continue your journey</p>

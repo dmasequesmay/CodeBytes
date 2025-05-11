@@ -15,7 +15,7 @@ export default function AnswerResult({
   return (
     <div
       className={`
-        rounded-xl p-6 flex flex-col items-center text-center
+        rounded-xl p-6 flex flex-col items-center text-center w-17
         ${className}
       `}
     >

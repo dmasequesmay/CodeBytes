@@ -65,7 +65,7 @@ export default function Profile() {
         <div className="relative pt-20 pb-4 border-b border-sky-300">
           {/* Profile picture placeholder */}
           <div className="w-[200px] h-[200px] bg-slate-500 rounded-full mx-auto">
-            <Icon image="" />
+            <img src="/assets/Frame 10.png" alt="Profile" className="w-full h-full rounded-full object-cover" />
           </div>
 
           {/* Edit button */}

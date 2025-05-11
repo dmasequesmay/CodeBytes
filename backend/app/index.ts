@@ -315,7 +315,7 @@ const startServer = async () => {
       } = req.body;
       
       dpool.query(
-        'INSERT INTO users (user_name, first_name, last_name, bio, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        'INSERT INTO users (userName, firstName, lastName, bio, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, $6, $7)',
         [userName, firstName, lastName, bio, email, role, dateJoined]
       )
       .then(() => {
@@ -445,38 +445,7 @@ const startServer = async () => {
     }
   });
 
-  app.post("/add-user", (req:any, res:any) => {
-    const {
-      userName,
-      firstName,
-      lastName,
-      bio,
-      email,
-      role,
-      dateJoined,
-    }: {
-      userName: string;
-      firstName: string;
-      lastName: string;
-      bio: string;
-      email: string;
-      role: typeof userInfo;
-      dateJoined: Date;
-    } = req.body;
-
-    dpool
-      .query(
-        "INSERT INTO users (user_name, first_name, last_name, bio, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, CAST($6 AS user_info), $7)",
-        [userName, firstName, lastName, bio, email, role, dateJoined]
-      )
-      .then(() => {
-        res.status(200).send("success!");
-      })
-      .catch((error:any) => {
-        console.error("Error inserting data:", error);
-        res.status(500).send("Internal Server Error");
-      });
-  });
+ 
 
   app.listen(5000, () => {
     console.log("Server is running on port 5000");
