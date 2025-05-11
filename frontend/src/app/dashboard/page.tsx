@@ -34,8 +34,8 @@ export default function DashboardLanding() {
     async function fetchData() {
       try{
         const [progressRes, badgeRes] = await Promise.all([
-          axios.get(`/api/user-progress/${userEmail}`),
-          axios.get(`/api/user-badges/${userEmail}`),
+          axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user-progress/${userEmail}`),
+          axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user-badges/${userEmail}`),
         ]);
         setCourses(progressRes.data.map((c: any) => ({
           name: c.course_name,

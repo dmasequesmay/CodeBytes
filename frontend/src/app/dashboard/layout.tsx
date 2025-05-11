@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <nav className="flex justify-between items-center p-4 border-b">
         <div className="flex items-center">
           <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white">
-            <span>logo</span>
+            <img src="/assets/Frame 1.png" alt="Logo" className="w-8 h-8" />
           </div>
         </div>
         <div className="flex items-center gap-4">

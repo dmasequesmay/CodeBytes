@@ -20,12 +20,12 @@ const useUserData = (email: string) => {
     const fetchData = async () => {
       try {
         // Fetch user name
-        const userResponse = await fetch(`/api/user-info/${email}`);
+        const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user-info/${email}`);
         const userData = await userResponse.json();
         setUserName(userData.firstName);
 
         // Fetch user progress in courses
-        const progressResponse = await fetch(`/api/user-progress/${email}`);
+        const progressResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user-progress/${email}`);
         const progressData = await progressResponse.json();
 
         // Transform backend data to the format needed for CourseCard

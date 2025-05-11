@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import * as fs from "fs";
 import bodyParser from "body-parser";
 import { Judge0Service } from "./services/judge0.js";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +25,11 @@ async function executeSQLFile(filePath: string, pool: any) {
 const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 let dpool = pool;
 let judge0Service = new Judge0Service();
 const judge0LanguageIdToLanguageName = {
@@ -92,19 +98,21 @@ const startServer = async () => {
       try{
         // progress = completed_difficulties / total_difficulties for each language
         const result = await dpool.query(
-          `SELECT 
+    `SELECT 
     l.languageId AS language,
     l.lessonName AS course_name,
     COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS completed_problems,
     COUNT(DISTINCT p.id) AS total_problems,
-    CAST(COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 AS progress
-FROM user_lesson_progress lp
-JOIN Lessons l ON lp.lessonId = l.id
-LEFT JOIN problems p ON p.language = l.languageId
-LEFT JOIN user_problem_progress upp ON upp.problemId = p.id AND upp.userId = lp.userId
-WHERE lp.userId = (SELECT id FROM Users WHERE email = $1)
-GROUP BY l.languageId, l.lessonName
-ORDER BY l.languageId, l.lessonName;`,
+    CASE 
+        WHEN COUNT(DISTINCT p.id) = 0 THEN 0
+        ELSE CAST(COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 
+    END AS progress
+    FROM Lessons l
+    LEFT JOIN user_lesson_progress lp ON lp.lessonId = l.id AND lp.userId = (SELECT id FROM Users WHERE email = $1)
+    LEFT JOIN problems p ON p.judge0_language_id = l.languageId
+    LEFT JOIN user_problem_progress upp ON upp.problemId = p.id AND upp.userId = (SELECT id FROM Users WHERE email = $1)
+    GROUP BY l.languageId, l.lessonName
+    ORDER BY l.languageId, l.lessonName;`,
           [email]
         );
         res.json(result.rows);
@@ -168,9 +176,9 @@ ORDER BY l.languageId, l.lessonName;`,
         const result = await dpool.query(
           `SELECT COUNT(*) 
           FROM problems p
-          LEFT JOIN user_problem_progress upp ON upp.problem_id = p.id AND upp.user_id = $2
+          LEFT JOIN user_problem_progress upp ON upp.problemid = p.id AND upp.userid = $2
           WHERE p.judge0_language_id = $1 
-          AND upp.date_finished IS NULL;`,
+          AND upp.datefinished IS NULL;`,
           [languageId, userId]
         );
         res.json(result.rows);
@@ -202,42 +210,41 @@ ORDER BY l.languageId, l.lessonName;`,
         }
         const userId = userResult.rows[0].id;
         const result = await dpool.query(
-          `SELECT 
-            p.*, 
-            CASE 
-              WHEN p.is_coding THEN (
-                SELECT json_agg(
-                  json_build_object(
-                    'id', tc.id,
-                    'input', tc.input,
-                    'expected_output', tc.expected_output,
-                    'is_sample', tc.is_sample,
-                    'score', tc.score
-                  )
-                )
-                FROM test_cases tc
-                WHERE tc.problem_id = p.id
-              )
-              ELSE (
-                SELECT json_agg(
-                  json_build_object(
-                    'id', mca.id,
-                    'choice_text', mca.choice_text,
-                    'is_correct', mca.is_correct,
-                    'choice_order', mca.choice_order
-                  )
-                )
-                FROM multiple_choice_answers mca
-                WHERE mca.problem_id = p.id
-                ORDER BY mca.choice_order
-              )
-            END as answers
-          FROM problems p
-          LEFT JOIN user_problem_progress upp ON upp.problem_id = p.id AND upp.user_id = $3
-          WHERE p.judge0_language_id = $1 
-          AND p.difficulty = $2
-          AND upp.date_finished IS NULL
-          LIMIT 6;`,
+  `SELECT 
+    p.*, 
+    CASE 
+      WHEN p.is_coding THEN (
+        SELECT json_agg(
+          json_build_object(
+            'id', tc.id,
+            'input', tc.input,
+            'expected_output', tc.expected_output,
+            'is_sample', tc.is_sample,
+            'score', tc.score
+          )
+        )
+        FROM test_cases tc
+        WHERE tc.problem_id = p.id
+      )
+      ELSE (
+        SELECT json_agg(
+          json_build_object(
+            'id', mca.id,
+            'choice_text', mca.choice_text,
+            'is_correct', mca.is_correct,
+            'choice_order', mca.choice_order
+          ) ORDER BY mca.choice_order
+        )
+        FROM multiple_choice_answers mca
+        WHERE mca.problem_id = p.id
+      )
+    END as answers
+  FROM problems p
+  LEFT JOIN user_problem_progress upp ON upp.problemid = p.id AND upp.userid = $3
+  WHERE p.judge0_language_id = $1 
+  AND p.difficulty = $2
+  AND upp.datefinished IS NULL
+  LIMIT 6;`,
           [languageId, difficulty, userId]
         );
         res.json(result.rows);
@@ -272,29 +279,29 @@ ORDER BY l.languageId, l.lessonName;`,
     });
 
 
-    
-    app.post('/api/user-completed-problem', async (req:any, res:any) => {
-      const { email, problemId }:{
-        email: string,
-        problemId: number
-      } = req.body;
-      try{
-        const userResult = await dpool.query('SELECT id FROM Users WHERE email = $1', [email]);
-        if (userResult.rows.length === 0) {
-          res.status(404).json({ error: 'User not found' });
-          return;
-        }
-        await dpool.query(
-          `INSERT INTO user_problem_progress (user_id, problem_id, date_finished)
-          VALUES ($1, $2, CURRENT_TIMESTAMP);`,
-          [userResult.rows[0].id, problemId]
-        );
-        res.status(200).send("success!");
-      } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
+    // Endpoint to get user's course progress
+  app.post('/api/user-completed-problem', async (req:any, res:any) => {
+    const { email, problemId }:{
+      email: string,
+      problemId: number
+    } = req.body;
+    try{
+      const userResult = await dpool.query('SELECT id FROM Users WHERE email = $1', [email]);
+      if (userResult.rows.length === 0) {
+        res.status(404).json({ error: 'User not found' });
+        return;
       }
-    });
+      await dpool.query(
+        `INSERT INTO user_problem_progress (user_id, problem_id, date_start, date_finished)
+        VALUES (CAST($1 AS INTEGER), $2, CURRENT_DATE, CURRENT_DATE);`,
+        [userResult.rows[0].id, problemId]
+      );
+      res.status(200).send("success!");
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
     app.post("/add-user ", (req:any, res:any) => {
       const { userName, firstName, lastName, bio, email, role, dateJoined }:{
@@ -364,24 +371,26 @@ ORDER BY l.languageId, l.lessonName;`,
     }
   });
 
-  // Endpoint to get user's course progress
-  app.get("/api/user-progress/:email", async (req:any, res:any) => {
+  // Fix user progress query
+  app.get('/api/user-progress/:email', async(req:any, res:any) =>{
     const email = req.params.email;
     try {
       const result = await dpool.query(
         `SELECT 
-          l.languageId AS language,
-          l.lessonName AS course_name,
-          COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS completed_problems,
+          l.language_id AS language,
+          l.lesson_name AS course_name,
+          COUNT(DISTINCT upp.problemid) FILTER (WHERE upp.datefinished IS NOT NULL) AS completed_problems,
           COUNT(DISTINCT p.id) AS total_problems,
-          CAST(COUNT(DISTINCT upp.problemId) FILTER (WHERE upp.dateFinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 AS progress
-        FROM user_lesson_progress lp
-        JOIN Lessons l ON lp.lessonId = l.id
-        LEFT JOIN problems p ON p.language = l.languageId
-        LEFT JOIN user_problem_progress upp ON upp.problemId = p.id AND upp.userId = lp.userId
-        WHERE lp.userId = (SELECT id FROM Users WHERE email = $1)
-        GROUP BY l.languageId, l.lessonName
-        ORDER BY l.languageId, l.lessonName;`,
+          CASE 
+              WHEN COUNT(DISTINCT p.id) = 0 THEN 0
+              ELSE CAST(COUNT(DISTINCT upp.problemid) FILTER (WHERE upp.datefinished IS NOT NULL) AS FLOAT) / COUNT(DISTINCT p.id) * 100 
+          END AS progress
+        FROM lessons l
+        LEFT JOIN user_lesson_progress ulp ON ulp.lesson_id = l.id AND ulp.user_id = (SELECT id FROM users WHERE email = $1)
+        LEFT JOIN problems p ON p.judge0_language_id = l.language_id
+        LEFT JOIN user_problem_progress upp ON upp.problemid = p.id AND upp.userid = (SELECT id FROM users WHERE email = $1)
+        GROUP BY l.language_id, l.lesson_name
+        ORDER BY l.language_id, l.lesson_name;`,
         [email]
       );
       res.json(result.rows);
@@ -397,14 +406,14 @@ ORDER BY l.languageId, l.lessonName;`,
     try {
       const result = await dpool.query(
         `SELECT 
-          b.badgeName AS badge_name, 
-          b.badgeDesc AS badge_desc, 
-          b.requirement AS requirement, 
-          b.badgeImageSrc AS badge_image_src, 
-          uob.dateEarned AS date_earned
-        FROM UserOwnedBadges uob
-        JOIN Badges b ON uob.badgeId = b.id
-        WHERE uob.userId = (SELECT id FROM Users WHERE email = $1);`,
+          b.badge_name, 
+          b.badge_desc, 
+          b.requirement, 
+          b.badge_image_src, 
+          uob.date_earned
+        FROM user_owned_badges uob
+        JOIN badges b ON uob.badge_id = b.id
+        WHERE uob.user_id = (SELECT id FROM users WHERE email = $1);`,
         [email]
       );
       res.json(result.rows);
@@ -457,7 +466,7 @@ ORDER BY l.languageId, l.lessonName;`,
 
     dpool
       .query(
-        "INSERT INTO users (user_name, first_name, last_name, bio, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        "INSERT INTO users (user_name, first_name, last_name, bio, email, role, date_joined) VALUES ($1, $2, $3, $4, $5, CAST($6 AS user_info), $7)",
         [userName, firstName, lastName, bio, email, role, dateJoined]
       )
       .then(() => {

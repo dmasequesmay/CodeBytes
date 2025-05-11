@@ -52,27 +52,25 @@ export default function ProblemDisplay({
   const difficulty = params.difficulty as string;
   const languageId = params['course-id'] as string;
   const difficultyInt = parseInt(difficulty);
-  const [result, setResult] = useState<{ correct?: boolean }>(null);
-  const [loading, setLoading] = useState(false);
   const [problemData, setProblemData] = useState<Question[]>([]);
   const [courseTitle, setCourseTitle] = useState('');
-
+  const userEmail = localStorage.getItem('userEmail');
+  const headers = {
+    'user-email': userEmail || 'student2@example.com'
+  };
   useEffect(() => {
     async function fetchData() {
-      const problemsAndSolutions = await axios.get(`/api/problems/${languageId}/${difficultyInt}`);
-      const course = await axios.get(`/api/courses/${languageId}`);
-      const problemData = problemsAndSolutions.data;
+      const problemsAndSolutions = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/problems/${languageId}/${difficultyInt}`, { headers });
+      const course = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/courses/${languageId}`);
+      const problemDataTemp = problemsAndSolutions.data;
       setCourseTitle(course.data.language);
-      setProblemData(problemData);
+      setProblemData(problemDataTemp);
     }
     fetchData();
   }, []);
 
   const currentQuestionData = problemData[currentQuestion];
-    
-  if (!currentQuestionData) {
-    return <div>Loading...</div>;  // Display a loading state until questions are fetched
-  }
+  console.log(problemData);  
   const isCodeQuestion = currentQuestionData['is_coding'];
 
   const handleRunCode = async () => {
@@ -91,7 +89,7 @@ export default function ProblemDisplay({
           setResult({
             correct: true
           });
-          await axios.post('/api/user-completed-problem', {
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user-completed-problem`, {
             problemId: question.id
           }, {
             headers: {
@@ -111,7 +109,7 @@ export default function ProblemDisplay({
           setResult({
             correct: true
           });
-          await axios.post('/api/user-completed-problem', {
+          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user-completed-problem`, {
             problemId: question.id
           }, {
             headers: {
