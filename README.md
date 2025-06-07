@@ -1,6 +1,14 @@
 # Konektado
 FIP 2024-25
 
+Our main objective is to develop an accessible, gamified learning platform for beginner web developers—especially community college students—by combining bite sized lessons and interactive challenges. 
+
+# [CodeBytes Figma Slides Presentation](https://www.figma.com/slides/QeUWgksOPUeWDe3vM989yW/CodeBytes-Pitch-Deck?node-id=14-1048&t=8k2BzynUwZk6a9Fw-1)
+These slides were presented by our Konektado Developer and Design leads at the 2025 FUSION (Filipinx Undergraduate Scientist-Engineers In an Organized Network) Engineering Project Convection at University of California, Irvine.
+
+# [CodeBytes Live Demo](https://www.youtube.com/watch?v=cFdJBVDholw&ab_channel=JustinRodriguezMacalalad)
+This is a live demo of our working web application. 
+
 # Welcome
 Greetings to all developers, and welcome to the repository for CodeBytes. This is where our code will be hosted, and where you'll be doing most of your work.
 
